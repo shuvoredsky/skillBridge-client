@@ -1,94 +1,83 @@
 "use client";
-import { useState } from "react";
+
+import { Button, Card, Form, Input, Select, Typography } from "antd";
 import { useRouter } from "next/navigation";
 
+const { Title } = Typography;
+const { Option } = Select;
+
 export default function RegisterPage() {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    password: "",
-    role: "STUDENT", // ডিফল্ট রোল
-  });
   const router = useRouter();
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const onFinish = async (values: {
+    name: string;
+    email: string;
+    password: string;
+    role: string;
+  }) => {
+    const res = await fetch("http://localhost:5000/api/auth/sign-up/email", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Origin: "http://localhost:3000",
+      },
+      body: JSON.stringify(values),
+    });
 
-    try {
-      const res = await fetch("http://localhost:5000/api/auth/sign-up/email", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
+    const data = await res.json();
 
-      const data = await res.json();
-
-      if (res.ok) {
-        alert("Registration Successful!");
-        router.push("/login");
-      } else {
-        alert(data.message || "Registration failed");
-      }
-    } catch (err) {
-      console.error("Error:", err);
+    if (res.ok) {
+      alert("Registration successful. Please verify your email.");
+      router.push("/login");
+    } else {
+      alert(data.message || "Registration failed");
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
-      <div className="max-w-md w-full bg-white p-8 rounded-lg shadow-md">
-        <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">Create Account</h2>
-        
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700">Full Name</label>
-            <input
-              type="text"
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-              required
-            />
-          </div>
+    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+      <Card style={{ width: 420 }}>
+        <Title level={3} style={{ textAlign: "center" }}>
+          Create Account
+        </Title>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700">Email</label>
-            <input
-              type="email"
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-              required
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700">Password</label>
-            <input
-              type="password"
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-              onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-              required
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700">Register as a:</label>
-            <select
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md bg-white focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-              onChange={(e) => setFormData({ ...formData, role: e.target.value })}
-            >
-              <option value="STUDENT">Student</option>
-              <option value="TUTOR">Tutor</option>
-            </select>
-          </div>
-
-          <button
-            type="submit"
-            className="w-full bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 transition duration-200"
+        <Form layout="vertical" onFinish={onFinish} initialValues={{ role: "STUDENT" }}>
+          <Form.Item
+            label="Full Name"
+            name="name"
+            rules={[{ required: true, message: "Name is required" }]}
           >
+            <Input placeholder="Your full name" />
+          </Form.Item>
+
+          <Form.Item
+            label="Email"
+            name="email"
+            rules={[{ required: true, message: "Email is required" }]}
+          >
+            <Input placeholder="Email address" />
+          </Form.Item>
+
+          <Form.Item
+            label="Password"
+            name="password"
+            rules={[{ required: true, message: "Password is required" }]}
+          >
+            <Input.Password placeholder="Password" />
+          </Form.Item>
+
+          <Form.Item label="Register as" name="role">
+            <Select>
+              <Option value="STUDENT">Student</Option>
+              <Option value="TUTOR">Tutor</Option>
+            </Select>
+          </Form.Item>
+
+          <Button type="primary" htmlType="submit" block>
             Sign Up
-          </button>
-        </form>
-      </div>
+          </Button>
+        </Form>
+      </Card>
     </div>
   );
 }

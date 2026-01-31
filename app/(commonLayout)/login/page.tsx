@@ -1,105 +1,62 @@
 "use client";
-import { useState } from "react";
+
+import { Button, Card, Form, Input, Typography } from "antd";
 import { useRouter } from "next/navigation";
+import { authService } from "../../../src/services/auth.service";
+
+const { Title } = Typography;
 
 export default function LoginPage() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
   const router = useRouter();
 
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
+  const onFinish = async (values: { email: string; password: string }) => {
+    const res = await AuthService.signIn(values);
 
-    try {
-      // সরাসরি ব্যাকএন্ড এন্ডপয়েন্টে রিকোয়েস্ট
-      const res = await fetch("http://localhost:5000/api/auth/login/email", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email,
-          password,
-        }),
-        // সেশন কুকি ব্রাউজারে সেভ করার জন্য এটি গুরুত্বপূর্ণ
-        // @ts-ignore
-        credentials: "include", 
-      });
+    if (res?.token) {
+      localStorage.setItem("token", res.token);
+      localStorage.setItem("user", JSON.stringify(res.user));
 
-      const data = await res.json();
-
-      if (res.ok) {
-        alert("Login successful!");
-        // লগইন সফল হলে ড্যাশবোর্ডে রিডাইরেক্ট
-        router.push("/dashboard");
+      if (res.user.role === "ADMIN") {
+        router.push("/admin");
+      } else if (res.user.role === "TUTOR") {
+        router.push("/user");
       } else {
-        alert(data.message || "Invalid credentials");
+        router.push("/");
       }
-    } catch (error) {
-      console.error("Login error:", error);
-      alert("Something went wrong. Please try again.");
-    } finally {
-      setLoading(false);
+    } else {
+      alert(res?.message || "Login failed");
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
-      <div className="max-w-md w-full bg-white p-8 rounded-xl shadow-sm border border-gray-100">
-        <div className="text-center mb-8">
-          <h2 className="text-3xl font-bold text-gray-900">SkillBridge</h2>
-          <p className="text-gray-500 mt-2">Welcome back! Please login to your account.</p>
-        </div>
+    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+      <Card style={{ width: 400 }}>
+        <Title level={3} style={{ textAlign: "center" }}>
+          Login
+        </Title>
 
-        <form onSubmit={handleLogin} className="space-y-5">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Email Address
-            </label>
-            <input
-              type="email"
-              placeholder="name@example.com"
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Password
-            </label>
-            <input
-              type="password"
-              placeholder="••••••••"
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-          </div>
-
-          <button
-            type="submit"
-            disabled={loading}
-            className={`w-full bg-indigo-600 text-white py-2.5 rounded-lg font-semibold hover:bg-indigo-700 transition duration-200 ${
-              loading ? "opacity-70 cursor-not-allowed" : ""
-            }`}
+        <Form layout="vertical" onFinish={onFinish}>
+          <Form.Item
+            label="Email"
+            name="email"
+            rules={[{ required: true, message: "Email is required" }]}
           >
-            {loading ? "Logging in..." : "Login"}
-          </button>
-        </form>
+            <Input placeholder="Enter your email" />
+          </Form.Item>
 
-        <div className="mt-6 text-center text-sm text-gray-600">
-          Don't have an account?{" "}
-          <a href="/register" className="text-indigo-600 font-medium hover:underline">
-            Register here
-          </a>
-        </div>
-      </div>
+          <Form.Item
+            label="Password"
+            name="password"
+            rules={[{ required: true, message: "Password is required" }]}
+          >
+            <Input.Password placeholder="Enter your password" />
+          </Form.Item>
+
+          <Button type="primary" htmlType="submit" block>
+            Login
+          </Button>
+        </Form>
+      </Card>
     </div>
   );
 }
