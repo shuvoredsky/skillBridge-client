@@ -1,82 +1,133 @@
 "use client";
 
-import { Button, Card, Form, Input, Select, Typography } from "antd";
-import { useRouter } from "next/navigation";
+import { useAuth } from "@/context/AuthContext";
+import { useState } from "react";
+import { Form, Input, Button, Card, Typography, message } from "antd";
+import { UserOutlined, MailOutlined, LockOutlined } from "@ant-design/icons";
+import Link from "next/link";
 
-const { Title } = Typography;
-const { Option } = Select;
+const { Title, Text } = Typography;
 
 export default function RegisterPage() {
-  const router = useRouter();
+  const [loading, setLoading] = useState(false);
+  const { register } = useAuth();
+  const [form] = Form.useForm();
 
   const onFinish = async (values: {
     name: string;
     email: string;
     password: string;
-    role: string;
   }) => {
-    const res = await fetch("http://localhost:5000/api/auth/sign-up/email", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Origin: "http://localhost:3000",
-      },
-      body: JSON.stringify(values),
-    });
-
-    const data = await res.json();
-
-    if (res.ok) {
-      alert("Registration successful. Please verify your email.");
-      router.push("/login");
-    } else {
-      alert(data.message || "Registration failed");
+    setLoading(true);
+    try {
+      await register(values.name, values.email, values.password);
+      message.success(
+        "Registration successful! Please check your email to verify."
+      );
+    } catch (error: any) {
+      message.error(error.message || "Registration failed");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <Card style={{ width: 420 }}>
-        <Title level={3} style={{ textAlign: "center" }}>
-          Create Account
-        </Title>
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
+      <Card className="w-full max-w-md shadow-lg">
+        <div className="text-center mb-8">
+          <Title level={2} className="!mb-2">
+            Create Account
+          </Title>
+          <Text type="secondary">Join SkillBridge today</Text>
+        </div>
 
-        <Form layout="vertical" onFinish={onFinish} initialValues={{ role: "STUDENT" }}>
+        <Form
+          form={form}
+          name="register"
+          onFinish={onFinish}
+          layout="vertical"
+          size="large"
+        >
           <Form.Item
-            label="Full Name"
             name="name"
-            rules={[{ required: true, message: "Name is required" }]}
+            rules={[
+              { required: true, message: "Please enter your name" },
+              { min: 2, message: "Name must be at least 2 characters" },
+            ]}
           >
-            <Input placeholder="Your full name" />
+            <Input
+              prefix={<UserOutlined className="text-gray-400" />}
+              placeholder="Full Name"
+            />
           </Form.Item>
 
           <Form.Item
-            label="Email"
             name="email"
-            rules={[{ required: true, message: "Email is required" }]}
+            rules={[
+              { required: true, message: "Please enter your email" },
+              { type: "email", message: "Please enter a valid email" },
+            ]}
           >
-            <Input placeholder="Email address" />
+            <Input
+              prefix={<MailOutlined className="text-gray-400" />}
+              placeholder="Email"
+            />
           </Form.Item>
 
           <Form.Item
-            label="Password"
             name="password"
-            rules={[{ required: true, message: "Password is required" }]}
+            rules={[
+              { required: true, message: "Please enter a password" },
+              { min: 8, message: "Password must be at least 8 characters" },
+            ]}
           >
-            <Input.Password placeholder="Password" />
+            <Input.Password
+              prefix={<LockOutlined className="text-gray-400" />}
+              placeholder="Password"
+            />
           </Form.Item>
 
-          <Form.Item label="Register as" name="role">
-            <Select>
-              <Option value="STUDENT">Student</Option>
-              <Option value="TUTOR">Tutor</Option>
-            </Select>
+          <Form.Item
+            name="confirmPassword"
+            dependencies={["password"]}
+            rules={[
+              { required: true, message: "Please confirm your password" },
+              ({ getFieldValue }) => ({
+                validator(_, value) {
+                  if (!value || getFieldValue("password") === value) {
+                    return Promise.resolve();
+                  }
+                  return Promise.reject(new Error("Passwords do not match"));
+                },
+              }),
+            ]}
+          >
+            <Input.Password
+              prefix={<LockOutlined className="text-gray-400" />}
+              placeholder="Confirm Password"
+            />
           </Form.Item>
 
-          <Button type="primary" htmlType="submit" block>
-            Sign Up
-          </Button>
+          <Form.Item>
+            <Button
+              type="primary"
+              htmlType="submit"
+              className="w-full"
+              loading={loading}
+            >
+              Create Account
+            </Button>
+          </Form.Item>
         </Form>
+
+        <div className="text-center">
+          <Text type="secondary">
+            Already have an account?{" "}
+            <Link href="/login" className="text-blue-600 hover:underline">
+              Sign in
+            </Link>
+          </Text>
+        </div>
       </Card>
     </div>
   );

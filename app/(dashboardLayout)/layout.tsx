@@ -1,12 +1,15 @@
 "use client";
 
-import { useEffect } from "react";
-import { requireAuth } from "../../src/lib/authGuard";
+import { ProtectedRoute } from "@/components/ProtectedRoute";
 
-export default function DashboardLayout({ children }: { children: React.ReactNode }) {
-  useEffect(() => {
-    requireAuth();
-  }, []);
-
-  return <>{children}</>;
+export default function DashboardLayout({ 
+  children 
+}: { 
+  children: React.ReactNode 
+}) {
+  return (
+    <ProtectedRoute allowedRoles={["STUDENT", "TUTOR", "ADMIN"]}>
+      {children}
+    </ProtectedRoute>
+  );
 }

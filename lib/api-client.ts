@@ -1,64 +1,82 @@
-// API base configuration
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:5000";
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
 
-interface ApiResponse<T = any> {
-  data?: T;
-  message?: string;
-  error?: string;
+interface ApiResponse<T> {
+  data: T | null;
+  error: string | null;
 }
 
+class ApiClient {
+  private baseURL: string;
 
-export async function apiCall<T = any>(
-  endpoint: string,
-  options: RequestInit = {}
-): Promise<ApiResponse<T>> {
-  try {
-    const url = `${API_BASE_URL}${endpoint}`;
+  constructor(baseURL: string) {
+    this.baseURL = baseURL;
+  }
 
-    const response = await fetch(url, {
-      ...options,
-      credentials: "include", 
-      headers: {
-        "Content-Type": "application/json",
-        ...options.headers,
-      },
-    });
+  private async request<T>(
+    endpoint: string,
+    options: RequestInit = {}
+  ): Promise<ApiResponse<T>> {
+    try {
+      const response = await fetch(`${this.baseURL}${endpoint}`, {
+        ...options,
+        headers: {
+          "Content-Type": "application/json",
+          ...options.headers,
+        },
+        credentials: "include", // ✅ Important for cookies
+      });
 
-    const data = await response.json();
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        return {
+          data: null,
+          error: errorData.message || `HTTP error! status: ${response.status}`,
+        };
+      }
 
-    if (!response.ok) {
-      throw new Error(data.message || "Something went wrong");
+      const data = await response.json();
+      return { data, error: null };
+    } catch (error: any) {
+      return {
+        data: null,
+        error: error.message || "An error occurred",
+      };
     }
+  }
 
-    return { data, message: data.message };
-  } catch (error: any) {
-    return { error: error.message };
+  async get<T>(endpoint: string): Promise<ApiResponse<T>> {
+    return this.request<T>(endpoint, {
+      method: "GET",
+    });
+  }
+
+  async post<T>(endpoint: string, body: any): Promise<ApiResponse<T>> {
+    return this.request<T>(endpoint, {
+      method: "POST",
+      body: JSON.stringify(body),
+    });
+  }
+
+  async put<T>(endpoint: string, body: any): Promise<ApiResponse<T>> {
+    return this.request<T>(endpoint, {
+      method: "PUT",
+      body: JSON.stringify(body),
+    });
+  }
+
+  // ✅ ADD THIS METHOD
+  async patch<T>(endpoint: string, body: any): Promise<ApiResponse<T>> {
+    return this.request<T>(endpoint, {
+      method: "PATCH",
+      body: JSON.stringify(body),
+    });
+  }
+
+  async delete<T>(endpoint: string): Promise<ApiResponse<T>> {
+    return this.request<T>(endpoint, {
+      method: "DELETE",
+    });
   }
 }
 
-
-export const api = {
-  get: <T = any>(endpoint: string) =>
-    apiCall<T>(endpoint, { method: "GET" }),
-
-  post: <T = any>(endpoint: string, body: any) =>
-    apiCall<T>(endpoint, {
-      method: "POST",
-      body: JSON.stringify(body),
-    }),
-
-  put: <T = any>(endpoint: string, body: any) =>
-    apiCall<T>(endpoint, {
-      method: "PUT",
-      body: JSON.stringify(body),
-    }),
-
-  patch: <T = any>(endpoint: string, body: any) =>
-    apiCall<T>(endpoint, {
-      method: "PATCH",
-      body: JSON.stringify(body),
-    }),
-
-  delete: <T = any>(endpoint: string) =>
-    apiCall<T>(endpoint, { method: "DELETE" }),
-};
+export const api = new ApiClient(BASE_URL);

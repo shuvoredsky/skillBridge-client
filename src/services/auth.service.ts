@@ -40,7 +40,7 @@ export const authService = {
 
   
   getMe: async () => {
-    return api.get<User>("/api/v1/user/me");
+    return api.get<User>("/api/v1/users/me");
   },
 
   

@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useEffect, useState } from "react";
 import { authService, User } from "../src/services/auth.service";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 
 interface AuthContextType {
   user: User | null;
@@ -19,43 +19,55 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
+  const pathname = usePathname();
 
-
+  // Check auth on mount
   useEffect(() => {
     checkAuth();
   }, []);
 
   const checkAuth = async () => {
+    console.log("🔍 Checking auth...");
     try {
       const { data, error } = await authService.getMe();
+      console.log("✅ Auth response:", { data, error });
+      
       if (data && !error) {
+        console.log("✅ User found:", data);
         setUser(data);
+      } else {
+        console.log("❌ No user found");
+        setUser(null);
       }
     } catch (error) {
-      console.error("Auth check failed:", error);
+      console.error("❌ Auth check failed:", error);
+      setUser(null);
     } finally {
       setLoading(false);
     }
   };
 
   const login = async (email: string, password: string) => {
+    console.log("🔐 Logging in...", { email });
     const { data, error } = await authService.login({ email, password });
+
+    console.log("📨 Login response:", { data, error });
 
     if (error) {
       throw new Error(error);
     }
 
     if (data?.user) {
+      console.log("✅ Login successful, setting user:", data.user);
       setUser(data.user);
 
-
-      if (data.user.role === "ADMIN") {
-        router.push("/admin");
-      } else if (data.user.role === "TUTOR") {
-        router.push("/tutor");
-      } else {
-        router.push("/student");
-      }
+      // ✅ router.replace use করুন - এতে back button issue হবে না
+      const redirectPath = 
+        data.user.role === "ADMIN" ? "/admin" :
+        data.user.role === "TUTOR" ? "/tutor" : "/student";
+      
+      console.log("➡️ Redirecting to", redirectPath);
+      router.replace(redirectPath);
     }
   };
 
@@ -70,15 +82,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       throw new Error(error);
     }
 
-    
-    alert("Registration successful! Please check your email to verify.");
-    router.push("/login");
+    return;
   };
 
   const logout = async () => {
     await authService.logout();
     setUser(null);
-    router.push("/login");
+    router.replace("/login"); // ✅ replace use করুন
   };
 
   const refreshUser = async () => {
@@ -93,7 +103,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     </AuthContext.Provider>
   );
 }
-
 
 export function useAuth() {
   const context = useContext(AuthContext);
