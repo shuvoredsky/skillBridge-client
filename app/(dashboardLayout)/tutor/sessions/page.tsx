@@ -1,170 +1,226 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { bookingService } from "@/services/booking.service";
-import { CheckCircle, XCircle, Clock, Calendar, User } from "lucide-react";
+import { useState, useEffect } from "react";
+import {
+  Card,
+  Table,
+  Tag,
+  Button,
+  Space,
+  Modal,
+  message,
+  Tabs,
+  Empty,
+  Rate,
+} from "antd";
+import {
+  CheckCircleOutlined,
+  ClockCircleOutlined,
+  UserOutlined,
+} from "@ant-design/icons";
+import { tutorService } from "../../../../src/services/tutor.service";
+import type { Session } from "@/types/tutor";
+import type { ColumnsType } from "antd/es/table";
 
-interface Booking {
-  id: string;
-  subject: string;
-  date: string;
-  startTime: string;
-  endTime: string;
-  status: string;
-  totalPrice: number;
-  student: {
-    name: string;
-    email: string;
-  };
-}
-
-export default function TutorSessionsPage() {
-  const [bookings, setBookings] = useState<Booking[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [filter, setFilter] = useState<string>("ALL");
+export default function SessionsPage() {
+  const [sessions, setSessions] = useState<Session[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [selectedSession, setSelectedSession] = useState<Session | null>(null);
+  const [modalVisible, setModalVisible] = useState(false);
 
   useEffect(() => {
-    loadBookings();
+    fetchSessions();
   }, []);
 
-  const loadBookings = async () => {
+  const fetchSessions = async () => {
+    setLoading(true);
     try {
-      const response = await bookingService.getTutorBookings();
-      if (response.data) {
-        setBookings(response.data);
+      const { data, error } = await tutorService.getMySessions();
+      if (error) {
+        message.error(error);
+      } else if (data) {
+        setSessions(data);
       }
-    } catch (error) {
-      console.error("Failed to load bookings:", error);
+    } catch (err) {
+      message.error("Failed to load sessions");
     } finally {
       setLoading(false);
     }
   };
 
-  const handleMarkComplete = async (bookingId: string) => {
+  const handleMarkComplete = async () => {
+    if (!selectedSession) return;
+
     try {
-      await bookingService.updateBookingStatus(bookingId, "COMPLETED");
-      await loadBookings();
-    } catch (error) {
-      console.error("Failed to mark complete:", error);
+      const { error } = await tutorService.updateSessionStatus(
+        selectedSession.id,
+        "COMPLETED"
+      );
+
+      if (error) {
+        message.error(error);
+      } else {
+        message.success("Session marked as completed!");
+        setModalVisible(false);
+        setSelectedSession(null);
+        fetchSessions();
+      }
+    } catch (err) {
+      message.error("Failed to update session");
     }
   };
 
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-[70vh]">
-        <div className="flex flex-col items-center gap-3">
-          <div className="w-12 h-12 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin"></div>
-          <p className="text-slate-600">Loading sessions...</p>
+  const columns: ColumnsType<Session> = [
+    {
+      title: "Student",
+      key: "student",
+      render: (_, record) => (
+        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+          <UserOutlined />
+          <div>
+            <div style={{ fontWeight: 500 }}>{record.student.name}</div>
+            <div style={{ fontSize: 12, color: "#999" }}>
+              {record.student.email}
+            </div>
+          </div>
         </div>
-      </div>
-    );
-  }
+      ),
+    },
+    {
+      title: "Subject",
+      dataIndex: "subject",
+      key: "subject",
+      render: (subject) => <Tag color="blue">{subject}</Tag>,
+    },
+    {
+      title: "Date & Time",
+      key: "datetime",
+      render: (_, record) => (
+        <div>
+          <div>{new Date(record.date).toLocaleDateString()}</div>
+          <div style={{ fontSize: 12, color: "#666" }}>
+            {record.startTime} - {record.endTime}
+          </div>
+        </div>
+      ),
+    },
+    {
+      title: "Status",
+      dataIndex: "status",
+      key: "status",
+      render: (status) => {
+        const config = {
+          CONFIRMED: { color: "orange", icon: <ClockCircleOutlined /> },
+          COMPLETED: { color: "green", icon: <CheckCircleOutlined /> },
+          CANCELLED: { color: "red", icon: null },
+        };
+        const { color, icon } = config[status as keyof typeof config];
+        return (
+          <Tag color={color} icon={icon}>
+            {status}
+          </Tag>
+        );
+      },
+    },
+    {
+      title: "Actions",
+      key: "actions",
+      render: (_, record) => (
+        <Space>
+          {record.status === "CONFIRMED" && (
+            <Button
+              type="primary"
+              size="small"
+              onClick={() => {
+                setSelectedSession(record);
+                setModalVisible(true);
+              }}
+            >
+              Mark Complete
+            </Button>
+          )}
+        </Space>
+      ),
+    },
+  ];
 
-  const filteredBookings =
-    filter === "ALL"
-      ? bookings
-      : bookings.filter((b) => b.status === filter);
-
-  const statusCounts = {
-    ALL: bookings.length,
-    CONFIRMED: bookings.filter((b) => b.status === "CONFIRMED").length,
-    COMPLETED: bookings.filter((b) => b.status === "COMPLETED").length,
-    CANCELLED: bookings.filter((b) => b.status === "CANCELLED").length,
-  };
+  const upcoming = sessions.filter((s) => s.status === "CONFIRMED");
+  const completed = sessions.filter((s) => s.status === "COMPLETED");
+  const cancelled = sessions.filter((s) => s.status === "CANCELLED");
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold text-slate-900">Teaching Sessions</h1>
-        <p className="text-slate-600 mt-1">Manage your upcoming and past sessions</p>
+    <div>
+      <div style={{ marginBottom: 24 }}>
+        <h1 style={{ fontSize: 28, fontWeight: 700, margin: 0 }}>My Sessions</h1>
+        <p style={{ color: "#666", marginTop: 8 }}>
+          View and manage your tutoring sessions
+        </p>
       </div>
 
-      <div className="flex flex-wrap gap-3">
-        {Object.entries(statusCounts).map(([status, count]) => (
-          <button
-            key={status}
-            onClick={() => setFilter(status)}
-            className={`px-5 py-3 rounded-xl font-medium transition-all ${
-              filter === status
-                ? "bg-gradient-to-r from-blue-500 to-indigo-600 text-white shadow-lg"
-                : "bg-white text-slate-700 border border-slate-200 hover:border-blue-500"
-            }`}
-          >
-            {status} ({count})
-          </button>
-        ))}
-      </div>
+      <Card>
+        <Tabs
+          items={[
+            {
+              key: "upcoming",
+              label: `Upcoming (${upcoming.length})`,
+              children: (
+                <Table
+                  columns={columns}
+                  dataSource={upcoming}
+                  rowKey="id"
+                  loading={loading}
+                  locale={{ emptyText: <Empty description="No upcoming sessions" /> }}
+                />
+              ),
+            },
+            {
+              key: "completed",
+              label: `Completed (${completed.length})`,
+              children: (
+                <Table
+                  columns={columns}
+                  dataSource={completed}
+                  rowKey="id"
+                  loading={loading}
+                  locale={{ emptyText: <Empty description="No completed sessions" /> }}
+                />
+              ),
+            },
+            {
+              key: "cancelled",
+              label: `Cancelled (${cancelled.length})`,
+              children: (
+                <Table
+                  columns={columns}
+                  dataSource={cancelled}
+                  rowKey="id"
+                  loading={loading}
+                  locale={{ emptyText: <Empty description="No cancelled sessions" /> }}
+                />
+              ),
+            },
+          ]}
+        />
+      </Card>
 
-      <div className="space-y-4">
-        {filteredBookings.length === 0 ? (
-          <div className="bg-white rounded-2xl p-12 border border-slate-200 text-center">
-            <p className="text-slate-500">No sessions found</p>
-          </div>
-        ) : (
-          filteredBookings.map((booking) => (
-            <div
-              key={booking.id}
-              className="bg-white rounded-2xl p-6 border border-slate-200 hover:shadow-lg transition-all"
-            >
-              <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-                <div className="flex-1 space-y-3">
-                  <div className="flex items-start gap-4">
-                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white font-bold">
-                      {booking.student.name.charAt(0)}
-                    </div>
-                    <div>
-                      <h3 className="text-lg font-bold text-slate-900">
-                        {booking.subject}
-                      </h3>
-                      <div className="flex items-center gap-2 text-slate-600 text-sm mt-1">
-                        <User size={16} />
-                        <span>{booking.student.name}</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="flex flex-wrap gap-4 text-sm text-slate-600">
-                    <div className="flex items-center gap-2">
-                      <Calendar size={16} />
-                      {new Date(booking.date).toLocaleDateString()}
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Clock size={16} />
-                      {booking.startTime} - {booking.endTime}
-                    </div>
-                  </div>
-                </div>
-
-                <div className="flex flex-col items-end gap-3">
-                  <span
-                    className={`px-4 py-2 rounded-full text-sm font-medium ${
-                      booking.status === "COMPLETED"
-                        ? "bg-green-100 text-green-700"
-                        : booking.status === "CONFIRMED"
-                        ? "bg-blue-100 text-blue-700"
-                        : "bg-red-100 text-red-700"
-                    }`}
-                  >
-                    {booking.status}
-                  </span>
-                  <p className="text-xl font-bold text-slate-900">
-                    ${booking.totalPrice.toFixed(2)}
-                  </p>
-                  {booking.status === "CONFIRMED" && (
-                    <button
-                      onClick={() => handleMarkComplete(booking.id)}
-                      className="bg-gradient-to-r from-green-500 to-emerald-600 text-white px-4 py-2 rounded-lg font-medium hover:shadow-lg transition-all flex items-center gap-2"
-                    >
-                      <CheckCircle size={18} />
-                      Mark Complete
-                    </button>
-                  )}
-                </div>
-              </div>
-            </div>
-          ))
-        )}
-      </div>
+      <Modal
+        title="Mark Session as Completed"
+        open={modalVisible}
+        onOk={handleMarkComplete}
+        onCancel={() => {
+          setModalVisible(false);
+          setSelectedSession(null);
+        }}
+        okText="Mark Complete"
+      >
+        <p>
+          Are you sure you want to mark this session with{" "}
+          <strong>{selectedSession?.student.name}</strong> as completed?
+        </p>
+        <p style={{ color: "#666", fontSize: 14 }}>
+          This will allow the student to leave a review.
+        </p>
+      </Modal>
     </div>
   );
 }
