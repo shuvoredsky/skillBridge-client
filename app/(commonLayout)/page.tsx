@@ -42,7 +42,7 @@ export default function HomePage() {
 
   return (
     <div>
-      {/* Hero Section */}
+      
       <section className="bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
@@ -79,7 +79,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Stats Section */}
+
       <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
@@ -95,7 +95,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Features Section */}
       <section className="py-20 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
@@ -124,7 +123,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* CTA Section */}
+      
       <section className="py-20 bg-indigo-600">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-4xl font-bold text-white mb-6">

@@ -61,10 +61,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       console.log("✅ Login successful, setting user:", data.user);
       setUser(data.user);
 
-      // ✅ router.replace use করুন - এতে back button issue হবে না
       const redirectPath = 
         data.user.role === "ADMIN" ? "/admin" :
-        data.user.role === "TUTOR" ? "/tutor" : "/student";
+        data.user.role === "TUTOR" ? "/tutor" : "/";
       
       console.log("➡️ Redirecting to", redirectPath);
       router.replace(redirectPath);

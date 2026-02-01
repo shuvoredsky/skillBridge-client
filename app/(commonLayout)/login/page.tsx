@@ -19,7 +19,7 @@ export default function LoginPage() {
     if (user) {
       const redirectPath = 
         user.role === "ADMIN" ? "/admin" :
-        user.role === "TUTOR" ? "/tutor" : "/student";
+        user.role === "TUTOR" ? "/tutor" : "/";
       
       router.replace(redirectPath);
     }

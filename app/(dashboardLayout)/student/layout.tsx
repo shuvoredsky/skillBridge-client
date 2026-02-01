@@ -24,7 +24,7 @@ export default function StudentLayout({
 
   const menuItems = [
     {
-      key: "/student",
+      key: "/",
       icon: <HomeOutlined />,
       label: "Dashboard",
     },

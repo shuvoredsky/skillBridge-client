@@ -48,7 +48,7 @@ export default function Navbar() {
           {/* Auth Buttons */}
           <div className="hidden md:flex items-center space-x-4">
             {user ? (
-              <Link href={user.role === "ADMIN" ? "/admin" : user.role === "TUTOR" ? "/tutor" : "/student"}>
+              <Link href={user.role === "ADMIN" ? "/admin" : user.role === "TUTOR" ? "/tutor" : "/"}>
                 <Button type="primary" className="bg-indigo-600 hover:bg-indigo-700">
                   Dashboard
                 </Button>
@@ -98,7 +98,7 @@ export default function Navbar() {
               ))}
               <div className="flex flex-col space-y-2 px-4 pt-4 border-t border-gray-200">
                 {user ? (
-                  <Link href={user.role === "ADMIN" ? "/admin" : user.role === "TUTOR" ? "/tutor" : "/student"}>
+                  <Link href={user.role === "ADMIN" ? "/admin" : user.role === "TUTOR" ? "/tutor" : "/"}>
                     <Button type="primary" className="w-full bg-indigo-600">
                       Dashboard
                     </Button>

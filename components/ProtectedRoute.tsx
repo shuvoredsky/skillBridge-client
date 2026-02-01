@@ -34,7 +34,7 @@ export function ProtectedRoute({
         } else if (user.role === "TUTOR") {
           router.push("/tutor");
         } else {
-          router.push("/student");
+          router.push("/");
         }
       }
     }
