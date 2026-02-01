@@ -3,11 +3,11 @@
 import { useAuth } from "@/context/AuthContext";
 import { useState, useEffect } from "react";
 import { Form, Input, Button, Card, Typography, message, Spin } from "antd";
-import { UserOutlined, LockOutlined, BookOutlined } from "@ant-design/icons";
+import {  BookOutlined } from "@ant-design/icons";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
-const { Title, Text } = Typography;
+const {  Text } = Typography;
 
 export default function LoginPage() {
   const [loading, setLoading] = useState(false);
