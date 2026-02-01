@@ -15,7 +15,6 @@ export default function LoginPage() {
   const [form] = Form.useForm();
   const router = useRouter();
 
-  // ✅ যদি already logged in থাকে
   useEffect(() => {
     if (user) {
       const redirectPath = 
@@ -38,10 +37,9 @@ export default function LoginPage() {
     }
   };
 
-  // ✅ Loading state
   if (user) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="text-center">
           <Spin size="large" />
           <p className="mt-4 text-gray-600 font-medium">Redirecting...</p>
@@ -51,31 +49,60 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 px-4 py-8">
-      <div className="w-full max-w-md">
-        {/* Logo & Brand */}
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-indigo-600 rounded-2xl mb-4 shadow-lg">
-            <BookOutlined className="text-3xl text-white" />
+    <div className="min-h-screen flex flex-col lg:flex-row">
+      <div className="hidden lg:flex lg:w-1/2 bg-[#008060] items-center justify-center p-12 text-white relative overflow-hidden">
+        <div className="z-10 max-w-lg">
+          <div className="flex items-center gap-3 mb-8">
+            <div className="bg-white p-2 rounded-lg">
+              <BookOutlined className="text-[#008060] text-2xl" />
+            </div>
+            <span className="text-2xl font-bold tracking-tight">SkillBridge</span>
           </div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">SkillBridge</h1>
-          <p className="text-gray-600">Learn from the best tutors worldwide</p>
+          
+          <h1 className="text-5xl font-extrabold mb-6 leading-tight">
+            Connect with <br /> Expert Tutors
+          </h1>
+          <p className="text-xl text-emerald-50 mb-12 leading-relaxed opacity-90">
+            Join thousands of students learning from the world's best educators. 
+            Master any skill, at your own pace.
+          </p>
+
+          <div className="grid grid-cols-3 gap-6 pt-12 border-t border-emerald-400/30">
+            <div>
+              <div className="text-3xl font-bold">10K+</div>
+              <div className="text-sm text-emerald-100 opacity-80 uppercase tracking-wider">Active Students</div>
+            </div>
+            <div>
+              <div className="text-3xl font-bold">500+</div>
+              <div className="text-sm text-emerald-100 opacity-80 uppercase tracking-wider">Expert Tutors</div>
+            </div>
+            <div>
+              <div className="text-3xl font-bold">4.9★</div>
+              <div className="text-sm text-emerald-100 opacity-80 uppercase tracking-wider">Avg Rating</div>
+            </div>
+          </div>
         </div>
 
-        <Card 
-          className="shadow-2xl border-0 rounded-2xl overflow-hidden"
-          styles={{
-            body: { padding: '2.5rem' }
-          }}
-        >
-          <div className="text-center mb-8">
-            <Title level={2} className="!mb-2 !text-gray-900">
-              Welcome Back
-            </Title>
-            <Text type="secondary" className="text-base">
-              Sign in to continue your learning journey
-            </Text>
+        <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-emerald-400/10 rounded-full blur-3xl"></div>
+        <div className="absolute -top-24 -right-24 w-96 h-96 bg-emerald-300/10 rounded-full blur-3xl"></div>
+      </div>
+
+      <div className="flex-1 flex items-center justify-center p-6 sm:p-12 lg:p-24 bg-white">
+        <div className="w-full max-w-[440px]">
+          <div className="lg:hidden flex justify-center mb-8">
+            <div className="flex items-center gap-2">
+              <div className="bg-[#008060] p-2 rounded-lg">
+                <BookOutlined className="text-white text-xl" />
+              </div>
+              <span className="text-xl font-bold text-gray-900">SkillBridge</span>
+            </div>
           </div>
+
+          <div className="mb-10">
+            <h2 className="text-3xl font-bold text-gray-900 mb-2">Welcome back</h2>
+            <p className="text-gray-500">Enter your credentials to access your account</p>
+          </div>
+
 
           <Form
             form={form}
@@ -83,80 +110,73 @@ export default function LoginPage() {
             onFinish={onFinish}
             layout="vertical"
             size="large"
+            requiredMark={false}
           >
             <Form.Item
+              label={<span className="text-gray-700 font-medium">Email Address</span>}
               name="email"
               rules={[
                 { required: true, message: "Please enter your email" },
                 { type: "email", message: "Please enter a valid email" },
               ]}
+              className="mb-6"
             >
               <Input
-                prefix={<UserOutlined className="text-gray-400" />}
-                placeholder="Email address"
-                className="rounded-lg h-12"
+                placeholder="your.email@example.com"
+                className="rounded-xl h-12 border-gray-200 hover:border-[#008060] focus:border-[#008060]"
               />
             </Form.Item>
 
             <Form.Item
+              label={
+                <div className="w-full flex justify-between items-center">
+                  <span className="text-gray-700 font-medium">Password</span>
+                  <Link href="/forgot-password text-[#008060] hover:text-[#006b50] text-sm font-medium">
+                    Forgot password?
+                  </Link>
+                </div>
+              }
               name="password"
               rules={[
                 { required: true, message: "Please enter your password" },
                 { min: 8, message: "Password must be at least 8 characters" },
               ]}
+              className="mb-8"
             >
               <Input.Password
-                prefix={<LockOutlined className="text-gray-400" />}
-                placeholder="Password"
-                className="rounded-lg h-12"
+                placeholder="Enter your password"
+                className="rounded-xl h-12 border-gray-200 hover:border-[#008060] focus:border-[#008060]"
               />
             </Form.Item>
 
-            <div className="flex items-center justify-between mb-6">
-              <Link 
-                href="/forgot-password" 
-                className="text-indigo-600 hover:text-indigo-700 text-sm font-medium"
-              >
-                Forgot password?
-              </Link>
-            </div>
-
-            <Form.Item className="mb-6">
+            <Form.Item className="mb-8">
               <Button
                 type="primary"
                 htmlType="submit"
-                className="w-full h-12 text-base font-semibold rounded-lg bg-indigo-600 hover:bg-indigo-700 border-0 shadow-lg hover:shadow-xl transition-all duration-200"
                 loading={loading}
+                className="w-full h-13 text-base font-semibold rounded-xl bg-[#008060] hover:bg-[#006b50] border-0 shadow-md transition-all duration-200"
               >
-                {loading ? "Signing in..." : "Sign In"}
+                Sign In →
               </Button>
             </Form.Item>
           </Form>
 
-          <div className="text-center pt-6 border-t border-gray-200">
-            <Text type="secondary" className="text-base">
+          <div className="text-center">
+            <Text className="text-gray-500 text-[15px]">
               Don't have an account?{" "}
-              <Link 
-                href="/register" 
-                className="text-indigo-600 hover:text-indigo-700 font-semibold hover:underline"
-              >
-                Create account
+              <Link href="/register" className="text-[#008060] font-bold hover:text-[#006b50] ml-1">
+                Create one now
               </Link>
             </Text>
           </div>
-        </Card>
 
-        <div className="text-center mt-8">
-          <Text type="secondary" className="text-sm">
-            By signing in, you agree to our{" "}
-            <Link href="/terms" className="text-indigo-600 hover:underline">
-              Terms of Service
-            </Link>{" "}
-            and{" "}
-            <Link href="/privacy" className="text-indigo-600 hover:underline">
-              Privacy Policy
-            </Link>
-          </Text>
+          <div className="mt-12 pt-8 border-t border-gray-100 text-center">
+            <p className="text-xs text-gray-400 leading-relaxed">
+              By continuing, you agree to our{" "}
+              <Link href="/terms" className="underline hover:text-gray-600">Terms</Link> and{" "}
+              <Link href="/privacy" className="underline hover:text-gray-600">Privacy Policy</Link>
+            </p>
+          </div>
         </div>
       </div>
     </div>
