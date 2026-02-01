@@ -33,7 +33,7 @@ interface DashboardStats {
   recentBookings?: any[];
 }
 
-export default function AdminDashboardPage() {  // ✅ এইটা আছে কিনা চেক করো
+export default function AdminDashboardPage() {  
   const [stats, setStats] = useState<DashboardStats | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -56,8 +56,11 @@ export default function AdminDashboardPage() {  // ✅ এইটা আছে �
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-[400px]">
-        <Spin size="large" tip="Loading dashboard..." />
+      <div className="flex items-center justify-center min-h-screen bg-gray-50">
+        <div className="text-center">
+          <Spin size="large" />
+          <p className="mt-4 text-gray-500">Loading dashboard data...</p>
+        </div>
       </div>
     );
   }
@@ -100,110 +103,120 @@ export default function AdminDashboardPage() {  // ✅ এইটা আছে �
   ];
 
   return (
-    <div className="space-y-6">
+    <div className="p-4 md:p-6 lg:p-8 bg-gray-50 min-h-screen space-y-8">
       <div>
-        <h1 className="text-2xl font-bold">Dashboard Overview</h1>
-        <p className="text-gray-500">Welcome to SkillBridge Admin Panel</p>
+        <h1 className="text-3xl font-extrabold text-gray-900">Dashboard Overview</h1>
+        <p className="text-gray-500 text-lg">Welcome to SkillBridge Admin Panel</p>
       </div>
 
-      {/* Stats Cards */}
-      <Row gutter={[16, 16]}>
+      <Row gutter={[20, 20]}>
         <Col xs={24} sm={12} lg={6}>
-          <Card>
+          <Card className="h-full shadow-sm hover:shadow-md transition-shadow border-0 rounded-xl">
             <Statistic
-              title="Total Users"
+              title={<span className="text-gray-400 font-semibold uppercase text-xs tracking-wider">Total Users</span>}
               value={stats?.users.total || 0}
-              prefix={<UserOutlined />}
-              valueStyle={{ color: "#3f8600" }}
+              prefix={<UserOutlined className="text-green-600 bg-green-50 p-2 rounded-lg" />}
+              valueStyle={{ color: "#111827", fontWeight: "800", fontSize: "24px" }}
             />
-            <div className="mt-2 text-sm text-gray-500">
-              {stats?.users.students} Students • {stats?.users.tutors} Tutors
+            <div className="mt-4 flex flex-wrap gap-2">
+              <span className="px-2 py-1 bg-blue-50 text-blue-600 text-xs rounded-md font-medium">{stats?.users.students} Students</span>
+              <span className="px-2 py-1 bg-purple-50 text-purple-600 text-xs rounded-md font-medium">{stats?.users.tutors} Tutors</span>
             </div>
           </Card>
         </Col>
 
         <Col xs={24} sm={12} lg={6}>
-          <Card>
+          <Card className="h-full shadow-sm hover:shadow-md transition-shadow border-0 rounded-xl">
             <Statistic
-              title="Total Bookings"
+              title={<span className="text-gray-400 font-semibold uppercase text-xs tracking-wider">Total Bookings</span>}
               value={stats?.bookings.total || 0}
-              prefix={<BookOutlined />}
-              valueStyle={{ color: "#1890ff" }}
+              prefix={<BookOutlined className="text-blue-600 bg-blue-50 p-2 rounded-lg" />}
+              valueStyle={{ color: "#111827", fontWeight: "800", fontSize: "24px" }}
             />
-            <div className="mt-2 text-sm text-gray-500">
-              {stats?.bookings.confirmed} Confirmed •{" "}
-              {stats?.bookings.completed} Completed
+            <div className="mt-4 flex flex-wrap gap-2 text-xs text-gray-500 italic">
+              All recorded sessions
             </div>
           </Card>
         </Col>
 
         <Col xs={24} sm={12} lg={6}>
-          <Card>
+          <Card className="h-full shadow-sm hover:shadow-md transition-shadow border-0 rounded-xl">
             <Statistic
-              title="Total Reviews"
+              title={<span className="text-gray-400 font-semibold uppercase text-xs tracking-wider">Total Reviews</span>}
               value={stats?.reviews.total || 0}
-              prefix={<StarOutlined />}
-              valueStyle={{ color: "#faad14" }}
+              prefix={<StarOutlined className="text-yellow-500 bg-yellow-50 p-2 rounded-lg" />}
+              valueStyle={{ color: "#111827", fontWeight: "800", fontSize: "24px" }}
             />
+            <div className="mt-4 text-xs text-gray-400">Feedback from students</div>
           </Card>
         </Col>
 
         <Col xs={24} sm={12} lg={6}>
-          <Card>
+          <Card className="h-full shadow-sm hover:shadow-md transition-shadow border-0 rounded-xl">
             <Statistic
-              title="Categories"
+              title={<span className="text-gray-400 font-semibold uppercase text-xs tracking-wider">Active Categories</span>}
               value={stats?.categories.total || 0}
-              prefix={<CheckCircleOutlined />}
-              valueStyle={{ color: "#722ed1" }}
+              prefix={<CheckCircleOutlined className="text-purple-600 bg-purple-50 p-2 rounded-lg" />}
+              valueStyle={{ color: "#111827", fontWeight: "800", fontSize: "24px" }}
             />
+            <div className="mt-4 text-xs text-gray-400">Available subjects</div>
           </Card>
         </Col>
       </Row>
 
-      {/* Booking Status */}
-      <Row gutter={[16, 16]}>
-        <Col xs={24} md={8}>
-          <Card>
-            <Statistic
-              title="Confirmed Bookings"
-              value={stats?.bookings.confirmed || 0}
-              prefix={<ClockCircleOutlined />}
-              valueStyle={{ color: "#1890ff" }}
-            />
-          </Card>
-        </Col>
+      <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+        <h2 className="text-lg font-bold text-gray-800 mb-6 flex items-center gap-2">
+          <div className="w-1 h-6 bg-blue-600 rounded-full"></div>
+          Booking Status
+        </h2>
+        <Row gutter={[16, 16]}>
+          <Col xs={24} md={8}>
+            <div className="p-4 rounded-xl bg-blue-50 border border-blue-100 h-full">
+              <Statistic
+                title="Confirmed"
+                value={stats?.bookings.confirmed || 0}
+                prefix={<ClockCircleOutlined className="text-blue-500" />}
+                valueStyle={{ color: "#1e40af", fontWeight: "700" }}
+              />
+            </div>
+          </Col>
 
-        <Col xs={24} md={8}>
-          <Card>
-            <Statistic
-              title="Completed Bookings"
-              value={stats?.bookings.completed || 0}
-              prefix={<CheckCircleOutlined />}
-              valueStyle={{ color: "#52c41a" }}
-            />
-          </Card>
-        </Col>
+          <Col xs={24} md={8}>
+            <div className="p-4 rounded-xl bg-green-50 border border-green-100 h-full">
+              <Statistic
+                title="Completed"
+                value={stats?.bookings.completed || 0}
+                prefix={<CheckCircleOutlined className="text-green-500" />}
+                valueStyle={{ color: "#166534", fontWeight: "700" }}
+              />
+            </div>
+          </Col>
 
-        <Col xs={24} md={8}>
-          <Card>
-            <Statistic
-              title="Cancelled Bookings"
-              value={stats?.bookings.cancelled || 0}
-              prefix={<CloseCircleOutlined />}
-              valueStyle={{ color: "#ff4d4f" }}
-            />
-          </Card>
-        </Col>
-      </Row>
+          <Col xs={24} md={8}>
+            <div className="p-4 rounded-xl bg-red-50 border border-red-100 h-full">
+              <Statistic
+                title="Cancelled"
+                value={stats?.bookings.cancelled || 0}
+                prefix={<CloseCircleOutlined className="text-red-500" />}
+                valueStyle={{ color: "#991b1b", fontWeight: "700" }}
+              />
+            </div>
+          </Col>
+        </Row>
+      </div>
 
-      {/* Recent Bookings Table */}
       {stats?.recentBookings && stats.recentBookings.length > 0 && (
-        <Card title="Recent Bookings">
+        <Card 
+          title={<span className="text-gray-800 font-bold">Recent Bookings</span>} 
+          className="shadow-sm border-0 rounded-2xl overflow-hidden"
+          bodyStyle={{ padding: 0 }}
+        >
           <Table
             dataSource={stats.recentBookings}
             columns={recentBookingsColumns}
             rowKey="id"
             pagination={{ pageSize: 5 }}
+            scroll={{ x: true }}
           />
         </Card>
       )}

@@ -23,7 +23,7 @@ class ApiClient {
           "Content-Type": "application/json",
           ...options.headers,
         },
-        credentials: "include", // ✅ Important for cookies
+        credentials: "include", 
       });
 
       if (!response.ok) {
