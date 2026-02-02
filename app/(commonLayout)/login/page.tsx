@@ -15,15 +15,17 @@ export default function LoginPage() {
   const [form] = Form.useForm();
   const router = useRouter();
 
-  useEffect(() => {
-    if (user) {
-      const redirectPath = 
-        user.role === "ADMIN" ? "/admin" :
-        user.role === "TUTOR" ? "/tutor" : "/";
+ useEffect(() => {
+  if (user) {
+
+    const redirectPath = 
+      user.role === "ADMIN" ? "/admin" :
+      user.role === "TUTOR" ? "/tutor" : 
+      user.role === "STUDENT" ? "/dashboard" : "/";
       
-      router.replace(redirectPath);
-    }
-  }, [user, router]);
+    router.replace(redirectPath);
+  }
+}, [user, router]);
 
   const onFinish = async (values: { email: string; password: string }) => {
     setLoading(true);
@@ -41,7 +43,7 @@ export default function LoginPage() {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="text-center">
-          <Spin size="large" />
+          <Spin fullscreen size="large" />
           <p className="mt-4 text-gray-600 font-medium">Redirecting...</p>
         </div>
       </div>

@@ -8,7 +8,7 @@ interface AuthContextType {
   user: User | null;
   loading: boolean;
   login: (email: string, password: string) => Promise<void>;
-  register: (name: string, email: string, password: string) => Promise<void>;
+  register: (name: string, email: string, password: string, role: "STUDENT" | "TUTOR") => Promise<void>;
   logout: () => Promise<void>;
   refreshUser: () => Promise<void>;
 }
@@ -21,7 +21,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const pathname = usePathname();
 
-  // Check auth on mount
+
   useEffect(() => {
     checkAuth();
   }, []);
@@ -47,34 +47,34 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
-  const login = async (email: string, password: string) => {
-    console.log("🔐 Logging in...", { email });
-    const { data, error } = await authService.login({ email, password });
+const login = async (email: string, password: string) => {
+  const { data, error } = await authService.login({ email, password });
 
-    console.log("📨 Login response:", { data, error });
+  if (error) throw new Error(error);
 
-    if (error) {
-      throw new Error(error);
+  if (data?.user) {
+    setUser(data.user);
+
+    let redirectPath = "/";
+    
+    if (data.user.role === "ADMIN") {
+      redirectPath = "/admin";
+    } else if (data.user.role === "TUTOR") {
+      redirectPath = "/tutor";
+    } else if (data.user.role === "STUDENT") {
+      redirectPath = "/dashboard";
     }
 
-    if (data?.user) {
-      console.log("✅ Login successful, setting user:", data.user);
-      setUser(data.user);
+    router.replace(redirectPath);
+  }
+};
 
-      const redirectPath = 
-        data.user.role === "ADMIN" ? "/admin" :
-        data.user.role === "TUTOR" ? "/tutor" : "/";
-      
-      console.log("➡️ Redirecting to", redirectPath);
-      router.replace(redirectPath);
-    }
-  };
-
-  const register = async (name: string, email: string, password: string) => {
+  const register = async (name: string, email: string, password: string, role: "STUDENT" | "TUTOR") => {
     const { data, error } = await authService.register({
       name,
       email,
       password,
+      role
     });
 
     if (error) {

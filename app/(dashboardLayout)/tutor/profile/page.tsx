@@ -39,7 +39,7 @@ export default function TutorProfilePage() {
     try {
       const { data, error } = await tutorService.getMyProfile();
       if (data) {
-        setProfile(data);
+        setProfile(data as any);
         form.setFieldsValue({
           bio: data.bio,
           subjects: data.subjects,
@@ -71,7 +71,7 @@ export default function TutorProfilePage() {
         message.success(
           profile ? "Profile updated successfully!" : "Profile created successfully!"
         );
-        setProfile(data);
+        setProfile(data as any);
         router.push("/tutor");
       }
     } catch (err) {
@@ -84,7 +84,7 @@ export default function TutorProfilePage() {
   if (loading) {
     return (
       <div style={{ display: "flex", justifyContent: "center", padding: 60 }}>
-        <Spin size="large" />
+        <Spin fullscreen size="large" />
       </div>
     );
   }
@@ -114,13 +114,13 @@ export default function TutorProfilePage() {
             name="bio"
             rules={[
               { required: true, message: "Please enter your bio" },
-              { min: 50, message: "Bio should be at least 50 characters" },
+              { min: 10, message: "Bio should be at least 10 characters" },
             ]}
           >
             <TextArea
               rows={4}
               placeholder="Tell students about yourself, your teaching style, and experience..."
-              maxLength={500}
+              maxLength={5000}
               showCount
             />
           </Form.Item>
@@ -147,12 +147,12 @@ export default function TutorProfilePage() {
           </Form.Item>
 
           <Form.Item
-            label="Hourly Rate (USD)"
+            label="Hourly Rate (Taka)"
             name="hourlyRate"
             rules={[
               { required: true, message: "Please enter your hourly rate" },
               { type: "number", min: 5, message: "Minimum rate is $5/hour" },
-              { type: "number", max: 500, message: "Maximum rate is $500/hour" },
+              { type: "number", max: 5000, message: "Maximum rate is $5000/hour" },
             ]}
           >
             <InputNumber
@@ -162,7 +162,7 @@ export default function TutorProfilePage() {
               style={{ width: "100%" }}
               placeholder="25"
               min={5}
-              max={500}
+              max={5000}
               step={5}
             />
           </Form.Item>

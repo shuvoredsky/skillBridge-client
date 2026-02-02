@@ -24,6 +24,7 @@ import {
   StarOutlined,
 } from "@ant-design/icons";
 import { bookingService, BookingSession } from "../../../src/services/booking.service";
+import { reviewService } from "../../../src/services/review.service"; 
 import type { ColumnsType } from "antd/es/table";
 import dayjs from "dayjs";
 
@@ -36,6 +37,7 @@ export default function MyBookingsPage() {
   const [cancelling, setCancelling] = useState<string | null>(null);
   const [reviewModalVisible, setReviewModalVisible] = useState(false);
   const [selectedBooking, setSelectedBooking] = useState<BookingSession | null>(null);
+  const [submittingReview, setSubmittingReview] = useState(false); // 👈 New state
   const [form] = Form.useForm();
 
   useEffect(() => {
@@ -80,11 +82,35 @@ export default function MyBookingsPage() {
     setReviewModalVisible(true);
   };
 
-  const handleSubmitReview = async (values: any) => {
-    console.log("Review submitted:", values);
-    message.success("Review submitted successfully!");
-    setReviewModalVisible(false);
-    form.resetFields();
+  // 👇 FIXED: Actual API call implementation
+  const handleSubmitReview = async (values: { rating: number; comment: string }) => {
+    if (!selectedBooking) {
+      message.error("No booking selected");
+      return;
+    }
+
+    setSubmittingReview(true);
+    try {
+      const { data, error } = await reviewService.createReview({
+        bookingId: selectedBooking.id,
+        rating: values.rating,
+        comment: values.comment,
+      });
+
+      if (error) {
+        message.error(error);
+      } else {
+        message.success("Review submitted successfully!");
+        setReviewModalVisible(false);
+        form.resetFields();
+        loadBookings(); // 👈 Reload to show updated review status
+      }
+    } catch (error) {
+      message.error("Failed to submit review");
+      console.error("Review submission error:", error);
+    } finally {
+      setSubmittingReview(false);
+    }
   };
 
   const getStatusColor = (status: string) => {
@@ -302,10 +328,16 @@ export default function MyBookingsPage() {
                   setReviewModalVisible(false);
                   form.resetFields();
                 }}
+                disabled={submittingReview}
               >
                 Cancel
               </Button>
-              <Button type="primary" htmlType="submit" className="bg-indigo-600">
+              <Button 
+                type="primary" 
+                htmlType="submit" 
+                className="bg-indigo-600"
+                loading={submittingReview} // 👈 Show loading state
+              >
                 Submit Review
               </Button>
             </div>

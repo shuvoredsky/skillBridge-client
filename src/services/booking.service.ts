@@ -37,7 +37,7 @@ export interface CreateBookingData {
 
 export const bookingService = {
   createBooking: async (data: CreateBookingData) => {
-    // ব্যাকএন্ডের ফুল পাথ সেট করা হলো
+
     return api.post<BookingSession>("/api/v1/bookings", data);
   },
 

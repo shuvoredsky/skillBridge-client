@@ -49,7 +49,7 @@ export default function AvailabilityPage() {
       if (profileRes.data) {
         setTutorProfileId(profileRes.data.id);
         const { data } = await tutorService.getMyAvailability(profileRes.data.id);
-        if (data) setAvailability(data);
+        if (data) setAvailability(data as any);
       }
     } catch (err) {
       console.error("Error loading availability:", err);

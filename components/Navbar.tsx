@@ -8,9 +8,9 @@ import { useAuth } from "@/context/AuthContext";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
-  const { user, logout } = useAuth(); // logout ফাংশনটি context থেকে নিন
+  const { user, logout } = useAuth(); 
 
-  // পাবলিক লিংক যেগুলো সবসময় থাকবে
+  
   const navLinks = [
     { name: "Home", href: "/" },
     { name: "Find Tutors", href: "/tutors" },
@@ -79,8 +79,8 @@ export default function Navbar() {
               <div className="flex items-center space-x-4">
                 
                 {user.role === "STUDENT" && (
-                  <Link href="/become-tutor">
-                    <Button type="link" className="text-indigo-600 font-semibold">Become a Tutor</Button>
+                  <Link href="/register">
+                    <Button onClick={logout} type="link" className="text-indigo-600 font-semibold">Become a Tutor</Button>
                   </Link>
                 )}
                 

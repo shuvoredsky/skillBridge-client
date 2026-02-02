@@ -30,8 +30,8 @@ export default function TutorDashboard() {
         tutorService.getMySessions(),
       ]);
 
-      if (profileRes.data) setProfile(profileRes.data);
-      if (sessionsRes.data) setSessions(sessionsRes.data);
+      if (profileRes.data) setProfile(profileRes.data as any);
+      if (sessionsRes.data) setSessions(sessionsRes.data as any);
     } catch (err) {
       console.error("Failed to load dashboard:", err);
     } finally {
@@ -42,7 +42,7 @@ export default function TutorDashboard() {
   if (loading) {
     return (
       <div style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: 400 }}>
-        <Spin size="large" tip="Loading your dashboard..." />
+        <Spin fullscreen size="large" tip="Loading your dashboard..." />
       </div>
     );
   }

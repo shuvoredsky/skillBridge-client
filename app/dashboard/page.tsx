@@ -60,7 +60,7 @@ export default function StudentDashboardPage() {
   if (loading) {
     return (
       <div className="flex justify-center items-center h-96">
-        <Spin size="large" />
+        <Spin fullscreen size="large" />
       </div>
     );
   }

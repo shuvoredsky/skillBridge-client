@@ -229,7 +229,7 @@ export default function BrowseTutorsPage() {
             <Col xs={24} lg={18}>
               {loading ? (
                 <div className="flex justify-center items-center h-96">
-                  <Spin size="large" />
+                  <Spin fullscreen size="large" />
                 </div>
               ) : filteredTutors.length === 0 ? (
                 <Card>

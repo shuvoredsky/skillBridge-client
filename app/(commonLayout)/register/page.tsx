@@ -2,28 +2,35 @@
 
 import { useAuth } from "@/context/AuthContext";
 import { useState } from "react";
-import { Form, Input, Button, Card, Typography, message } from "antd";
+import { Form, Input, Button, Typography, message, Radio } from "antd";
 import { UserOutlined, MailOutlined, LockOutlined, BookOutlined } from "@ant-design/icons";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
-const { Title, Text } = Typography;
+const { Text } = Typography;
 
 export default function RegisterPage() {
+  const router = useRouter();
   const [loading, setLoading] = useState(false);
   const { register } = useAuth();
   const [form] = Form.useForm();
+  
 
   const onFinish = async (values: {
     name: string;
     email: string;
     password: string;
+    role: "STUDENT" | "TUTOR" ;
   }) => {
     setLoading(true);
     try {
-      await register(values.name, values.email, values.password);
+      await register(values.name, values.email, values.password, values.role);
       message.success(
         "Registration successful! Please check your email to verify."
       );
+      setTimeout(() => {
+      router.push("/login");
+    }, 2000);
     } catch (error: any) {
       message.error(error.message || "Registration failed");
     } finally {
@@ -65,15 +72,15 @@ export default function RegisterPage() {
           <p className="text-sm font-medium opacity-80 italic">Join over 2,000+ active learners today!</p>
         </div>
 
-        {/* Decorative elements */}
+
         <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -mr-32 -mt-32 blur-3xl"></div>
         <div className="absolute bottom-0 left-0 w-64 h-64 bg-emerald-400/20 rounded-full -ml-32 -mb-32 blur-3xl"></div>
       </div>
 
-      {/* Right Side: Register Form */}
+      
       <div className="flex-1 flex items-center justify-center p-6 md:p-12 lg:p-16">
         <div className="w-full max-w-[440px]">
-          {/* Mobile Logo Only */}
+          
           <div className="lg:hidden flex justify-center mb-8">
             <div className="flex items-center gap-2">
               <BookOutlined className="text-[#008060] text-2xl" />
@@ -109,6 +116,24 @@ export default function RegisterPage() {
                 className="rounded-xl h-12 border-gray-200"
               />
             </Form.Item>
+
+
+            <Form.Item
+  label={<span className="text-gray-700 font-semibold">I want to join as a</span>}
+  name="role"
+  rules={[{ required: true, message: "Please select your role" }]}
+>
+  <Radio.Group className="w-full">
+    <div className="grid grid-cols-2 gap-4">
+      <Radio.Button value="STUDENT" className="text-center h-12 flex items-center justify-center rounded-xl">
+        Student
+      </Radio.Button>
+      <Radio.Button value="TUTOR" className="text-center h-12 flex items-center justify-center rounded-xl">
+        Tutor
+      </Radio.Button>
+    </div>
+  </Radio.Group>
+</Form.Item>
 
             <Form.Item
               label={<span className="text-gray-700 font-semibold">Email Address</span>}
@@ -171,6 +196,7 @@ export default function RegisterPage() {
                 htmlType="submit"
                 className="w-full h-12 text-base font-bold rounded-xl bg-[#008060] hover:bg-[#006b50] border-0 shadow-md transition-all duration-200"
                 loading={loading}
+                
               >
                 Create Account
               </Button>

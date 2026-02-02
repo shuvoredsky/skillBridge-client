@@ -39,7 +39,7 @@ export default function SessionsPage() {
       if (error) {
         message.error(error);
       } else if (data) {
-        setSessions(data);
+        setSessions(data as any);
       }
     } catch (err) {
       message.error("Failed to load sessions");

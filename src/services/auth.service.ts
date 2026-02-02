@@ -24,6 +24,7 @@ export const authService = {
     name: string;
     email: string;
     password: string;
+    role: "STUDENT" | "TUTOR";
   }) => {
     return api.post<AuthResponse>("/api/auth/sign-up/email", data);
   },

@@ -58,7 +58,7 @@ export default function AdminDashboardPage() {
     return (
       <div className="flex items-center justify-center min-h-screen bg-gray-50">
         <div className="text-center">
-          <Spin size="large" />
+          <Spin fullscreen size="large" />
           <p className="mt-4 text-gray-500">Loading dashboard data...</p>
         </div>
       </div>

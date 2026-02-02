@@ -44,7 +44,7 @@ export function ProtectedRoute({
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <Spin size="large" />
+        <Spin fullscreen size="large" />
       </div>
     );
   }
