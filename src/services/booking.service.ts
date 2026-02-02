@@ -37,6 +37,7 @@ export interface CreateBookingData {
 
 export const bookingService = {
   createBooking: async (data: CreateBookingData) => {
+    // ব্যাকএন্ডের ফুল পাথ সেট করা হলো
     return api.post<BookingSession>("/api/v1/bookings", data);
   },
 
@@ -47,4 +48,12 @@ export const bookingService = {
   cancelBooking: async (bookingId: string) => {
     return api.delete(`/api/v1/bookings/${bookingId}`);
   },
+
+  getTutorSessions: async () => {
+    return api.get<BookingSession[]>("/api/v1/bookings/my-sessions");
+  },
+
+  updateBookingStatus: async (bookingId: string, status: "COMPLETED" | "CANCELLED") => {
+    return api.patch(`/api/v1/bookings/${bookingId}/status`, { status });
+  }
 };

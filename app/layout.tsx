@@ -1,6 +1,6 @@
 import { AntdRegistry } from "@ant-design/nextjs-registry";
 import { AuthProvider } from "@/context/AuthContext";
-import { ConfigProvider } from "antd";
+import { ConfigProvider, App } from "antd";
 import "./globals.css";
 
 export const metadata = {
@@ -20,12 +20,14 @@ export default function RootLayout({
           <ConfigProvider
             theme={{
               token: {
-                colorPrimary: "#1890ff",
+                colorPrimary: "#4F46E5",
                 borderRadius: 6,
               },
             }}
           >
-            <AuthProvider>{children}</AuthProvider>
+            <App>
+              <AuthProvider>{children}</AuthProvider>
+            </App>
           </ConfigProvider>
         </AntdRegistry>
       </body>
