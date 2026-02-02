@@ -22,18 +22,23 @@ export default function StudentLayout({
   const pathname = usePathname();
   const router = useRouter();
 
-  const menuItems = [
-    {
-      key: "/",
-      icon: <HomeOutlined />,
-      label: "Dashboard",
-    },
-    {
-      key: "/student/bookings",
-      icon: <BookOutlined />,
-      label: "My Bookings",
-    },
-  ];
+ const menuItems = [
+  {
+    key: "/student",
+    icon: <HomeOutlined />,
+    label: "Overview",
+  },
+  {
+    key: "/student/bookings",
+    icon: <BookOutlined />,
+    label: "My Bookings",
+  },
+  {
+    key: "/dashboard/profile",
+    icon: <UserOutlined />,
+    label: "Profile",
+  },
+];
 
   const userMenuItems = [
     {

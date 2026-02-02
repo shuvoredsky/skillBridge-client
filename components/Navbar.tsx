@@ -18,18 +18,18 @@ export default function Navbar() {
     { name: "Contact", href: "/contact" },
   ];
 
-  // স্টুডেন্টের জন্য ড্রপডাউন মেনু
+  
   const studentItems: MenuProps['items'] = [
-    {
-      key: '1',
-      label: <Link href="/dashboard">Dashboard</Link>,
-      icon: <DashboardOutlined />,
-    },
-    {
-      key: '2',
-      label: <Link href="/dashboard/bookings">My Bookings</Link>,
-      icon: <BookOutlined />,
-    },
+   {
+    key: '1',
+    label: <Link href="/dashboard">Dashboard</Link>, // /dashboard এর বদলে /student
+    icon: <DashboardOutlined />,
+  },
+  {
+    key: '2',
+    label: <Link href="/dashboard/bookings">My Bookings</Link>,
+    icon: <BookOutlined />,
+  },
     {
       key: '3',
       label: <Link href="/dashboard/profile">Profile</Link>,
