@@ -66,7 +66,7 @@ export default function BrowseTutorsPage() {
   const loadTutors = async () => {
     setLoading(true);
     try {
-      const response = await fetch("http://localhost:5000/api/v1/tutors", {
+      const response = await fetch("https://skill-bridge-server-omega.vercel.app/api/v1/tutors", {
         credentials: "include",
       });
       const data = await response.json();

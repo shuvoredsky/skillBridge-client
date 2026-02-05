@@ -1,4 +1,4 @@
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "https://skill-bridge-server-omega.vercel.app";
 
 interface ApiResponse<T> {
   data: T | null;

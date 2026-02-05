@@ -29,7 +29,7 @@ export default function VerifyEmailPage() {
 
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000"}/api/verification/email`,
+        `${process.env.NEXT_PUBLIC_API_URL || "https://skill-bridge-server-omega.vercel.app"}/api/verification/email`,
         {
           method: "POST",
           headers: {
