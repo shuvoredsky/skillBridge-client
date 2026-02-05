@@ -98,7 +98,7 @@ export default function Footer() {
           <p className="text-gray-400 text-xs sm:text-sm">
             © {currentYear} SkillBridge. All rights reserved.
           </p>
-          <div className="flex gap-4 text-xs sm:text-sm">
+          {/* <div className="flex gap-4 text-xs sm:text-sm">
             <Link href="/terms" className="text-gray-400 hover:text-indigo-400 transition-colors">
               Terms
             </Link>
@@ -108,7 +108,7 @@ export default function Footer() {
             <Link href="/cookies" className="text-gray-400 hover:text-indigo-400 transition-colors">
               Cookies
             </Link>
-          </div>
+          </div> */}
         </div>
       </div>
     </footer>
