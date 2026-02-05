@@ -50,11 +50,11 @@ export const authService = {
   },
 
 
-  verifyEmail: async (token: string) => {
-    return api.post<{ message: string }>("/api/auth/verify-email", { token });
-  },
+  // verifyEmail: async (token: string) => {
+  //   return api.post<{ message: string }>("/api/auth/verify-email", { token });
+  // },
 
-  resendVerification: async (email: string) => {
-    return api.post<{ message: string }>("/api/auth/resend-verification", { email });
-  },
+  // resendVerification: async (email: string) => {
+  //   return api.post<{ message: string }>("/api/auth/resend-verification", { email });
+  // },
 };
