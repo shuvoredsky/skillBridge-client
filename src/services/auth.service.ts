@@ -48,4 +48,13 @@ export const authService = {
   getSession: async () => {
     return api.get<{ user: User }>("/api/auth/get-session");
   },
+
+
+  verifyEmail: async (token: string) => {
+    return api.post<{ message: string }>("/api/auth/verify-email", { token });
+  },
+
+  resendVerification: async (email: string) => {
+    return api.post<{ message: string }>("/api/auth/resend-verification", { email });
+  },
 };
