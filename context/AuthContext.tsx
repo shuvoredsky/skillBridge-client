@@ -87,7 +87,7 @@ const login = async (email: string, password: string) => {
   const logout = async () => {
     await authService.logout();
     setUser(null);
-    router.replace("/login"); // ✅ replace use করুন
+    router.replace("/login"); 
   };
 
   const refreshUser = async () => {

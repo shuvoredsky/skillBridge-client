@@ -1,4 +1,4 @@
-const BACKEND_URL = "https://skill-bridge-server-omega.vercel.app";
+const BACKEND_URL = "http://localhost:5000";
 
 export const getMe = async () => {
   try {
@@ -7,8 +7,8 @@ export const getMe = async () => {
       headers: {
         "Content-Type": "application/json",
       },
-      
-      credentials: "include", 
+
+      credentials: "include",
     });
 
     if (!res.ok) return null;

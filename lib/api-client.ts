@@ -1,4 +1,6 @@
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "https://skill-bridge-server-omega.vercel.app";
+const BASE_URL =
+  process.env.NEXT_PUBLIC_API_URL ||
+  "http://localhost:5000";
 
 interface ApiResponse<T> {
   data: T | null;
@@ -14,7 +16,7 @@ class ApiClient {
 
   private async request<T>(
     endpoint: string,
-    options: RequestInit = {}
+    options: RequestInit = {},
   ): Promise<ApiResponse<T>> {
     try {
       const response = await fetch(`${this.baseURL}${endpoint}`, {
@@ -23,7 +25,7 @@ class ApiClient {
           "Content-Type": "application/json",
           ...options.headers,
         },
-        credentials: "include", 
+        credentials: "include",
       });
 
       if (!response.ok) {
