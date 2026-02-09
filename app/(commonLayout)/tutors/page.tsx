@@ -67,7 +67,7 @@ export default function BrowseTutorsPage() {
     setLoading(true);
     try {
       const response = await fetch(
-        "http://localhost:5000/api/v1/tutors",
+        "https://skill-bridge-server-omega.vercel.app/api/v1/tutors",
         {
           credentials: "include",
         },
