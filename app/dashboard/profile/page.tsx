@@ -139,15 +139,7 @@ export default function StudentProfilePage() {
               <p className="font-semibold text-gray-900">Student Account</p>
             </div>
           </div>
-          <div className="flex justify-between items-center py-3 border-b">
-            <div>
-              <p className="text-sm text-gray-500">Email Verified</p>
-              <p className="font-semibold text-gray-900">
-                {user?.emailVerified ? "✅ Verified" : "❌ Not Verified"}
-              </p>
-            </div>
-          </div>
-          
+          {/* ❌ REMOVED: Email Verified section */}
         </div>
       </Card>
 

@@ -10,7 +10,7 @@ import {
   CloseCircleOutlined,
   ClockCircleOutlined,
 } from "@ant-design/icons";
-import { adminService } from "../../../src/services/admin.service";
+import { adminService } from "../../../services/admin.service";
 
 interface DashboardStats {
   users: {

@@ -15,10 +15,9 @@ import {
 import {
   SearchOutlined,
   UserOutlined,
-  CheckCircleOutlined,
   StopOutlined,
 } from "@ant-design/icons";
-import { adminService, User } from "../../../../src/services/admin.service";
+import { adminService, User } from "../../../../services/admin.service";
 import type { ColumnsType } from "antd/es/table";
 
 const { Search } = Input;
@@ -152,19 +151,7 @@ export default function AdminUsersPage() {
         );
       },
     },
-    {
-      title: "Email Verified",
-      dataIndex: "emailVerified",
-      key: "emailVerified",
-      render: (verified: boolean) =>
-        verified ? (
-          <Tag color="success" icon={<CheckCircleOutlined />}>
-            Verified
-          </Tag>
-        ) : (
-          <Tag color="warning">Not Verified</Tag>
-        ),
-    },
+    // ❌ REMOVED: Email Verified column
     {
       title: "Status",
       dataIndex: "status",
@@ -201,7 +188,6 @@ export default function AdminUsersPage() {
                 <Button
                   type="primary"
                   size="small"
-                  icon={<CheckCircleOutlined />}
                   onClick={() => openActionModal(record, "unban")}
                 >
                   Unban

@@ -18,7 +18,7 @@ import {
   ClockCircleOutlined,
   UserOutlined,
 } from "@ant-design/icons";
-import { tutorService } from "../../../../src/services/tutor.service";
+import { tutorService } from "../../../../services/tutor.service";
 import type { Session } from "@/types/tutor";
 import type { ColumnsType } from "antd/es/table";
 

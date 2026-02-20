@@ -17,7 +17,7 @@ import {
   UserOutlined,
   BookOutlined,
 } from "@ant-design/icons";
-import { adminService, Booking } from "../../../../src/services/admin.service";
+import { adminService, Booking } from "../../../../services/admin.service";
 import type { ColumnsType } from "antd/es/table";
 import dayjs from "dayjs";
 

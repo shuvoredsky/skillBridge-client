@@ -18,7 +18,7 @@ import {
   DeleteOutlined,
   TagsOutlined,
 } from "@ant-design/icons";
-import { adminService, Category } from "../../../../src/services/admin.service";
+import { adminService, Category } from "../../../../services/admin.service";
 import type { ColumnsType } from "antd/es/table";
 import dayjs from "dayjs";
 

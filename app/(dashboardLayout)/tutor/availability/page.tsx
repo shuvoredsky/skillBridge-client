@@ -16,7 +16,7 @@ import {
   Popconfirm,
 } from "antd";
 import { PlusOutlined, DeleteOutlined, ClockCircleOutlined } from "@ant-design/icons";
-import { tutorService } from "../../../../src/services/tutor.service";
+import { tutorService } from "../../../../services/tutor.service";
 import type { Availability } from "@/types/tutor";
 
 const { Option } = Select;

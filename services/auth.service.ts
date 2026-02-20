@@ -5,17 +5,15 @@ export interface User {
   name: string;
   email: string;
   role: "STUDENT" | "TUTOR" | "ADMIN";
-  emailVerified: boolean;
   image?: string;
   phone?: string;
 }
 
+// auth.service.ts
 export interface AuthResponse {
+  redirect: boolean;
+  token: string;        
   user: User;
-  session?: {
-    token: string;
-    expiresAt: string;
-  };
 }
 
 export const authService = {
@@ -30,9 +28,11 @@ export const authService = {
   },
 
 
-  login: async (data: { email: string; password: string }) => {
-    return api.post<AuthResponse>("/api/auth/sign-in/email", data);
-  },
+login: async (data: { email: string; password: string }) => {
+  const result = await api.post<AuthResponse>("/api/auth/sign-in/email", data);
+  console.log("🔴 RAW LOGIN RESPONSE:", JSON.stringify(result, null, 2));
+  return result;
+},
 
   
   logout: async () => {
@@ -40,9 +40,11 @@ export const authService = {
   },
 
   
-  getMe: async () => {
-    return api.get<User>("/api/v1/users/me");
-  },
+getMe: async () => {
+  const result = await api.get<User>("/api/v1/users/me"); // ✅ আগের endpoint এ ফিরে যাও
+  console.log("🔴 RAW GETME RESPONSE:", JSON.stringify(result, null, 2));
+  return result;
+},
 
   
   getSession: async () => {
@@ -50,11 +52,5 @@ export const authService = {
   },
 
 
-  // verifyEmail: async (token: string) => {
-  //   return api.post<{ message: string }>("/api/auth/verify-email", { token });
-  // },
 
-  // resendVerification: async (email: string) => {
-  //   return api.post<{ message: string }>("/api/auth/resend-verification", { email });
-  // },
 };

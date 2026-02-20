@@ -27,7 +27,6 @@ export interface User {
   name: string;
   email: string;
   role: "STUDENT" | "TUTOR" | "ADMIN";
-  emailVerified: boolean;
   image?: string;
   phone?: string;
   status?: string;

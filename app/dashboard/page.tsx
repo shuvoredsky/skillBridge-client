@@ -11,7 +11,7 @@ import {
   ArrowRightOutlined,
 } from "@ant-design/icons";
 import { useRouter } from "next/navigation";
-import { bookingService, BookingSession } from "../../src/services/booking.service";
+import { bookingService, BookingSession } from "../../services/booking.service";
 import dayjs from "dayjs";
 
 export default function StudentDashboardPage() {

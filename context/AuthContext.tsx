@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useContext, useEffect, useState } from "react";
-import { authService, User } from "../src/services/auth.service";
+import { authService, User } from "../services/auth.service";
 import { useRouter, usePathname } from "next/navigation";
 
 interface AuthContextType {
@@ -26,48 +26,62 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     checkAuth();
   }, []);
 
-  const checkAuth = async () => {
-    console.log("🔍 Checking auth...");
-    try {
-      const { data, error } = await authService.getMe();
-      console.log("✅ Auth response:", { data, error });
-      
-      if (data && !error) {
-        console.log("✅ User found:", data);
-        setUser(data);
-      } else {
-        console.log("❌ No user found");
-        setUser(null);
-      }
-    } catch (error) {
-      console.error("❌ Auth check failed:", error);
-      setUser(null);
-    } finally {
-      setLoading(false);
-    }
-  };
 
-const login = async (email: string, password: string) => {
-  const { data, error } = await authService.login({ email, password });
 
-  if (error) throw new Error(error);
-
-  if (data?.user) {
-    setUser(data.user);
-
-    let redirectPath = "/";
+const checkAuth = async () => {
+  const token = typeof window !== "undefined" 
+    ? localStorage.getItem("authToken") 
+    : null;
     
-    if (data.user.role === "ADMIN") {
-      redirectPath = "/admin";
-    } else if (data.user.role === "TUTOR") {
-      redirectPath = "/tutor";
-    } else if (data.user.role === "STUDENT") {
-      redirectPath = "/dashboard";
-    }
+  if (!token) {
+    setLoading(false);
+    return;
+  }
 
-    router.replace(redirectPath);
+  try {
+    const { data, error } = await authService.getMe();
+    if (data && !error) {
+      setUser(data as User); // ✅ সরাসরি data, data.user না
+    } else {
+      setUser(null);
+      localStorage.removeItem("authToken");
+    }
+  } catch (error) {
+    setUser(null);
+    localStorage.removeItem("authToken");
+  } finally {
+    setLoading(false);
   }
 };
+
+
+
+// AuthContext.tsx
+const login = async (email: string, password: string) => {
+  const { data, error } = await authService.login({ email, password });
+  if (error) throw new Error(error);
+  
+  if (data?.user) {
+    // ✅ আগে token store করো
+    if (data.token) {
+      localStorage.setItem("authToken", data.token);
+    }
+    // ✅ তারপর user set করো (token এখন available)
+    setUser(data.user);
+  }
+};
+
+
+
+useEffect(() => {
+  if (user) {
+    const redirectPath = 
+      user.role === "ADMIN" ? "/admin" :
+      user.role === "TUTOR" ? "/tutor" : 
+      user.role === "STUDENT" ? "/dashboard" : "/";
+    router.replace(redirectPath);
+  }
+}, [user, router]);
 
   const register = async (name: string, email: string, password: string, role: "STUDENT" | "TUTOR") => {
     const { data, error } = await authService.register({
@@ -87,6 +101,9 @@ const login = async (email: string, password: string) => {
   const logout = async () => {
     await authService.logout();
     setUser(null);
+    if (typeof window !== "undefined") {
+      localStorage.removeItem("authToken");
+    }
     router.replace("/login"); 
   };
 

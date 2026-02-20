@@ -27,17 +27,20 @@ export default function LoginPage() {
   }
 }, [user, router]);
 
-  const onFinish = async (values: { email: string; password: string }) => {
-    setLoading(true);
-    try {
-      await login(values.email, values.password);
-      message.success("Login successful!");
-    } catch (error: any) {
-      message.error(error.message || "Login failed");
-    } finally {
-      setLoading(false);
-    }
-  };
+// Login form এ এভাবে করো
+const onFinish = async (values: { email: string; password: string }) => {
+  setLoading(true);
+  try {
+    await login(values.email, values.password);
+    // login এর পরে user state এ set হয়ে যাবে
+    // redirect login function নিজেই করবে
+    message.success("Login successful!");
+  } catch (error: any) {
+    message.error(error.message || "Login failed");
+  } finally {
+    setLoading(false);
+  }
+};
 
   if (user) {
     return (

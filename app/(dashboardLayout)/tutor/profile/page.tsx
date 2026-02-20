@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { Card, Form, Input, InputNumber, Button, Select, message, Spin } from "antd";
 import { SaveOutlined } from "@ant-design/icons";
-import { tutorService } from "../../../../src/services/tutor.service";
+import { tutorService } from "../../../../services/tutor.service";
 import { useRouter } from "next/navigation";
 import type { TutorProfile } from "@/types/tutor";
 

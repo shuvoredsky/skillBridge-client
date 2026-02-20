@@ -31,8 +31,8 @@ import {
   ArrowLeftOutlined,
 } from "@ant-design/icons";
 import { useParams, useRouter } from "next/navigation";
-import { tutorService, TutorProfile } from "../../../../src/services/tutor.service";
-import { bookingService } from "../../../../src/services/booking.service";
+import { tutorService, TutorProfile } from "../../../../services/tutor.service";
+import { bookingService } from "../../../../services/booking.service";
 import { useAuth } from "@/context/AuthContext";
 import dayjs from "dayjs";
 

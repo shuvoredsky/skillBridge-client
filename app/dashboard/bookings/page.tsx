@@ -23,8 +23,8 @@ import {
   DeleteOutlined,
   StarOutlined,
 } from "@ant-design/icons";
-import { bookingService, BookingSession } from "../../../src/services/booking.service";
-import { reviewService } from "../../../src/services/review.service"; 
+import { bookingService, BookingSession } from "../../../services/booking.service";
+import { reviewService } from "../../../services/review.service"; 
 import type { ColumnsType } from "antd/es/table";
 import dayjs from "dayjs";
 

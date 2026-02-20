@@ -1,4 +1,4 @@
-const BACKEND_URL = "https://skill-bridge-server-omega.vercel.app";
+const BACKEND_URL = "https://skillbridge-server-a.onrender.com";
 
 export const getMe = async () => {
   try {

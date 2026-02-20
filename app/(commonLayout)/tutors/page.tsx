@@ -67,7 +67,7 @@ export default function BrowseTutorsPage() {
     setLoading(true);
     try {
       const response = await fetch(
-        "https://skill-bridge-server-omega.vercel.app/api/v1/tutors",
+        "https://skillbridge-server-a.onrender.com/api/v1/tutors",
         {
           credentials: "include",
         },

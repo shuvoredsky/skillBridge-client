@@ -1,6 +1,6 @@
 const BASE_URL =
   process.env.NEXT_PUBLIC_API_URL ||
-  "https://skill-bridge-server-omega.vercel.app";
+  "https://skillbridge-server-a.onrender.com";
 
 interface ApiResponse<T> {
   data: T | null;
@@ -19,13 +19,24 @@ class ApiClient {
     options: RequestInit = {},
   ): Promise<ApiResponse<T>> {
     try {
+      // Get token from localStorage as fallback
+      const token = typeof window !== "undefined" ? localStorage.getItem("authToken") : null;
+      
+      const headers: Record<string, string> = {
+        "Content-Type": "application/json",
+        ...options.headers as Record<string, string>,
+      };
+
+      // Add token to Authorization header if available
+      if (token) {
+        headers["Authorization"] = `Bearer ${token}`;
+      }
+
       const response = await fetch(`${this.baseURL}${endpoint}`, {
         ...options,
-        headers: {
-          "Content-Type": "application/json",
-          ...options.headers,
-        },
+        headers,
         credentials: "include",
+        mode: "cors",
       });
 
       if (!response.ok) {
