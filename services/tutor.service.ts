@@ -10,6 +10,8 @@ export interface TutorProfile {
   education?: string;
   rating: number;
   totalReviews: number;
+  profilePhoto?: string;
+  profilePhotoUrl?: string;
   createdAt: string;
   updatedAt: string;
   user: {

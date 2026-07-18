@@ -41,7 +41,12 @@ const checkAuth = async () => {
   try {
     const { data, error } = await authService.getMe();
     if (data && !error) {
-      setUser(data as User); // ✅ সরাসরি data, data.user না
+      const cachedPhoto = typeof window !== "undefined" ? localStorage.getItem(`profilePhoto_${data.id}`) : null;
+      setUser({
+        ...data,
+        image: cachedPhoto || data.image,
+        profilePhoto: cachedPhoto || data.profilePhoto
+      } as User);
     } else {
       setUser(null);
       localStorage.removeItem("authToken");
@@ -67,7 +72,12 @@ const login = async (email: string, password: string) => {
       localStorage.setItem("authToken", data.token);
     }
     // ✅ তারপর user set করো (token এখন available)
-    setUser(data.user);
+    const cachedPhoto = typeof window !== "undefined" ? localStorage.getItem(`profilePhoto_${data.user.id}`) : null;
+    setUser({
+      ...data.user,
+      image: cachedPhoto || data.user.image,
+      profilePhoto: cachedPhoto || data.user.profilePhoto
+    });
   }
 };
 

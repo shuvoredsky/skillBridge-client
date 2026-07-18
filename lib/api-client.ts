@@ -1,6 +1,13 @@
-const BASE_URL =
-  process.env.NEXT_PUBLIC_API_URL ||
-  "https://skillbridge-server-a.onrender.com";
+const getCleanBaseUrl = () => {
+  const url =
+    process.env.NEXT_PUBLIC_API_BASE_URL ||
+    process.env.NEXT_PUBLIC_API_URL ||
+    "https://skillbridge-server-a.onrender.com";
+  return url.endsWith("/") ? url.slice(0, -1) : url;
+};
+
+// Use NEXT_PUBLIC_API_BASE_URL if NEXT_PUBLIC_API_URL is undefined (fixes routing errors in local dev)
+const BASE_URL = getCleanBaseUrl();
 
 interface ApiResponse<T> {
   data: T | null;
@@ -23,9 +30,13 @@ class ApiClient {
       const token = typeof window !== "undefined" ? localStorage.getItem("authToken") : null;
       
       const headers: Record<string, string> = {
-        "Content-Type": "application/json",
         ...options.headers as Record<string, string>,
       };
+
+      // Only set Content-Type if body is not FormData (for file uploads)
+      if (!(options.body instanceof FormData)) {
+        headers["Content-Type"] = "application/json";
+      }
 
       // Add token to Authorization header if available
       if (token) {
@@ -82,6 +93,13 @@ class ApiClient {
     return this.request<T>(endpoint, {
       method: "PATCH",
       body: JSON.stringify(body),
+    });
+  }
+
+  async upload<T>(endpoint: string, formData: FormData): Promise<ApiResponse<T>> {
+    return this.request<T>(endpoint, {
+      method: "POST",
+      body: formData,
     });
   }
 

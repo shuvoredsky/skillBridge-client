@@ -105,7 +105,7 @@ export default function AvailabilityPage() {
       dataIndex: "day",
       key: "day",
       render: (day: string) => (
-        <Tag color="blue" style={{ fontSize: 14 }}>
+        <Tag color="success" className="font-semibold text-sm">
           {day}
         </Tag>
       ),
@@ -116,19 +116,12 @@ export default function AvailabilityPage() {
       render: (_: any, record: { day: string; slots: Availability[] }) => (
         <Space size={[8, 8]} wrap>
           {record.slots.length === 0 ? (
-            <span style={{ color: "#999" }}>No slots available</span>
+            <span className="text-gray-400 dark:text-gray-500">No slots available</span>
           ) : (
             record.slots.map((slot) => (
               <div
                 key={slot.id}
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 8,
-                  padding: "6px 12px",
-                  background: "#f0f0f0",
-                  borderRadius: 6,
-                }}
+                className="flex items-center gap-2 px-3 py-1.5 bg-slate-100 dark:bg-slate-800 text-gray-700 dark:text-gray-200 border border-slate-200/60 dark:border-slate-700/60 rounded-lg text-sm transition-colors duration-200"
               >
                 <ClockCircleOutlined />
                 <span>
@@ -145,6 +138,7 @@ export default function AvailabilityPage() {
                     danger
                     size="small"
                     icon={<DeleteOutlined />}
+                    className="hover:bg-red-50 dark:hover:bg-red-950/20"
                   />
                 </Popconfirm>
               </div>
@@ -157,12 +151,12 @@ export default function AvailabilityPage() {
 
   return (
     <div>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 24 }}>
+      <div className="flex justify-between items-center mb-6">
         <div>
-          <h1 style={{ fontSize: 28, fontWeight: 700, margin: 0 }}>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
             Manage Availability
           </h1>
-          <p style={{ color: "#666", marginTop: 8 }}>
+          <p className="text-gray-600 dark:text-gray-400 mt-2">
             Set your weekly availability for students to book sessions
           </p>
         </div>
@@ -170,19 +164,20 @@ export default function AvailabilityPage() {
           type="primary"
           icon={<PlusOutlined />}
           size="large"
+          className="bg-brand-green hover:bg-brand-green-hover border-0 text-white"
           onClick={() => setModalVisible(true)}
         >
           Add Time Slot
         </Button>
       </div>
 
-      <Card>
+      <Card className="dark:bg-slate-900 dark:border-slate-800 shadow-sm">
         {availability.length === 0 ? (
           <Empty
-            description="No availability set yet"
+            description={<span className="dark:text-gray-400">No availability set yet</span>}
             style={{ padding: "60px 0" }}
           >
-            <Button type="primary" onClick={() => setModalVisible(true)}>
+            <Button type="primary" className="bg-brand-green hover:bg-brand-green-hover border-0" onClick={() => setModalVisible(true)}>
               Add Your First Slot
             </Button>
           </Empty>
@@ -236,9 +231,9 @@ export default function AvailabilityPage() {
           </Form.Item>
 
           <Form.Item style={{ marginBottom: 0 }}>
-            <Space style={{ width: "100%", justifyContent: "flex-end" }}>
+            <Space className="w-full justify-end">
               <Button onClick={() => setModalVisible(false)}>Cancel</Button>
-              <Button type="primary" htmlType="submit">
+              <Button type="primary" htmlType="submit" className="bg-brand-green hover:bg-brand-green-hover border-0 text-white">
                 Add Slot
               </Button>
             </Space>

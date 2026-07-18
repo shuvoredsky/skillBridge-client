@@ -7,6 +7,7 @@ export interface User {
   role: "STUDENT" | "TUTOR" | "ADMIN";
   image?: string;
   phone?: string;
+  profilePhoto?: string;
 }
 
 // auth.service.ts

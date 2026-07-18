@@ -15,6 +15,7 @@ import {
   Empty,
   Spin,
   Space,
+  message,
 } from "antd";
 import {
   SearchOutlined,
@@ -23,8 +24,14 @@ import {
   UserOutlined,
   StarOutlined,
   ClockCircleOutlined,
+  HeartOutlined,
+  HeartFilled,
 } from "@ant-design/icons";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/context/AuthContext";
+import { useWishlist } from "@/context/WishlistContext";
+import { getImageUrl } from "@/lib/getImageUrl";
+import { tutorService } from "@/services/tutor.service";
 
 const { Option } = Select;
 
@@ -37,6 +44,8 @@ interface TutorProfile {
   education?: string;
   rating: number;
   totalReviews: number;
+  profilePhoto?: string;
+  profilePhotoUrl?: string;
   user: {
     id: string;
     name: string;
@@ -54,6 +63,8 @@ export default function BrowseTutorsPage() {
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 5000]);
   const [minRating, setMinRating] = useState<number | undefined>();
   const router = useRouter();
+  const { user } = useAuth();
+  const { isSaved, toggleWishlist } = useWishlist();
 
   useEffect(() => {
     loadTutors();
@@ -66,15 +77,13 @@ export default function BrowseTutorsPage() {
   const loadTutors = async () => {
     setLoading(true);
     try {
-      const response = await fetch(
-        "https://skillbridge-server-a.onrender.com/api/v1/tutors",
-        {
-          credentials: "include",
-        },
-      );
-      const data = await response.json();
-      setTutors(data);
-      setFilteredTutors(data);
+      const { data, error } = await tutorService.getAllTutors();
+      if (data && !error) {
+        setTutors(data);
+        setFilteredTutors(data);
+      } else if (error) {
+        console.error("Failed to load tutors:", error);
+      }
     } catch (error) {
       console.error("Failed to load tutors:", error);
     } finally {
@@ -126,24 +135,24 @@ export default function BrowseTutorsPage() {
 
   return (
     <>
-      <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
+      <div className="min-h-screen bg-slate-50 dark:bg-slate-950 transition-colors duration-200">
         <div className="max-w-7xl mx-auto px-4 py-8">
           <div className="mb-8">
-            <h1 className="text-4xl font-bold text-gray-900 mb-3">
+            <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-3">
               Find Your Perfect Tutor
             </h1>
-            <p className="text-lg text-gray-600">
+            <p className="text-lg text-gray-600 dark:text-gray-400">
               Browse {tutors.length} expert tutors across various subjects
             </p>
           </div>
 
           <Row gutter={[24, 24]}>
             <Col xs={24} lg={6}>
-              <Card className="sticky top-4 shadow-lg">
+              <Card className="sticky top-4 shadow-lg dark:bg-slate-900 dark:border-slate-800">
                 <div className="space-y-6">
                   <div>
-                    <h3 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
-                      <SearchOutlined className="text-indigo-600" />
+                    <h3 className="font-semibold text-gray-900 dark:text-white mb-3 flex items-center gap-2">
+                      <SearchOutlined className="text-brand-green" />
                       Search Tutors
                     </h3>
                     <Input
@@ -152,12 +161,13 @@ export default function BrowseTutorsPage() {
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
                       allowClear
+                      className="dark:bg-slate-800 dark:border-slate-700 dark:text-white"
                     />
                   </div>
 
                   <div>
-                    <h3 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
-                      <BookOutlined className="text-indigo-600" />
+                    <h3 className="font-semibold text-gray-900 dark:text-white mb-3 flex items-center gap-2">
+                      <BookOutlined className="text-brand-green" />
                       Subject
                     </h3>
                     <Select
@@ -177,8 +187,8 @@ export default function BrowseTutorsPage() {
                   </div>
 
                   <div>
-                    <h3 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
-                      <DollarOutlined className="text-indigo-600" />
+                    <h3 className="font-semibold text-gray-900 dark:text-white mb-3 flex items-center gap-2">
+                      <DollarOutlined className="text-brand-green" />
                       Hourly Rate
                     </h3>
                     <Slider
@@ -193,15 +203,15 @@ export default function BrowseTutorsPage() {
                         formatter: (value) => `$${value}`,
                       }}
                     />
-                    <div className="flex justify-between text-sm text-gray-600 mt-2">
+                    <div className="flex justify-between text-sm text-gray-600 dark:text-gray-300 mt-2">
                       <span>${priceRange[0]}</span>
                       <span>${priceRange[1]}</span>
                     </div>
                   </div>
 
                   <div>
-                    <h3 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
-                      <StarOutlined className="text-indigo-600" />
+                    <h3 className="font-semibold text-gray-900 dark:text-white mb-3 flex items-center gap-2">
+                      <StarOutlined className="text-brand-green" />
                       Minimum Rating
                     </h3>
                     <Select
@@ -224,6 +234,7 @@ export default function BrowseTutorsPage() {
                     block
                     size="large"
                     onClick={clearAllFilters}
+                    className="dark:bg-slate-800 dark:text-white dark:border-slate-700"
                   >
                     Clear Filters
                   </Button>
@@ -234,12 +245,12 @@ export default function BrowseTutorsPage() {
             <Col xs={24} lg={18}>
               {loading ? (
                 <div className="flex justify-center items-center h-96">
-                  <Spin fullscreen size="large" />
+                  <Spin size="large" />
                 </div>
               ) : filteredTutors.length === 0 ? (
-                <Card>
+                <Card className="dark:bg-slate-900 dark:border-slate-800">
                   <Empty
-                    description="No tutors found matching your criteria"
+                    description={<span className="dark:text-gray-400">No tutors found matching your criteria</span>}
                     image={Empty.PRESENTED_IMAGE_SIMPLE}
                   />
                 </Card>
@@ -249,17 +260,48 @@ export default function BrowseTutorsPage() {
                     <Col xs={24} sm={12} xl={8} key={tutor.id}>
                       <Card
                         hoverable
-                        className="h-full shadow-md hover:shadow-xl transition-shadow duration-300"
+                        className="h-full shadow-md hover:shadow-xl dark:bg-slate-900 dark:border-slate-800 transition-all duration-300 relative"
                         onClick={() => router.push(`/tutors/${tutor.id}`)}
                       >
+                        {/* Save Tutor Heart Button (Bug/Feature E) */}
+                        <div
+                          className="absolute top-4 right-4 z-10"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            if (!user) {
+                              message.warning("Please login to save tutors");
+                              router.push("/login");
+                              return;
+                            }
+                            if (user.role !== "STUDENT") {
+                              message.warning("Only students can save tutors to wishlist");
+                              return;
+                            }
+                            toggleWishlist(tutor.id);
+                          }}
+                        >
+                          <Button
+                            type="text"
+                            shape="circle"
+                            className="bg-slate-100/80 dark:bg-slate-800/80 hover:bg-slate-200 dark:hover:bg-slate-700 shadow-sm flex items-center justify-center border-0 text-lg transition-transform duration-200 hover:scale-110"
+                            icon={
+                              isSaved(tutor.id) ? (
+                                <HeartFilled className="text-brand-red text-xl" />
+                              ) : (
+                                <HeartOutlined className="text-gray-400 dark:text-gray-300 hover:text-brand-red text-xl" />
+                              )
+                            }
+                          />
+                        </div>
+
                         <div className="text-center mb-4">
                           <Avatar
                             size={80}
-                            src={tutor.user.image}
+                            src={getImageUrl(tutor.profilePhoto || tutor.user.image)}
                             icon={<UserOutlined />}
-                            className="bg-gradient-to-br from-indigo-500 to-purple-600"
+                            className="bg-gradient-to-br from-brand-green to-emerald-600"
                           />
-                          <h3 className="text-lg font-bold text-gray-900 mt-3 mb-1">
+                          <h3 className="text-lg font-bold text-gray-900 dark:text-white mt-3 mb-1">
                             {tutor.user.name}
                           </h3>
                           <div className="flex items-center justify-center gap-2">
@@ -269,23 +311,23 @@ export default function BrowseTutorsPage() {
                               allowHalf
                               className="text-sm"
                             />
-                            <span className="text-sm text-gray-600">
+                            <span className="text-sm text-gray-600 dark:text-gray-400">
                               ({tutor.totalReviews})
                             </span>
                           </div>
                         </div>
 
                         <div className="space-y-3">
-                          <div className="flex items-center gap-2 text-gray-600">
-                            <DollarOutlined className="text-green-600" />
-                            <span className="font-semibold text-gray-900">
+                          <div className="flex items-center gap-2 text-gray-600 dark:text-gray-300">
+                            <DollarOutlined className="text-brand-green" />
+                            <span className="font-semibold text-gray-900 dark:text-white">
                               ${tutor.hourlyRate}/hr
                             </span>
                           </div>
 
                           {tutor.experience && (
-                            <div className="flex items-center gap-2 text-gray-600 text-sm">
-                              <ClockCircleOutlined className="text-indigo-600" />
+                            <div className="flex items-center gap-2 text-gray-600 dark:text-gray-300 text-sm">
+                              <ClockCircleOutlined className="text-brand-green" />
                               <span>{tutor.experience}</span>
                             </div>
                           )}
@@ -293,18 +335,18 @@ export default function BrowseTutorsPage() {
                           <div>
                             <div className="flex flex-wrap gap-1 mt-2">
                               {tutor.subjects.slice(0, 3).map((subject) => (
-                                <Tag key={subject} color="blue">
+                                <Tag key={subject} color="success" className="font-medium">
                                   {subject}
                                 </Tag>
                               ))}
                               {tutor.subjects.length > 3 && (
-                                <Tag>+{tutor.subjects.length - 3} more</Tag>
+                                <Tag className="dark:bg-slate-800 dark:text-gray-300">+{tutor.subjects.length - 3} more</Tag>
                               )}
                             </div>
                           </div>
 
                           {tutor.bio && (
-                            <p className="text-sm text-gray-600 line-clamp-2">
+                            <p className="text-sm text-gray-600 dark:text-gray-300 line-clamp-2">
                               {tutor.bio}
                             </p>
                           )}
@@ -313,7 +355,7 @@ export default function BrowseTutorsPage() {
                         <Button
                           type="primary"
                           block
-                          className="mt-4 bg-indigo-600 hover:bg-indigo-700"
+                          className="mt-4 bg-brand-green hover:bg-brand-green-hover border-0 text-white"
                           onClick={(e) => {
                             e.stopPropagation();
                             router.push(`/tutors/${tutor.id}`);

@@ -109,8 +109,8 @@ export default function AdminBookingsPage() {
       key: "subject",
       render: (subject) => (
         <div className="flex items-center gap-2">
-          <BookOutlined className="text-indigo-600" />
-          <span className="font-medium">{subject}</span>
+          <BookOutlined className="text-brand-green" />
+          <span className="font-medium dark:text-gray-200">{subject}</span>
         </div>
       ),
     },
@@ -119,11 +119,11 @@ export default function AdminBookingsPage() {
       key: "datetime",
       render: (_, record) => (
         <div>
-          <div className="flex items-center gap-1 text-sm">
+          <div className="flex items-center gap-1 text-sm text-gray-700 dark:text-gray-200">
             <CalendarOutlined className="text-gray-400" />
             <span>{dayjs(record.date).format("MMM DD, YYYY")}</span>
           </div>
-          <div className="flex items-center gap-1 text-xs text-gray-500">
+          <div className="flex items-center gap-1 text-xs text-gray-500 dark:text-gray-400">
             <ClockCircleOutlined />
             <span>
               {record.startTime} - {record.endTime}
@@ -162,12 +162,12 @@ export default function AdminBookingsPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold">Bookings Management</h1>
-        <p className="text-gray-500">View and manage all bookings on the platform</p>
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Bookings Management</h1>
+        <p className="text-gray-500 dark:text-gray-400">View and manage all bookings on the platform</p>
       </div>
 
       {/* Filters */}
-      <Card>
+      <Card className="dark:bg-slate-900 dark:border-slate-800 shadow-sm">
         <div className="flex flex-wrap gap-4">
           <Select
             placeholder="Filter by Status"
@@ -197,42 +197,42 @@ export default function AdminBookingsPage() {
 
       {/* Statistics */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card className="bg-blue-50 border-blue-200">
+        <Card className="bg-blue-50 border-blue-200 dark:from-slate-900 dark:to-slate-800 dark:border-slate-700">
           <div className="text-center">
-            <div className="text-3xl font-bold text-blue-600">
+            <div className="text-3xl font-bold text-blue-600 dark:text-blue-400">
               {bookings.filter((b) => b.status === "CONFIRMED").length}
             </div>
-            <div className="text-gray-600 mt-1">Confirmed</div>
+            <div className="text-gray-600 dark:text-gray-300 mt-1">Confirmed</div>
           </div>
         </Card>
-        <Card className="bg-green-50 border-green-200">
+        <Card className="bg-green-50 border-green-200 dark:from-slate-900 dark:to-slate-800 dark:border-slate-700">
           <div className="text-center">
-            <div className="text-3xl font-bold text-green-600">
+            <div className="text-3xl font-bold text-brand-green">
               {bookings.filter((b) => b.status === "COMPLETED").length}
             </div>
-            <div className="text-gray-600 mt-1">Completed</div>
+            <div className="text-gray-600 dark:text-gray-300 mt-1">Completed</div>
           </div>
         </Card>
-        <Card className="bg-red-50 border-red-200">
+        <Card className="bg-red-50 border-red-200 dark:from-slate-900 dark:to-slate-800 dark:border-slate-700">
           <div className="text-center">
-            <div className="text-3xl font-bold text-red-600">
+            <div className="text-3xl font-bold text-brand-red">
               {bookings.filter((b) => b.status === "CANCELLED").length}
             </div>
-            <div className="text-gray-600 mt-1">Cancelled</div>
+            <div className="text-gray-600 dark:text-gray-300 mt-1">Cancelled</div>
           </div>
         </Card>
-        <Card className="bg-indigo-50 border-indigo-200">
+        <Card className="bg-emerald-50 border-emerald-200 dark:from-slate-900 dark:to-slate-800 dark:border-slate-700">
           <div className="text-center">
-            <div className="text-3xl font-bold text-indigo-600">
+            <div className="text-3xl font-bold text-brand-green">
               {bookings.length}
             </div>
-            <div className="text-gray-600 mt-1">Total Bookings</div>
+            <div className="text-gray-600 dark:text-gray-300 mt-1">Total Bookings</div>
           </div>
         </Card>
       </div>
 
       {/* Bookings Table */}
-      <Card>
+      <Card className="dark:bg-slate-900 dark:border-slate-800 shadow-sm">
         <Table
           columns={columns}
           dataSource={bookings}

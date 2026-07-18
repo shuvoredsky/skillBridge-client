@@ -122,8 +122,8 @@ export default function AdminCategoriesPage() {
       key: "name",
       render: (name) => (
         <div className="flex items-center gap-2">
-          <TagsOutlined className="text-indigo-600" />
-          <span className="font-semibold text-gray-900">{name}</span>
+          <TagsOutlined className="text-brand-green" />
+          <span className="font-semibold text-gray-900 dark:text-gray-100">{name}</span>
         </div>
       ),
     },
@@ -132,7 +132,7 @@ export default function AdminCategoriesPage() {
       dataIndex: "description",
       key: "description",
       render: (description) => (
-        <span className="text-gray-600">
+        <span className="text-gray-600 dark:text-gray-300">
           {description || "No description"}
         </span>
       ),
@@ -142,7 +142,7 @@ export default function AdminCategoriesPage() {
       dataIndex: "createdAt",
       key: "createdAt",
       render: (date: string) => (
-        <span className="text-gray-500">
+        <span className="text-gray-500 dark:text-gray-400">
           {dayjs(date).format("MMM DD, YYYY")}
         </span>
       ),
@@ -182,30 +182,30 @@ export default function AdminCategoriesPage() {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-2xl font-bold">Categories Management</h1>
-          <p className="text-gray-500">Manage tutoring categories</p>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Categories Management</h1>
+          <p className="text-gray-500 dark:text-gray-400">Manage tutoring categories</p>
         </div>
         <Button
           type="primary"
           size="large"
           icon={<PlusOutlined />}
           onClick={openCreateModal}
-          className="bg-indigo-600 hover:bg-indigo-700"
+          className="bg-brand-green hover:bg-brand-green-hover border-0 text-white"
         >
           Add Category
         </Button>
       </div>
 
-      <Card className="bg-indigo-50 border-indigo-200">
+      <Card className="bg-emerald-50 dark:bg-emerald-950/20 border-emerald-200 dark:border-emerald-900/30">
         <div className="text-center">
-          <div className="text-4xl font-bold text-indigo-600">
+          <div className="text-4xl font-bold text-brand-green">
             {categories.length}
           </div>
-          <div className="text-gray-600 mt-1">Total Categories</div>
+          <div className="text-gray-600 dark:text-gray-300 mt-1">Total Categories</div>
         </div>
       </Card>
 
-      <Card>
+      <Card className="dark:bg-slate-900 dark:border-slate-800 shadow-sm">
         <Table
           columns={columns}
           dataSource={categories}
@@ -269,7 +269,7 @@ export default function AdminCategoriesPage() {
                 htmlType="submit"
                 loading={loading}
                 size="large"
-                className="bg-indigo-600 hover:bg-indigo-700"
+                className="bg-brand-green hover:bg-brand-green-hover border-0 text-white"
               >
                 {editingCategory ? "Update" : "Create"}
               </Button>

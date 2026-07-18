@@ -1,6 +1,4 @@
-import { AntdRegistry } from "@ant-design/nextjs-registry";
-import { AuthProvider } from "@/context/AuthContext";
-import { ConfigProvider, App } from "antd";
+import { Providers } from "@/components/Providers";
 import "./globals.css";
 
 export const metadata = {
@@ -15,21 +13,30 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        {/* Anti-flash blocking inline script */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                try {
+                  var saved = localStorage.getItem('theme');
+                  var pref = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                  if (saved === 'dark' || (!saved && pref)) {
+                    document.documentElement.classList.add('dark');
+                    document.documentElement.style.colorScheme = 'dark';
+                  } else {
+                    document.documentElement.classList.remove('dark');
+                    document.documentElement.style.colorScheme = 'light';
+                  }
+                } catch (e) {}
+              })();
+            `,
+          }}
+        />
+      </head>
       <body suppressHydrationWarning>
-        <AntdRegistry>
-          <ConfigProvider
-            theme={{
-              token: {
-                colorPrimary: "#4F46E5",
-                borderRadius: 6,
-              },
-            }}
-          >
-            <App>
-              <AuthProvider>{children}</AuthProvider>
-            </App>
-          </ConfigProvider>
-        </AntdRegistry>
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

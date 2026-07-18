@@ -13,8 +13,11 @@ import {
 import { useRouter } from "next/navigation";
 import { bookingService, BookingSession } from "../../services/booking.service";
 import dayjs from "dayjs";
+import { useTheme } from "@/context/ThemeContext";
 
 export default function StudentDashboardPage() {
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
   const [bookings, setBookings] = useState<BookingSession[]>([]);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
@@ -68,50 +71,50 @@ export default function StudentDashboardPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold text-gray-900">Welcome Back!</h1>
-        <p className="text-gray-600 mt-1">
+        <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Welcome Back!</h1>
+        <p className="text-gray-600 dark:text-gray-400 mt-1">
           Here's what's happening with your learning journey
         </p>
       </div>
 
       <Row gutter={[16, 16]}>
         <Col xs={24} sm={12} lg={6}>
-          <Card className="bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200">
+          <Card className="bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200 dark:from-slate-900 dark:to-slate-800 dark:border-slate-700">
             <Statistic
-              title={<span className="text-blue-900">Total Sessions</span>}
+              title={<span className="text-blue-900 dark:text-blue-200">Total Sessions</span>}
               value={bookings.length}
-              prefix={<BookOutlined className="text-blue-600" />}
-              valueStyle={{ color: "#1e40af", fontWeight: "bold" }}
+              prefix={<BookOutlined className="text-blue-600 dark:text-blue-400" />}
+              styles={{ content: { color: isDark ? "#60a5fa" : "#1e40af", fontWeight: "bold" } }}
             />
           </Card>
         </Col>
         <Col xs={24} sm={12} lg={6}>
-          <Card className="bg-gradient-to-br from-indigo-50 to-indigo-100 border-indigo-200">
+          <Card className="bg-gradient-to-br from-emerald-50 to-emerald-100 border-emerald-200 dark:from-emerald-950/30 dark:to-emerald-900/10 dark:border-emerald-800/30">
             <Statistic
-              title={<span className="text-indigo-900">Upcoming</span>}
+              title={<span className="text-emerald-900 dark:text-emerald-300 font-medium">Upcoming</span>}
               value={upcomingBookings.length}
-              prefix={<CalendarOutlined className="text-indigo-600" />}
-              valueStyle={{ color: "#4338ca", fontWeight: "bold" }}
+              prefix={<CalendarOutlined className="text-brand-green" />}
+              styles={{ content: { color: isDark ? "#34d399" : "#059669", fontWeight: "bold" } }}
             />
           </Card>
         </Col>
         <Col xs={24} sm={12} lg={6}>
-          <Card className="bg-gradient-to-br from-green-50 to-green-100 border-green-200">
+          <Card className="bg-gradient-to-br from-green-50 to-green-100 border-green-200 dark:from-slate-900 dark:to-slate-800 dark:border-slate-700">
             <Statistic
-              title={<span className="text-green-900">Completed</span>}
+              title={<span className="text-green-900 dark:text-emerald-300">Completed</span>}
               value={completedBookings.length}
-              prefix={<CheckCircleOutlined className="text-green-600" />}
-              valueStyle={{ color: "#16a34a", fontWeight: "bold" }}
+              prefix={<CheckCircleOutlined className="text-green-600 dark:text-brand-green" />}
+              styles={{ content: { color: isDark ? "#34d399" : "#16a34a", fontWeight: "bold" } }}
             />
           </Card>
         </Col>
         <Col xs={24} sm={12} lg={6}>
-          <Card className="bg-gradient-to-br from-red-50 to-red-100 border-red-200">
+          <Card className="bg-gradient-to-br from-red-50 to-red-100 border-red-200 dark:from-red-950/20 dark:to-red-900/10 dark:border-red-900/30">
             <Statistic
-              title={<span className="text-red-900">Cancelled</span>}
+              title={<span className="text-red-900 dark:text-red-300">Cancelled</span>}
               value={cancelledBookings.length}
-              prefix={<CloseCircleOutlined className="text-red-600" />}
-              valueStyle={{ color: "#dc2626", fontWeight: "bold" }}
+              prefix={<CloseCircleOutlined className="text-red-600 dark:text-brand-red" />}
+              styles={{ content: { color: isDark ? "#f87171" : "#dc2626", fontWeight: "bold" } }}
             />
           </Card>
         </Col>
@@ -120,7 +123,7 @@ export default function StudentDashboardPage() {
       <Card
         title={
           <div className="flex items-center justify-between">
-            <span className="text-xl font-bold">Upcoming Sessions</span>
+            <span className="text-xl font-bold dark:text-white">Upcoming Sessions</span>
             <Button
               type="link"
               onClick={() => router.push("/dashboard/bookings")}
@@ -130,16 +133,16 @@ export default function StudentDashboardPage() {
             </Button>
           </div>
         }
-        className="shadow-lg"
+        className="shadow-lg dark:bg-slate-900 dark:border-slate-800"
       >
         {upcomingBookings.length === 0 ? (
           <Empty
-            description="No upcoming sessions"
+            description={<span className="dark:text-gray-400">No upcoming sessions</span>}
             image={Empty.PRESENTED_IMAGE_SIMPLE}
           >
             <Button
               type="primary"
-              className="bg-indigo-600"
+              className="bg-brand-green hover:bg-brand-green-hover border-0"
               onClick={() => router.push("/tutors")}
             >
               Find a Tutor
@@ -148,22 +151,22 @@ export default function StudentDashboardPage() {
         ) : (
           <div className="space-y-4">
             {upcomingBookings.slice(0, 5).map((booking) => (
-              <Card key={booking.id} className="bg-gray-50 hover:bg-gray-100 transition-colors">
+              <Card key={booking.id} className="bg-gray-50 dark:bg-slate-800 hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors border-0">
                 <div className="flex items-center justify-between">
                   <div className="flex items-start gap-4 flex-1">
-                    <div className="w-12 h-12 bg-indigo-100 rounded-lg flex items-center justify-center">
-                      <BookOutlined className="text-indigo-600 text-xl" />
+                    <div className="w-12 h-12 bg-emerald-50 dark:bg-emerald-950/40 rounded-lg flex items-center justify-center">
+                      <BookOutlined className="text-brand-green text-xl" />
                     </div>
                     <div className="flex-1">
-                      <h3 className="font-semibold text-gray-900 mb-1">
+                      <h3 className="font-semibold text-gray-900 dark:text-gray-100 mb-1">
                         {booking.subject} with {booking.tutor.user.name}
                       </h3>
-                      <div className="flex flex-wrap gap-3 text-sm text-gray-600">
+                      <div className="flex flex-wrap gap-3 text-sm text-gray-600 dark:text-gray-300">
                         <span className="flex items-center gap-1">
                           <CalendarOutlined />
                           {dayjs(booking.date).format("MMM DD, YYYY")}
                         </span>
-                        <span className="flex items-center gap-1">
+                        <span className="flex items-center gap-1 text-gray-500 dark:text-gray-400">
                           <ClockCircleOutlined />
                           {booking.startTime} - {booking.endTime}
                         </span>
@@ -178,14 +181,14 @@ export default function StudentDashboardPage() {
         )}
       </Card>
 
-      <Card title="Quick Actions" className="shadow-lg">
+      <Card title={<span className="dark:text-white">Quick Actions</span>} className="shadow-lg dark:bg-slate-900 dark:border-slate-800">
         <Row gutter={[16, 16]}>
           <Col xs={24} sm={12} md={8}>
             <Button
               type="primary"
               size="large"
               block
-              className="bg-indigo-600 h-auto py-4"
+              className="bg-brand-green hover:bg-brand-green-hover border-0 h-auto py-4 text-white"
               onClick={() => router.push("/tutors")}
             >
               <div className="flex flex-col items-center gap-2">
@@ -198,7 +201,7 @@ export default function StudentDashboardPage() {
             <Button
               size="large"
               block
-              className="h-auto py-4"
+              className="h-auto py-4 dark:bg-slate-800 dark:text-white dark:border-slate-700 hover:border-brand-green"
               onClick={() => router.push("/dashboard/bookings")}
             >
               <div className="flex flex-col items-center gap-2">
@@ -211,7 +214,7 @@ export default function StudentDashboardPage() {
             <Button
               size="large"
               block
-              className="h-auto py-4"
+              className="h-auto py-4 dark:bg-slate-800 dark:text-white dark:border-slate-700 hover:border-brand-green"
               onClick={() => router.push("/dashboard/profile")}
             >
               <div className="flex flex-col items-center gap-2">

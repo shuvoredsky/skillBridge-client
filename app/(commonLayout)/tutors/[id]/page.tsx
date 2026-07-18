@@ -29,11 +29,15 @@ import {
   StarOutlined,
   CalendarOutlined,
   ArrowLeftOutlined,
+  HeartOutlined,
+  HeartFilled,
 } from "@ant-design/icons";
 import { useParams, useRouter } from "next/navigation";
 import { tutorService, TutorProfile } from "../../../../services/tutor.service";
 import { bookingService } from "../../../../services/booking.service";
 import { useAuth } from "@/context/AuthContext";
+import { useWishlist } from "@/context/WishlistContext";
+import { getImageUrl } from "@/lib/getImageUrl";
 import dayjs from "dayjs";
 
 const { TextArea } = Input;
@@ -48,6 +52,7 @@ export default function TutorDetailsPage() {
   const params = useParams();
   const router = useRouter();
   const { user } = useAuth();
+  const { isSaved, toggleWishlist } = useWishlist();
 
   useEffect(() => {
     if (params.id) {
@@ -140,26 +145,26 @@ export default function TutorDetailsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white py-8">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 py-8 transition-colors duration-200">
       <div className="max-w-7xl mx-auto px-4">
-        <Button icon={<ArrowLeftOutlined />} onClick={() => router.back()} className="mb-6">
+        <Button icon={<ArrowLeftOutlined />} onClick={() => router.back()} className="mb-6 dark:bg-slate-800 dark:text-white dark:border-slate-700">
           Back to Tutors
         </Button>
 
         <Row gutter={[24, 24]}>
           <Col xs={24} lg={8}>
-            <Card className="shadow-lg sticky top-4">
+            <Card className="shadow-lg sticky top-4 dark:bg-slate-900 dark:border-slate-800">
               <div className="text-center mb-6">
                 <Avatar
                   size={120}
-                  src={tutor.user.image}
+                  src={getImageUrl(tutor.profilePhoto || tutor.user.image)}
                   icon={<UserOutlined />}
-                  className="bg-gradient-to-br from-indigo-500 to-purple-600 mb-4"
+                  className="bg-gradient-to-br from-brand-green to-emerald-600 mb-4"
                 />
-                <h2 className="text-2xl font-bold text-gray-900 mb-2">{tutor.user.name}</h2>
+                <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">{tutor.user.name}</h2>
                 <div className="flex items-center justify-center gap-2 mb-4">
                   <Rate disabled value={tutor.rating} allowHalf />
-                  <span className="text-gray-600">({tutor.totalReviews} reviews)</span>
+                  <span className="text-gray-600 dark:text-gray-400">({tutor.totalReviews} reviews)</span>
                 </div>
               </div>
 
@@ -167,7 +172,7 @@ export default function TutorDetailsPage() {
 
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <span className="text-gray-600 flex items-center gap-2">
+                  <span className="text-gray-600 dark:text-gray-400 flex items-center gap-2">
                     <DollarOutlined className="text-green-600" />
                     Hourly Rate
                   </span>
@@ -175,15 +180,15 @@ export default function TutorDetailsPage() {
                 </div>
 
                 {tutor.experience && (
-                  <div className="flex items-center gap-2 text-gray-600">
-                    <ClockCircleOutlined className="text-indigo-600" />
+                  <div className="flex items-center gap-2 text-gray-600 dark:text-gray-300">
+                    <ClockCircleOutlined className="text-brand-green" />
                     <span>{tutor.experience}</span>
                   </div>
                 )}
 
                 {tutor.education && (
-                  <div className="flex items-center gap-2 text-gray-600">
-                    <BookOutlined className="text-indigo-600" />
+                  <div className="flex items-center gap-2 text-gray-600 dark:text-gray-300">
+                    <BookOutlined className="text-brand-green" />
                     <span>{tutor.education}</span>
                   </div>
                 )}
@@ -192,67 +197,91 @@ export default function TutorDetailsPage() {
               <Divider />
 
               <div>
-                <h3 className="font-semibold text-gray-900 mb-3">Subjects</h3>
+                <h3 className="font-semibold text-gray-900 dark:text-white mb-3">Subjects</h3>
                 <div className="flex flex-wrap gap-2">
                   {tutor.subjects.map((subject: any) => (
-                    <Tag key={subject} color="blue" className="text-sm">
+                    <Tag key={subject} color="success" className="text-sm font-medium">
                       {subject}
                     </Tag>
                   ))}
                 </div>
               </div>
 
-              <Button
-                type="primary"
-                size="large"
-                block
-                className="mt-6 bg-indigo-600 hover:bg-indigo-700 h-12"
-                icon={<CalendarOutlined />}
-                onClick={handleBookSession}
-              >
-                Book a Session
-              </Button>
+              <div className="flex gap-3 mt-6">
+                <Button
+                  type="primary"
+                  size="large"
+                  className="flex-1 bg-brand-green hover:bg-brand-green-hover border-0 text-white h-12"
+                  icon={<CalendarOutlined />}
+                  onClick={handleBookSession}
+                >
+                  Book a Session
+                </Button>
+                <Button
+                  size="large"
+                  className="h-12 w-12 flex items-center justify-center border-gray-200 dark:border-slate-700 dark:bg-slate-800 text-lg transition-transform duration-200 hover:scale-105"
+                  icon={
+                    isSaved(tutor.id) ? (
+                      <HeartFilled className="text-brand-red text-xl" />
+                    ) : (
+                      <HeartOutlined className="text-gray-400 dark:text-gray-300 hover:text-brand-red text-xl" />
+                    )
+                  }
+                  onClick={() => {
+                    if (!user) {
+                      message.warning("Please login to save tutors");
+                      router.push("/login");
+                      return;
+                    }
+                    if (user.role !== "STUDENT") {
+                      message.warning("Only students can save tutors to wishlist");
+                      return;
+                    }
+                    toggleWishlist(tutor.id);
+                  }}
+                />
+              </div>
             </Card>
           </Col>
 
           <Col xs={24} lg={16}>
-            <Card className="shadow-lg mb-6">
-              <h3 className="text-xl font-bold text-gray-900 mb-4">About Me</h3>
-              <p className="text-gray-700 leading-relaxed">{tutor.bio || "No bio available"}</p>
+            <Card className="shadow-lg mb-6 dark:bg-slate-900 dark:border-slate-800">
+              <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4">About Me</h3>
+              <p className="text-gray-700 dark:text-gray-300 leading-relaxed">{tutor.bio || "No bio available"}</p>
             </Card>
 
-            <Card className="shadow-lg">
+            <Card className="shadow-lg dark:bg-slate-900 dark:border-slate-800">
               <div className="flex items-center justify-between mb-6">
-                <h3 className="text-xl font-bold text-gray-900">Student Reviews</h3>
+                <h3 className="text-xl font-bold text-gray-900 dark:text-white">Student Reviews</h3>
                 <div className="flex items-center gap-2">
                   <StarOutlined className="text-yellow-500 text-xl" />
-                  <span className="text-2xl font-bold">{tutor.rating.toFixed(1)}</span>
-                  <span className="text-gray-500">({tutor.totalReviews} reviews)</span>
+                  <span className="text-2xl font-bold dark:text-white">{tutor.rating.toFixed(1)}</span>
+                  <span className="text-gray-500 dark:text-gray-400">({tutor.totalReviews} reviews)</span>
                 </div>
               </div>
 
               {tutor.reviews && tutor.reviews.length > 0 ? (
                 <div className="space-y-4">
                   {tutor.reviews.map((review: any) => (
-                    <Card key={review.id} className="bg-gray-50">
+                    <Card key={review.id} className="bg-gray-50 dark:bg-slate-800 dark:border-slate-700">
                       <div className="flex items-start gap-4">
                         <Avatar
                           src={review.student.image}
                           icon={<UserOutlined />}
                           size={48}
-                          className="bg-indigo-600"
+                          className="bg-brand-green"
                         />
                         <div className="flex-1">
                           <div className="flex items-center justify-between mb-2">
                             <div>
-                              <h4 className="font-semibold text-gray-900">{review.student.name}</h4>
+                              <h4 className="font-semibold text-gray-900 dark:text-white">{review.student.name}</h4>
                               <Rate disabled value={review.rating} />
                             </div>
-                            <span className="text-sm text-gray-500">
+                            <span className="text-sm text-gray-500 dark:text-gray-400">
                               {dayjs(review.createdAt).format("MMM DD, YYYY")}
                             </span>
                           </div>
-                          <p className="text-gray-700">{review.comment}</p>
+                          <p className="text-gray-700 dark:text-gray-300">{review.comment}</p>
                         </div>
                       </div>
                     </Card>
@@ -338,14 +367,14 @@ export default function TutorDetailsPage() {
             />
           </Form.Item>
 
-          <div className="bg-gray-50 p-4 rounded-lg mb-4">
+          <div className="bg-gray-50 dark:bg-slate-800 p-4 rounded-lg mb-4">
             <div className="flex items-center justify-between">
-              <span className="text-gray-700">Hourly Rate:</span>
+              <span className="text-gray-700 dark:text-gray-200">Hourly Rate:</span>
               <span className="text-2xl font-bold text-green-600">${tutor.hourlyRate}/hr</span>
             </div>
           </div>
 
-          <Form.Item className="mb-0">
+          <Form.Item style={{ marginBottom: 0 }}>
             <Space className="w-full justify-end">
               <Button
                 onClick={() => {
@@ -361,7 +390,7 @@ export default function TutorDetailsPage() {
                 htmlType="submit"
                 loading={submitting}
                 size="large"
-                className="bg-indigo-600 hover:bg-indigo-700"
+                className="bg-brand-green hover:bg-brand-green-hover border-0 text-white"
               >
                 Confirm Booking
               </Button>

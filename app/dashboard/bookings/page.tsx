@@ -133,7 +133,7 @@ export default function MyBookingsPage() {
       render: (_, record) => (
         <div className="flex items-center gap-2">
           <UserOutlined className="text-gray-400" />
-          <span className="font-medium">{record.tutor.user.name}</span>
+          <span className="font-medium dark:text-gray-200">{record.tutor.user.name}</span>
         </div>
       ),
     },
@@ -148,11 +148,11 @@ export default function MyBookingsPage() {
       key: "datetime",
       render: (_, record) => (
         <div className="space-y-1">
-          <div className="flex items-center gap-1 text-sm">
+          <div className="flex items-center gap-1 text-sm text-gray-700 dark:text-gray-200">
             <CalendarOutlined className="text-gray-400" />
             <span>{dayjs(record.date).format("MMM DD, YYYY")}</span>
           </div>
-          <div className="flex items-center gap-1 text-xs text-gray-500">
+          <div className="flex items-center gap-1 text-xs text-gray-500 dark:text-gray-400">
             <ClockCircleOutlined />
             <span>
               {record.startTime} - {record.endTime}
@@ -197,7 +197,7 @@ export default function MyBookingsPage() {
               size="small"
               icon={<StarOutlined />}
               onClick={() => openReviewModal(record)}
-              className="bg-indigo-600"
+              className="bg-brand-green border-0 hover:bg-brand-green-hover text-white"
             >
               Review
             </Button>
@@ -229,11 +229,11 @@ export default function MyBookingsPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">My Bookings</h1>
-        <p className="text-gray-600">Manage your tutoring sessions</p>
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">My Bookings</h1>
+        <p className="text-gray-600 dark:text-gray-400">Manage your tutoring sessions</p>
       </div>
 
-      <Card className="shadow-lg">
+      <Card className="shadow-lg dark:bg-slate-900 dark:border-slate-800">
         <Tabs defaultActiveKey="all">
           <TabPane tab={`All (${bookings.length})`} key="all">
             {bookings.length === 0 ? (
@@ -335,7 +335,7 @@ export default function MyBookingsPage() {
               <Button 
                 type="primary" 
                 htmlType="submit" 
-                className="bg-indigo-600"
+                className="bg-brand-green hover:bg-brand-green-hover border-0 text-white"
                 loading={submittingReview} // 👈 Show loading state
               >
                 Submit Review

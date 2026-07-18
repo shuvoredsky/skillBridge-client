@@ -6,6 +6,8 @@ import { SaveOutlined } from "@ant-design/icons";
 import { tutorService } from "../../../../services/tutor.service";
 import { useRouter } from "next/navigation";
 import type { TutorProfile } from "@/types/tutor";
+import { useAuth } from "@/context/AuthContext";
+import ProfilePhotoUploader from "@/components/ProfilePhotoUploader";
 
 const { TextArea } = Input;
 const { Option } = Select;
@@ -29,6 +31,7 @@ export default function TutorProfilePage() {
   const [saving, setSaving] = useState(false);
   const [profile, setProfile] = useState<TutorProfile | null>(null);
   const router = useRouter();
+  const { user } = useAuth();
 
   useEffect(() => {
     fetchProfile();
@@ -90,19 +93,29 @@ export default function TutorProfilePage() {
   }
 
   return (
-    <div style={{ maxWidth: 800, margin: "0 auto" }}>
-      <div style={{ marginBottom: 24 }}>
-        <h1 style={{ fontSize: 28, fontWeight: 700, margin: 0 }}>
+    <div className="max-w-3xl mx-auto">
+      <div className="mb-6">
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
           {profile ? "Edit Your Profile" : "Create Your Tutor Profile"}
         </h1>
-        <p style={{ color: "#666", marginTop: 8 }}>
+        <p className="text-gray-600 dark:text-gray-400 mt-2">
           {profile
             ? "Update your information to attract more students"
             : "Complete your profile to start teaching"}
         </p>
       </div>
 
-      <Card>
+      <Card className="dark:bg-slate-900 dark:border-slate-800 shadow-sm">
+        {user && profile && (
+          <div className="flex justify-center mb-6 pb-6 border-b border-gray-100 dark:border-slate-800">
+            {/* Fix: Send tutor profile ID (profile.id) instead of user ID (user.id) to match server validation */}
+            <ProfilePhotoUploader
+              userId={profile.id}
+              role="tutor"
+              currentPhotoUrl={profile.profilePhoto || user.image}
+            />
+          </div>
+        )}
         <Form
           form={form}
           layout="vertical"
@@ -198,6 +211,7 @@ export default function TutorProfilePage() {
               size="large"
               loading={saving}
               icon={<SaveOutlined />}
+              className="bg-brand-green hover:bg-brand-green-hover border-0 text-white h-12"
               block
             >
               {profile ? "Update Profile" : "Create Profile"}

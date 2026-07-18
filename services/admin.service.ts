@@ -32,6 +32,7 @@ export interface User {
   status?: string;
   createdAt: string;
   updatedAt: string;
+  profilePhoto?: string;
   tutorProfile?: {
     id: string;
     rating: number;

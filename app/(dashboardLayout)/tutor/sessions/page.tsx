@@ -78,8 +78,8 @@ export default function SessionsPage() {
         <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
           <UserOutlined />
           <div>
-            <div style={{ fontWeight: 500 }}>{record.student.name}</div>
-            <div style={{ fontSize: 12, color: "#999" }}>
+            <div className="font-semibold text-gray-900 dark:text-gray-100">{record.student.name}</div>
+            <div className="text-xs text-gray-500 dark:text-gray-400">
               {record.student.email}
             </div>
           </div>
@@ -97,8 +97,8 @@ export default function SessionsPage() {
       key: "datetime",
       render: (_, record) => (
         <div>
-          <div>{new Date(record.date).toLocaleDateString()}</div>
-          <div style={{ fontSize: 12, color: "#666" }}>
+          <div className="text-gray-900 dark:text-gray-100">{new Date(record.date).toLocaleDateString()}</div>
+          <div className="text-xs text-gray-500 dark:text-gray-400">
             {record.startTime} - {record.endTime}
           </div>
         </div>
@@ -135,6 +135,7 @@ export default function SessionsPage() {
                 setSelectedSession(record);
                 setModalVisible(true);
               }}
+              className="bg-brand-green hover:bg-brand-green-hover border-0 text-white"
             >
               Mark Complete
             </Button>
@@ -150,14 +151,14 @@ export default function SessionsPage() {
 
   return (
     <div>
-      <div style={{ marginBottom: 24 }}>
-        <h1 style={{ fontSize: 28, fontWeight: 700, margin: 0 }}>My Sessions</h1>
-        <p style={{ color: "#666", marginTop: 8 }}>
+      <div className="mb-6">
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">My Sessions</h1>
+        <p className="text-gray-600 dark:text-gray-400 mt-2">
           View and manage your tutoring sessions
         </p>
       </div>
 
-      <Card>
+      <Card className="dark:bg-slate-900 dark:border-slate-800 shadow-sm">
         <Tabs
           items={[
             {
@@ -213,11 +214,11 @@ export default function SessionsPage() {
         }}
         okText="Mark Complete"
       >
-        <p>
+        <p className="text-gray-800 dark:text-gray-200">
           Are you sure you want to mark this session with{" "}
-          <strong>{selectedSession?.student.name}</strong> as completed?
+          <strong className="text-brand-green">{selectedSession?.student.name}</strong> as completed?
         </p>
-        <p style={{ color: "#666", fontSize: 14 }}>
+        <p className="text-sm text-gray-500 dark:text-gray-400">
           This will allow the student to leave a review.
         </p>
       </Modal>

@@ -41,7 +41,7 @@ export default function TutorDashboard() {
 
   if (loading) {
     return (
-      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: 400 }}>
+      <div className="flex justify-center items-center min-h-[400px]">
         <Spin fullscreen size="large" tip="Loading your dashboard..." />
       </div>
     );
@@ -49,22 +49,14 @@ export default function TutorDashboard() {
 
   if (!profile) {
     return (
-      <Card>
+      <Card className="dark:bg-slate-900 dark:border-slate-800">
         <Empty
-          description="You haven't created your tutor profile yet"
+          description={<span className="dark:text-gray-400">You haven't created your tutor profile yet</span>}
           style={{ padding: "40px 0" }}
         >
           <button
             onClick={() => router.push("/tutor/profile")}
-            style={{
-              padding: "10px 24px",
-              background: "#16a34a",
-              color: "white",
-              border: "none",
-              borderRadius: 6,
-              cursor: "pointer",
-              fontSize: 16,
-            }}
+            className="bg-brand-green hover:bg-brand-green-hover text-white font-medium px-6 py-2.5 rounded-lg border-0 transition-all cursor-pointer text-base"
           >
             Create Profile Now
           </button>
@@ -77,10 +69,10 @@ export default function TutorDashboard() {
   const completedSessions = sessions.filter((s) => s.status === "COMPLETED");
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
+    <div className="flex flex-col gap-6">
       <div>
-        <h1 style={{ fontSize: 28, fontWeight: 700, margin: 0 }}>Welcome Back!</h1>
-        <p style={{ color: "#666", marginTop: 8 }}>
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Welcome Back!</h1>
+        <p className="text-gray-600 dark:text-gray-400 mt-2">
           Here's what's happening with your tutoring sessions
         </p>
       </div>
@@ -96,48 +88,48 @@ export default function TutorDashboard() {
 
       <Row gutter={[16, 16]}>
         <Col xs={24} sm={12} lg={6}>
-          <Card>
+          <Card className="dark:bg-slate-900 dark:border-slate-800 shadow-sm">
             <Statistic
-              title="Total Sessions"
+              title={<span className="dark:text-gray-400">Total Sessions</span>}
               value={sessions.length}
-              prefix={<CalendarOutlined />}
-              valueStyle={{ color: "#1890ff" }}
+              prefix={<CalendarOutlined className="text-brand-green" />}
+              styles={{ content: { color: "#10b981" } }}
             />
           </Card>
         </Col>
 
         <Col xs={24} sm={12} lg={6}>
-          <Card>
+          <Card className="dark:bg-slate-900 dark:border-slate-800 shadow-sm">
             <Statistic
-              title="Upcoming"
+              title={<span className="dark:text-gray-400">Upcoming</span>}
               value={confirmedSessions.length}
-              prefix={<ClockCircleOutlined />}
-              valueStyle={{ color: "#faad14" }}
+              prefix={<ClockCircleOutlined className="text-amber-500" />}
+              styles={{ content: { color: "#f59e0b" } }}
             />
           </Card>
         </Col>
 
         <Col xs={24} sm={12} lg={6}>
-          <Card>
+          <Card className="dark:bg-slate-900 dark:border-slate-800 shadow-sm">
             <Statistic
-              title="Completed"
+              title={<span className="dark:text-gray-400">Completed</span>}
               value={completedSessions.length}
-              prefix={<CheckCircleOutlined />}
-              valueStyle={{ color: "#52c41a" }}
+              prefix={<CheckCircleOutlined className="text-brand-green" />}
+              styles={{ content: { color: "#10b981" } }}
             />
           </Card>
         </Col>
 
         <Col xs={24} sm={12} lg={6}>
-          <Card>
+          <Card className="dark:bg-slate-900 dark:border-slate-800 shadow-sm">
             <Statistic
-              title="Rating"
+              title={<span className="dark:text-gray-400">Rating</span>}
               value={profile.rating.toFixed(1)}
-              prefix={<StarOutlined />}
+              prefix={<StarOutlined className="text-amber-500" />}
               suffix={`/ 5.0`}
-              valueStyle={{ color: "#faad14" }}
+              styles={{ content: { color: "#f59e0b" } }}
             />
-            <div style={{ fontSize: 12, color: "#999", marginTop: 8 }}>
+            <div className="text-xs text-gray-500 dark:text-gray-400 mt-2">
               {profile.totalReviews} reviews
             </div>
           </Card>
@@ -146,25 +138,19 @@ export default function TutorDashboard() {
 
       <Row gutter={[16, 16]}>
         <Col xs={24} lg={16}>
-          <Card title="Profile Summary" extra={
-            <a onClick={() => router.push("/tutor/profile")} style={{ cursor: "pointer" }}>
+          <Card title={<span className="dark:text-white">Profile Summary</span>} extra={
+            <a onClick={() => router.push("/tutor/profile")} className="text-brand-green hover:text-brand-green-hover font-semibold cursor-pointer">
               Edit
             </a>
-          }>
-            <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+          } className="dark:bg-slate-900 dark:border-slate-800 shadow-sm">
+            <div className="flex flex-col gap-4">
               <div>
-                <div style={{ fontWeight: 600, marginBottom: 4 }}>Subjects</div>
-                <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+                <div className="font-semibold text-gray-900 dark:text-white mb-2">Subjects</div>
+                <div className="flex gap-2 flex-wrap">
                   {profile.subjects.map((subject) => (
                     <span
                       key={subject}
-                      style={{
-                        padding: "4px 12px",
-                        background: "#e6f7ff",
-                        color: "#1890ff",
-                        borderRadius: 4,
-                        fontSize: 14,
-                      }}
+                      className="px-3 py-1 bg-emerald-50 dark:bg-emerald-950/40 text-brand-green dark:text-brand-green font-medium rounded-md text-sm"
                     >
                       {subject}
                     </span>
@@ -173,16 +159,16 @@ export default function TutorDashboard() {
               </div>
 
               <div>
-                <div style={{ fontWeight: 600, marginBottom: 4 }}>Hourly Rate</div>
-                <div style={{ fontSize: 18, color: "#16a34a", fontWeight: 600 }}>
+                <div className="font-semibold text-gray-900 dark:text-white mb-1">Hourly Rate</div>
+                <div className="text-lg font-bold text-brand-green">
                   ${profile.hourlyRate}/hour
                 </div>
               </div>
 
               {profile.experience && (
                 <div>
-                  <div style={{ fontWeight: 600, marginBottom: 4 }}>Experience</div>
-                  <div style={{ color: "#666" }}>{profile.experience}</div>
+                  <div className="font-semibold text-gray-900 dark:text-white mb-1">Experience</div>
+                  <div className="text-gray-600 dark:text-gray-300">{profile.experience}</div>
                 </div>
               )}
             </div>
@@ -190,38 +176,22 @@ export default function TutorDashboard() {
         </Col>
 
         <Col xs={24} lg={8}>
-          <Card title="Quick Actions">
-            <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+          <Card title={<span className="dark:text-white">Quick Actions</span>} className="dark:bg-slate-900 dark:border-slate-800 shadow-sm">
+            <div className="flex flex-col gap-3">
               <button
                 onClick={() => router.push("/tutor/availability")}
-                style={{
-                  padding: "12px 16px",
-                  background: "#fff",
-                  border: "1px solid #d9d9d9",
-                  borderRadius: 6,
-                  cursor: "pointer",
-                  textAlign: "left",
-                  fontSize: 14,
-                }}
+                className="w-full flex items-center gap-2 px-4 py-3 bg-white dark:bg-slate-800 text-gray-700 dark:text-gray-200 border border-gray-200 dark:border-slate-700 rounded-lg hover:border-brand-green hover:text-brand-green dark:hover:text-brand-green transition-colors cursor-pointer text-sm font-medium"
               >
-                <ClockCircleOutlined style={{ marginRight: 8 }} />
-                Manage Availability
+                <ClockCircleOutlined />
+                <span>Manage Availability</span>
               </button>
 
               <button
                 onClick={() => router.push("/tutor/sessions")}
-                style={{
-                  padding: "12px 16px",
-                  background: "#fff",
-                  border: "1px solid #d9d9d9",
-                  borderRadius: 6,
-                  cursor: "pointer",
-                  textAlign: "left",
-                  fontSize: 14,
-                }}
+                className="w-full flex items-center gap-2 px-4 py-3 bg-white dark:bg-slate-800 text-gray-700 dark:text-gray-200 border border-gray-200 dark:border-slate-700 rounded-lg hover:border-brand-green hover:text-brand-green dark:hover:text-brand-green transition-colors cursor-pointer text-sm font-medium"
               >
-                <CalendarOutlined style={{ marginRight: 8 }} />
-                View All Sessions
+                <CalendarOutlined />
+                <span>View All Sessions</span>
               </button>
             </div>
           </Card>

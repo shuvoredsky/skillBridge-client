@@ -9,6 +9,11 @@ import { useRouter } from "next/navigation";
 
 const {  Text } = Typography;
 
+const DEMO_ADMIN_CREDENTIALS = {
+  email: "kumarshuvo265@gmail.com",
+  password: "12345678",
+};
+
 export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const { login, user } = useAuth();
@@ -42,24 +47,32 @@ const onFinish = async (values: { email: string; password: string }) => {
   }
 };
 
+  const handleDemoAdminLogin = async () => {
+    form.setFieldsValue({
+      email: DEMO_ADMIN_CREDENTIALS.email,
+      password: DEMO_ADMIN_CREDENTIALS.password,
+    });
+    await onFinish(DEMO_ADMIN_CREDENTIALS);
+  };
+
   if (user) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-950 transition-colors">
         <div className="text-center">
-          <Spin fullscreen size="large" />
-          <p className="mt-4 text-gray-600 font-medium">Redirecting...</p>
+          <Spin size="large" />
+          <p className="mt-4 text-gray-600 dark:text-gray-400 font-medium">Redirecting...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen flex flex-col lg:flex-row">
-      <div className="hidden lg:flex lg:w-1/2 bg-[#008060] items-center justify-center p-12 text-white relative overflow-hidden">
+    <div className="min-h-screen flex flex-col lg:flex-row bg-slate-50 dark:bg-slate-950 transition-colors duration-200">
+      <div className="hidden lg:flex lg:w-1/2 bg-brand-green items-center justify-center p-12 text-white relative overflow-hidden">
         <div className="z-10 max-w-lg">
           <div className="flex items-center gap-3 mb-8">
             <div className="bg-white p-2 rounded-lg">
-              <BookOutlined className="text-[#008060] text-2xl" />
+              <BookOutlined className="text-brand-green text-2xl" />
             </div>
             <span className="text-2xl font-bold tracking-tight">SkillBridge</span>
           </div>
@@ -92,20 +105,20 @@ const onFinish = async (values: { email: string; password: string }) => {
         <div className="absolute -top-24 -right-24 w-96 h-96 bg-emerald-300/10 rounded-full blur-3xl"></div>
       </div>
 
-      <div className="flex-1 flex items-center justify-center p-6 sm:p-12 lg:p-24 bg-white">
+      <div className="flex-1 flex items-center justify-center p-6 sm:p-12 lg:p-24 bg-white dark:bg-slate-900 transition-colors duration-200">
         <div className="w-full max-w-[440px]">
           <div className="lg:hidden flex justify-center mb-8">
             <div className="flex items-center gap-2">
-              <div className="bg-[#008060] p-2 rounded-lg">
+              <div className="bg-brand-green p-2 rounded-lg">
                 <BookOutlined className="text-white text-xl" />
               </div>
-              <span className="text-xl font-bold text-gray-900">SkillBridge</span>
+              <span className="text-xl font-bold text-gray-900 dark:text-white">SkillBridge</span>
             </div>
           </div>
 
           <div className="mb-10">
-            <h2 className="text-3xl font-bold text-gray-900 mb-2">Welcome back</h2>
-            <p className="text-gray-500">Enter your credentials to access your account</p>
+            <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">Welcome back</h2>
+            <p className="text-gray-500 dark:text-gray-400">Enter your credentials to access your account</p>
           </div>
 
 
@@ -118,7 +131,7 @@ const onFinish = async (values: { email: string; password: string }) => {
             requiredMark={false}
           >
             <Form.Item
-              label={<span className="text-gray-700 font-medium">Email Address</span>}
+              label={<span className="text-gray-700 dark:text-gray-300 font-medium">Email Address</span>}
               name="email"
               rules={[
                 { required: true, message: "Please enter your email" },
@@ -128,15 +141,15 @@ const onFinish = async (values: { email: string; password: string }) => {
             >
               <Input
                 placeholder="your.email@example.com"
-                className="rounded-xl h-12 border-gray-200 hover:border-[#008060] focus:border-[#008060]"
+                className="rounded-xl h-12 border-gray-200 hover:border-brand-green focus:border-brand-green dark:bg-slate-800 dark:border-slate-700 dark:text-white"
               />
             </Form.Item>
 
             <Form.Item
               label={
                 <div className="w-full flex justify-between items-center">
-                  <span className="text-gray-700 font-medium">Password</span>
-                  <Link href="/forgot-password text-[#008060] hover:text-[#006b50] text-sm font-medium">
+                  <span className="text-gray-700 dark:text-gray-300 font-medium">Password</span>
+                  <Link href="/forgot-password" className="text-brand-green hover:text-brand-green-hover text-sm font-medium">
                     Forgot password?
                   </Link>
                 </div>
@@ -150,36 +163,54 @@ const onFinish = async (values: { email: string; password: string }) => {
             >
               <Input.Password
                 placeholder="Enter your password"
-                className="rounded-xl h-12 border-gray-200 hover:border-[#008060] focus:border-[#008060]"
+                className="rounded-xl h-12 border-gray-200 hover:border-brand-green focus:border-brand-green dark:bg-slate-800 dark:border-slate-700 dark:text-white"
               />
             </Form.Item>
 
-            <Form.Item className="mb-8">
+            <Form.Item className="mb-4">
               <Button
                 type="primary"
                 htmlType="submit"
                 loading={loading}
-                className="w-full h-13 text-base font-semibold rounded-xl bg-[#008060] hover:bg-[#006b50] border-0 shadow-md transition-all duration-200"
+                className="w-full h-13 text-base font-semibold rounded-xl bg-brand-green hover:bg-brand-green-hover border-0 shadow-md transition-all duration-200 text-white"
               >
                 Sign In →
               </Button>
             </Form.Item>
+
+            {/* 
+              DEVELOPER NOTE: This is a demo-only convenience button to allow portfolio reviewers/evaluators 
+              to quickly log in as administrator. These hardcoded credentials should be removed or gated 
+              behind an environment variable (e.g. process.env.NEXT_PUBLIC_SHOW_DEMO_LOGIN === "true") 
+              before any production launch.
+            */}
+            {(process.env.NEXT_PUBLIC_SHOW_DEMO_LOGIN === "true" || process.env.NODE_ENV === "development" || true) && (
+              <Form.Item className="mb-8">
+                <Button
+                  onClick={handleDemoAdminLogin}
+                  loading={loading}
+                  className="w-full h-13 text-base font-semibold rounded-xl border border-gray-200 dark:border-slate-700 hover:border-brand-green hover:text-brand-green text-gray-700 dark:text-gray-200 bg-transparent transition-all duration-200"
+                >
+                  ⚡ Try Admin Demo
+                </Button>
+              </Form.Item>
+            )}
           </Form>
 
           <div className="text-center">
-            <Text className="text-gray-500 text-[15px]">
+            <Text className="text-gray-500 dark:text-gray-400 text-[15px]">
               Don't have an account?{" "}
-              <Link href="/register" className="text-[#008060] font-bold hover:text-[#006b50] ml-1">
+              <Link href="/register" className="text-brand-green font-bold hover:text-brand-green-hover ml-1">
                 Create one now
               </Link>
             </Text>
           </div>
 
-          <div className="mt-12 pt-8 border-t border-gray-100 text-center">
-            <p className="text-xs text-gray-400 leading-relaxed">
+          <div className="mt-12 pt-8 border-t border-gray-100 dark:border-slate-800 text-center">
+            <p className="text-xs text-gray-400 dark:text-gray-500 leading-relaxed">
               By continuing, you agree to our{" "}
-              <Link href="/terms" className="underline hover:text-gray-600">Terms</Link> and{" "}
-              <Link href="/privacy" className="underline hover:text-gray-600">Privacy Policy</Link>
+              <Link href="/terms" className="underline hover:text-gray-600 dark:hover:text-gray-400">Terms</Link> and{" "}
+              <Link href="/privacy" className="underline hover:text-gray-600 dark:hover:text-gray-400">Privacy Policy</Link>
             </p>
           </div>
         </div>
