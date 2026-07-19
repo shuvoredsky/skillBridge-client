@@ -35,7 +35,6 @@ export default function ProfilePhotoUploader({
     // Support NEXT_PUBLIC_API_BASE_URL in local dev environment
     const baseUrl =
       process.env.NEXT_PUBLIC_API_BASE_URL ||
-      process.env.NEXT_PUBLIC_API_URL ||
       "https://skillbridge-server-a.onrender.com";
     const cleanBaseUrl = baseUrl.endsWith("/") ? baseUrl.slice(0, -1) : baseUrl;
     return `${cleanBaseUrl}${cleanPath}`;

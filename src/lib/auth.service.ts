@@ -1,4 +1,11 @@
-const BACKEND_URL = "https://skillbridge-server-a.onrender.com";
+const getCleanBaseUrl = () => {
+  const url =
+    process.env.NEXT_PUBLIC_API_BASE_URL ||
+    "https://skillbridge-server-a.onrender.com";
+  return url.endsWith("/") ? url.slice(0, -1) : url;
+};
+
+const BACKEND_URL = getCleanBaseUrl();
 
 export const getMe = async () => {
   try {
