@@ -12,6 +12,9 @@ export interface TutorProfile {
   totalReviews: number;
   profilePhoto?: string;
   profilePhotoUrl?: string;
+  verificationStatus?: "PENDING" | "APPROVED" | "REJECTED";
+  rejectionReason?: string | null;
+  documents?: TutorDocument[];
   createdAt: string;
   updatedAt: string;
   user: {
@@ -30,6 +33,16 @@ export interface TutorProfile {
       image?: string;
     };
   }>;
+}
+
+export interface TutorDocument {
+  id: string;
+  tutorId: string;
+  type: "DEGREE" | "NID" | "CERTIFICATE";
+  url: string;
+  publicId: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface CreateProfilePayload {
@@ -123,4 +136,13 @@ export const tutorService = {
   updateSessionStatus: async (sessionId: string, status: "COMPLETED") => {
     return api.patch(`/api/v1/bookings/${sessionId}/status`, { status });
   },
+
+  uploadDocument: async (tutorId: string, file: File, type: "degree" | "nid" | "certificate") => {
+    const formData = new FormData();
+    formData.append("document", file);
+    return api.upload<{ message: string; data: any }>(
+      `/api/tutors/${tutorId}/documents/${type}`,
+      formData
+    );
+  }
 };

@@ -10,12 +10,26 @@ export interface TutorProfile {
   totalReviews: number;
   profilePhoto?: string | null;
   profilePhotoUrl?: string | null;
+  verificationStatus?: "PENDING" | "APPROVED" | "REJECTED";
+  rejectionReason?: string | null;
+  documents?: TutorDocument[];
   createdAt: string;
   updatedAt: string;
   user?: {
     name: string;
     email: string;
   };
+  reviews?: any[];
+}
+
+export interface TutorDocument {
+  id: string;
+  tutorId: string;
+  type: "DEGREE" | "NID" | "CERTIFICATE";
+  url: string;
+  publicId: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface Availability {

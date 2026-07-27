@@ -11,6 +11,7 @@ import {
   TeamOutlined,
   TagsOutlined,
   BellOutlined,
+  SafetyCertificateOutlined,
 } from "@ant-design/icons";
 import { usePathname, useRouter } from "next/navigation";
 import ThemeToggle from "@/components/ThemeToggle";
@@ -41,6 +42,11 @@ export default function AdminLayout({
       key: "/admin/users",
       icon: <TeamOutlined />,
       label: "Users",
+    },
+    {
+      key: "/admin/tutors",
+      icon: <SafetyCertificateOutlined />,
+      label: "Tutors",
     },
     {
       key: "/admin/bookings",

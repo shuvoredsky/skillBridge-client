@@ -28,7 +28,7 @@ export default function ProfilePhotoUploader({
   // Helper to construct absolute image URL using the backend base URL env
   const getFullImageUrl = (path: string | undefined | null) => {
     if (!path) return undefined;
-    if (path.startsWith("http://") || path.startsWith("https://")) {
+    if (path.startsWith("http://") || path.startsWith("https://") || path.startsWith("blob:")) {
       return path;
     }
     const cleanPath = path.startsWith("/") ? path : `/${path}`;

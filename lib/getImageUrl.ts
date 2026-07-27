@@ -11,7 +11,7 @@ const getCleanBaseUrl = () => {
  */
 export const getImageUrl = (path: string | undefined | null) => {
   if (!path) return undefined;
-  if (path.startsWith("http://") || path.startsWith("https://")) {
+  if (path.startsWith("http://") || path.startsWith("https://") || path.startsWith("blob:")) {
     return path;
   }
   const cleanBaseUrl = getCleanBaseUrl();

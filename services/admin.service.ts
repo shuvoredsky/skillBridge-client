@@ -145,4 +145,49 @@ export const adminService = {
   deleteCategory: async (id: string) => {
     return api.delete(`/api/v1/categories/${id}`);
   },
+
+  getPendingTutors: async () => {
+    return api.get<PendingTutor[]>("/api/v1/admin/tutors/pending");
+  },
+
+  approveTutor: async (tutorId: string) => {
+    return api.patch(`/api/v1/admin/tutors/${tutorId}/approve`, {});
+  },
+
+  rejectTutor: async (tutorId: string, rejectionReason?: string) => {
+    return api.patch(`/api/v1/admin/tutors/${tutorId}/reject`, { rejectionReason });
+  },
 };
+
+export interface PendingTutor {
+  id: string;
+  userId: string;
+  bio: string | null;
+  subjects: string[];
+  hourlyRate: number;
+  experience: string | null;
+  education: string | null;
+  rating: number;
+  totalReviews: number;
+  verificationStatus: "PENDING" | "APPROVED" | "REJECTED";
+  rejectionReason: string | null;
+  createdAt: string;
+  updatedAt: string;
+  user: {
+    id: string;
+    name: string;
+    email: string;
+    image: string | null;
+    phone: string | null;
+    status: string;
+  };
+  documents: Array<{
+    id: string;
+    tutorId: string;
+    type: "DEGREE" | "NID" | "CERTIFICATE";
+    url: string;
+    publicId: string;
+    createdAt: string;
+    updatedAt: string;
+  }>;
+}
