@@ -38,6 +38,7 @@ import { bookingService } from "../../../../services/booking.service";
 import { useAuth } from "@/context/AuthContext";
 import { useWishlist } from "@/context/WishlistContext";
 import { getImageUrl } from "@/lib/getImageUrl";
+import { recentlyViewedService } from "@/services/recently-viewed.service";
 import dayjs from "dayjs";
 
 const { TextArea } = Input;
@@ -70,6 +71,11 @@ export default function TutorDetailsPage() {
         router.push("/tutors");
       } else if (data) {
         setTutor(data);
+        if (user && user.role === "STUDENT") {
+          recentlyViewedService.recordView(data.id).catch((err) => {
+            console.error("Failed to record tutor view:", err);
+          });
+        }
       }
     } catch (error) {
       message.error("Failed to load tutor details");
@@ -259,6 +265,41 @@ export default function TutorDetailsPage() {
                   <span className="text-gray-500 dark:text-gray-400">({tutor.totalReviews} reviews)</span>
                 </div>
               </div>
+
+              {tutor.totalReviews > 0 && tutor.ratingBreakdown && (
+                <div className="bg-gray-50 dark:bg-slate-800/50 p-6 rounded-xl mb-6 grid grid-cols-1 md:grid-cols-3 gap-6 items-center border border-gray-100 dark:border-slate-700/50">
+                  <div className="text-center md:border-r border-gray-200 dark:border-slate-700 md:pr-6">
+                    <div className="text-5xl font-extrabold text-gray-900 dark:text-white mb-2">
+                      {tutor.rating.toFixed(1)}
+                    </div>
+                    <Rate disabled value={tutor.rating} allowHalf className="mb-2" />
+                    <div className="text-xs text-gray-500 dark:text-gray-400">
+                      Tutor Rating ({tutor.totalReviews} reviews)
+                    </div>
+                  </div>
+                  <div className="md:col-span-2 space-y-2">
+                    {[5, 4, 3, 2, 1].map((stars) => {
+                      const item = tutor.ratingBreakdown?.[stars] || { count: 0, percentage: 0 };
+                      return (
+                        <div key={stars} className="flex items-center gap-3 text-sm">
+                          <span className="w-12 text-gray-600 dark:text-gray-400 font-medium">
+                            {stars} star
+                          </span>
+                          <div className="flex-1 bg-gray-200 dark:bg-slate-700 h-2.5 rounded-full overflow-hidden">
+                            <div
+                              className="bg-brand-green h-full rounded-full transition-all duration-500"
+                              style={{ width: `${item.percentage}%` }}
+                            />
+                          </div>
+                          <span className="w-10 text-right text-gray-500 dark:text-gray-400 font-semibold">
+                            {item.percentage}%
+                          </span>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
 
               {tutor.reviews && tutor.reviews.length > 0 ? (
                 <div className="space-y-4">

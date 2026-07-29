@@ -20,6 +20,7 @@ export interface TutorProfile {
     email: string;
   };
   reviews?: any[];
+  ratingBreakdown?: Record<number, { count: number; percentage: number }>;
 }
 
 export interface TutorDocument {

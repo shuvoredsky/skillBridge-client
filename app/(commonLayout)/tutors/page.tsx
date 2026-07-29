@@ -34,6 +34,7 @@ import { useWishlist } from "@/context/WishlistContext";
 import { getImageUrl } from "@/lib/getImageUrl";
 import { tutorService } from "@/services/tutor.service";
 import { adminService } from "@/services/admin.service";
+import RecentlyViewedRow from "@/components/RecentlyViewedRow";
 
 const { Option } = Select;
 
@@ -145,6 +146,8 @@ export default function BrowseTutorsPage() {
               Browse {totalTutors} expert tutors across various subjects
             </p>
           </div>
+
+          <RecentlyViewedRow />
 
           <Row gutter={[24, 24]}>
             <Col xs={24} lg={6}>

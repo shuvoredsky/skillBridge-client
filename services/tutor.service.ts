@@ -33,6 +33,7 @@ export interface TutorProfile {
       image?: string;
     };
   }>;
+  ratingBreakdown?: Record<number, { count: number; percentage: number }>;
 }
 
 export interface TutorDocument {
