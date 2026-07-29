@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { Card, Form, Input, InputNumber, Button, Select, message, Spin } from "antd";
 import { SaveOutlined } from "@ant-design/icons";
 import { tutorService } from "../../../../services/tutor.service";
+import { adminService } from "../../../../services/admin.service";
 import { useRouter } from "next/navigation";
 import type { TutorProfile } from "@/types/tutor";
 import { useAuth } from "@/context/AuthContext";
@@ -24,20 +25,32 @@ const SUBJECT_OPTIONS = [
   "Economics",
   "Accounting",
 ];
-
 export default function TutorProfilePage() {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [profile, setProfile] = useState<TutorProfile | null>(null);
+  const [availableSubjects, setAvailableSubjects] = useState<string[]>([]);
   const router = useRouter();
   const { user } = useAuth();
 
   useEffect(() => {
-    fetchProfile();
+    loadProfile();
+    fetchCategories();
   }, []);
 
-  const fetchProfile = async () => {
+  const fetchCategories = async () => {
+    try {
+      const { data, error } = await adminService.getAllCategories();
+      if (data && !error) {
+        setAvailableSubjects(data.map((c: any) => c.name));
+      }
+    } catch (err) {
+      console.error("Failed to load categories:", err);
+    }
+  };
+
+  const loadProfile = async () => {
     setLoading(true);
     try {
       const { data, error } = await tutorService.getMyProfile();
@@ -151,7 +164,7 @@ export default function TutorProfilePage() {
               size="large"
               maxTagCount="responsive"
             >
-              {SUBJECT_OPTIONS.map((subject) => (
+              {(availableSubjects.length > 0 ? availableSubjects : SUBJECT_OPTIONS).map((subject) => (
                 <Option key={subject} value={subject}>
                   {subject}
                 </Option>
