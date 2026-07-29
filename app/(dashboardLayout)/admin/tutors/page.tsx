@@ -17,18 +17,26 @@ export default function AdminTutorsPage() {
   const [rejectionReason, setRejectionReason] = useState("");
   const [actionLoading, setActionLoading] = useState(false);
 
+  const [page, setPage] = useState(1);
+  const [pageSize] = useState(10);
+  const [totalTutors, setTotalTutors] = useState(0);
+
   useEffect(() => {
-    fetchPendingTutors();
+    fetchPendingTutors(1);
   }, []);
 
-  const fetchPendingTutors = async () => {
+  const fetchPendingTutors = async (currentPage = page) => {
     setLoading(true);
     try {
-      const { data, error } = await adminService.getPendingTutors();
+      const { data, error } = await adminService.getPendingTutors({
+        page: currentPage,
+        limit: pageSize,
+      });
       if (error) {
         message.error(error);
       } else if (data) {
-        setTutors(data);
+        setTutors(data.data);
+        setTotalTutors(data.meta.total);
       }
     } catch (err) {
       message.error("Failed to fetch pending tutors");
@@ -190,7 +198,13 @@ export default function AdminTutorsPage() {
           rowKey="id"
           loading={loading}
           pagination={{
-            pageSize: 10,
+            current: page,
+            pageSize: pageSize,
+            total: totalTutors,
+            onChange: (newPage) => {
+              setPage(newPage);
+              fetchPendingTutors(newPage);
+            },
             showTotal: (total) => `Total ${total} tutors pending review`,
           }}
           locale={{ emptyText: "No pending tutor verification requests" }}

@@ -1,4 +1,5 @@
 import { api } from "@/lib/api-client";
+import { PaginatedResponse } from "./tutor.service";
 
 export interface DashboardStats {
   users: {
@@ -89,13 +90,17 @@ export const adminService = {
     search?: string;
     role?: string;
     status?: string;
+    page?: number;
+    limit?: number;
   }) => {
     const params = new URLSearchParams();
     if (filters?.search) params.append("search", filters.search);
     if (filters?.role) params.append("role", filters.role);
     if (filters?.status) params.append("status", filters.status);
+    if (filters?.page) params.append("page", filters.page.toString());
+    if (filters?.limit) params.append("limit", filters.limit.toString());
     const query = params.toString();
-    return api.get<User[]>(
+    return api.get<PaginatedResponse<User>>(
       `/api/v1/admin/users${query ? `?${query}` : ""}`
     );
   },
@@ -116,13 +121,17 @@ export const adminService = {
     status?: string;
     studentId?: string;
     tutorId?: string;
+    page?: number;
+    limit?: number;
   }) => {
     const params = new URLSearchParams();
     if (filters?.status) params.append("status", filters.status);
     if (filters?.studentId) params.append("studentId", filters.studentId);
     if (filters?.tutorId) params.append("tutorId", filters.tutorId);
+    if (filters?.page) params.append("page", filters.page.toString());
+    if (filters?.limit) params.append("limit", filters.limit.toString());
     const query = params.toString();
-    return api.get<Booking[]>(
+    return api.get<PaginatedResponse<Booking>>(
       `/api/v1/admin/bookings${query ? `?${query}` : ""}`
     );
   },
@@ -146,8 +155,14 @@ export const adminService = {
     return api.delete(`/api/v1/categories/${id}`);
   },
 
-  getPendingTutors: async () => {
-    return api.get<PendingTutor[]>("/api/v1/admin/tutors/pending");
+  getPendingTutors: async (filters?: { page?: number; limit?: number }) => {
+    const params = new URLSearchParams();
+    if (filters?.page) params.append("page", filters.page.toString());
+    if (filters?.limit) params.append("limit", filters.limit.toString());
+    const query = params.toString();
+    return api.get<PaginatedResponse<PendingTutor>>(
+      `/api/v1/admin/tutors/pending${query ? `?${query}` : ""}`
+    );
   },
 
   approveTutor: async (tutorId: string) => {

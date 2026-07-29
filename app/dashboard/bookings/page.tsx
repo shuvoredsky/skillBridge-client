@@ -171,7 +171,23 @@ export default function MyBookingsPage() {
       title: "Actions",
       key: "actions",
       render: (_, record) => (
-        <div className="space-x-2">
+        <div className="space-y-2 flex flex-col justify-start items-start gap-1">
+          {record.status === "CONFIRMED" && record.meetingLink ? (
+            <Button
+              type="primary"
+              size="small"
+              href={record.meetingLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-brand-green hover:bg-brand-green-hover border-0 text-white font-medium shadow-sm"
+            >
+              Join Meeting ({record.meetingPlatform === "GOOGLE_MEET" ? "Google Meet" : record.meetingPlatform === "ZOOM" ? "Zoom" : "Microsoft Teams"})
+            </Button>
+          ) : record.status === "CONFIRMED" ? (
+            <span className="text-gray-500 dark:text-gray-400 text-xs font-normal">
+              Your tutor hasn't added a meeting link yet
+            </span>
+          ) : null}
           {record.status === "CONFIRMED" && (
             <Popconfirm
               title="Cancel Booking"

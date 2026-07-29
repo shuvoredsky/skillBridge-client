@@ -76,6 +76,18 @@ export interface Session {
   endTime: string;
   subject: string;
   status: string;
+  meetingLink?: string;
+  meetingPlatform?: "GOOGLE_MEET" | "ZOOM" | "MS_TEAMS";
+}
+
+export interface PaginatedResponse<T> {
+  data: T[];
+  meta: {
+    total: number;
+    page: number;
+    limit: number;
+    totalPages: number;
+  };
 }
 
 export const tutorService = {
@@ -85,6 +97,8 @@ export const tutorService = {
     minPrice?: number;
     maxPrice?: number;
     minRating?: number;
+    page?: number;
+    limit?: number;
   }) => {
     const params = new URLSearchParams();
     if (filters?.search) params.append("search", filters.search);
@@ -92,9 +106,11 @@ export const tutorService = {
     if (filters?.minPrice) params.append("minPrice", filters.minPrice.toString());
     if (filters?.maxPrice) params.append("maxPrice", filters.maxPrice.toString());
     if (filters?.minRating) params.append("minRating", filters.minRating.toString());
+    if (filters?.page) params.append("page", filters.page.toString());
+    if (filters?.limit) params.append("limit", filters.limit.toString());
 
     const query = params.toString();
-    return api.get<TutorProfile[]>(`/api/v1/tutors${query ? `?${query}` : ""}`);
+    return api.get<PaginatedResponse<TutorProfile>>(`/api/v1/tutors${query ? `?${query}` : ""}`);
   },
 
   getTutorById: async (id: string) => {

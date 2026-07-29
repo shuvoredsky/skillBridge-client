@@ -17,7 +17,7 @@ import {
   UserOutlined,
   BookOutlined,
 } from "@ant-design/icons";
-import { adminService, Booking } from "../../../../services/admin.service";
+import { adminService, Booking, DashboardStats } from "../../../../services/admin.service";
 import type { ColumnsType } from "antd/es/table";
 import dayjs from "dayjs";
 
@@ -29,19 +29,46 @@ export default function AdminBookingsPage() {
   const [statusFilter, setStatusFilter] = useState<string | undefined>(
     undefined
   );
+  const [stats, setStats] = useState<DashboardStats | null>(null);
+
+  const [page, setPage] = useState(1);
+  const [pageSize] = useState(10);
+  const [totalBookings, setTotalBookings] = useState(0);
 
   useEffect(() => {
-    fetchBookings();
+    fetchBookings(1);
+    fetchStats();
   }, []);
 
-  const fetchBookings = async (filters?: { status?: string }) => {
+  const fetchStats = async () => {
+    try {
+      const { data, error } = await adminService.getDashboardStats();
+      if (data && !error) {
+        setStats(data);
+      }
+    } catch (err) {
+      console.error("Failed to fetch statistics", err);
+    }
+  };
+
+  const fetchBookings = async (
+    currentPage = page,
+    filters?: { status?: string }
+  ) => {
     setLoading(true);
     try {
-      const { data, error } = await adminService.getAllBookings(filters);
+      const activeFilters = {
+        status: filters?.status !== undefined ? filters.status : statusFilter,
+        page: currentPage,
+        limit: pageSize,
+      };
+
+      const { data, error } = await adminService.getAllBookings(activeFilters);
       if (error) {
         message.error(error);
       } else if (data) {
-        setBookings(data);
+        setBookings(data.data);
+        setTotalBookings(data.meta.total);
       }
     } catch (error) {
       message.error("Failed to fetch bookings");
@@ -52,7 +79,8 @@ export default function AdminBookingsPage() {
 
   const handleStatusFilter = (value: string | undefined) => {
     setStatusFilter(value);
-    fetchBookings({ status: value });
+    setPage(1);
+    fetchBookings(1, { status: value });
   };
 
   const getStatusColor = (status: string) => {
@@ -187,7 +215,8 @@ export default function AdminBookingsPage() {
             size="large"
             onClick={() => {
               setStatusFilter(undefined);
-              fetchBookings();
+              setPage(1);
+              fetchBookings(1, { status: undefined });
             }}
           >
             Reset Filters
@@ -200,7 +229,7 @@ export default function AdminBookingsPage() {
         <Card className="bg-blue-50 border-blue-200 dark:from-slate-900 dark:to-slate-800 dark:border-slate-700">
           <div className="text-center">
             <div className="text-3xl font-bold text-blue-600 dark:text-blue-400">
-              {bookings.filter((b) => b.status === "CONFIRMED").length}
+              {stats?.bookings.confirmed ?? 0}
             </div>
             <div className="text-gray-600 dark:text-gray-300 mt-1">Confirmed</div>
           </div>
@@ -208,7 +237,7 @@ export default function AdminBookingsPage() {
         <Card className="bg-green-50 border-green-200 dark:from-slate-900 dark:to-slate-800 dark:border-slate-700">
           <div className="text-center">
             <div className="text-3xl font-bold text-brand-green">
-              {bookings.filter((b) => b.status === "COMPLETED").length}
+              {stats?.bookings.completed ?? 0}
             </div>
             <div className="text-gray-600 dark:text-gray-300 mt-1">Completed</div>
           </div>
@@ -216,7 +245,7 @@ export default function AdminBookingsPage() {
         <Card className="bg-red-50 border-red-200 dark:from-slate-900 dark:to-slate-800 dark:border-slate-700">
           <div className="text-center">
             <div className="text-3xl font-bold text-brand-red">
-              {bookings.filter((b) => b.status === "CANCELLED").length}
+              {stats?.bookings.cancelled ?? 0}
             </div>
             <div className="text-gray-600 dark:text-gray-300 mt-1">Cancelled</div>
           </div>
@@ -224,7 +253,7 @@ export default function AdminBookingsPage() {
         <Card className="bg-emerald-50 border-emerald-200 dark:from-slate-900 dark:to-slate-800 dark:border-slate-700">
           <div className="text-center">
             <div className="text-3xl font-bold text-brand-green">
-              {bookings.length}
+              {stats?.bookings.total ?? 0}
             </div>
             <div className="text-gray-600 dark:text-gray-300 mt-1">Total Bookings</div>
           </div>
@@ -239,7 +268,13 @@ export default function AdminBookingsPage() {
           rowKey="id"
           loading={loading}
           pagination={{
-            pageSize: 10,
+            current: page,
+            pageSize: pageSize,
+            total: totalBookings,
+            onChange: (newPage) => {
+              setPage(newPage);
+              fetchBookings(newPage);
+            },
             showTotal: (total) => `Total ${total} bookings`,
           }}
           scroll={{ x: 1200 }}

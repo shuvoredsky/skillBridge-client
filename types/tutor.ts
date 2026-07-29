@@ -52,6 +52,8 @@ export interface Session {
   status: "CONFIRMED" | "COMPLETED" | "CANCELLED";
   subject: string;
   notes: string | null;
+  meetingLink?: string | null;
+  meetingPlatform?: "GOOGLE_MEET" | "ZOOM" | "MS_TEAMS" | null;
   student: {
     id: string;
     name: string;

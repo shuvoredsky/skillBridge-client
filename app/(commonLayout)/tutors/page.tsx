@@ -16,6 +16,7 @@ import {
   Spin,
   Space,
   message,
+  Pagination,
 } from "antd";
 import {
   SearchOutlined,
@@ -32,6 +33,7 @@ import { useAuth } from "@/context/AuthContext";
 import { useWishlist } from "@/context/WishlistContext";
 import { getImageUrl } from "@/lib/getImageUrl";
 import { tutorService } from "@/services/tutor.service";
+import { adminService } from "@/services/admin.service";
 
 const { Option } = Select;
 
@@ -55,32 +57,53 @@ interface TutorProfile {
 }
 
 export default function BrowseTutorsPage() {
-  const [tutors, setTutors] = useState<TutorProfile[]>([]);
   const [filteredTutors, setFilteredTutors] = useState<TutorProfile[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedSubject, setSelectedSubject] = useState<string | undefined>();
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 5000]);
   const [minRating, setMinRating] = useState<number | undefined>();
+  const [subjects, setSubjects] = useState<string[]>([]);
+
+  const [page, setPage] = useState(1);
+  const [pageSize] = useState(9); // 9 matches the 3-column responsive layout
+  const [totalTutors, setTotalTutors] = useState(0);
+
   const router = useRouter();
   const { user } = useAuth();
   const { isSaved, toggleWishlist } = useWishlist();
 
+  // Load categories / subjects list from database dynamically on mount
   useEffect(() => {
-    loadTutors();
+    const fetchSubjects = async () => {
+      try {
+        const { data, error } = await adminService.getAllCategories();
+        if (data && !error) {
+          setSubjects(data.map((c) => c.name));
+        }
+      } catch (err) {
+        console.error("Failed to load subjects", err);
+      }
+    };
+    fetchSubjects();
   }, []);
 
-  useEffect(() => {
-    applyFilters();
-  }, [searchQuery, selectedSubject, priceRange, minRating, tutors]);
-
-  const loadTutors = async () => {
+  const loadTutors = async (currentPage = page, size = pageSize) => {
     setLoading(true);
     try {
-      const { data, error } = await tutorService.getAllTutors();
+      const { data, error } = await tutorService.getAllTutors({
+        search: searchQuery || undefined,
+        subject: selectedSubject || undefined,
+        minPrice: priceRange[0],
+        maxPrice: priceRange[1],
+        minRating: minRating || undefined,
+        page: currentPage,
+        limit: size,
+      });
+
       if (data && !error) {
-        setTutors(data);
-        setFilteredTutors(data);
+        setFilteredTutors(data.data);
+        setTotalTutors(data.meta.total);
       } else if (error) {
         console.error("Failed to load tutors:", error);
       }
@@ -91,46 +114,23 @@ export default function BrowseTutorsPage() {
     }
   };
 
-  const applyFilters = () => {
-    let filtered = [...tutors];
+  // Trigger search on filter changes (always reset to page 1 on filter tweak)
+  useEffect(() => {
+    setPage(1);
+    loadTutors(1);
+  }, [searchQuery, selectedSubject, priceRange, minRating]);
 
-    if (searchQuery) {
-      filtered = filtered.filter((tutor) =>
-        tutor.user.name.toLowerCase().includes(searchQuery.toLowerCase()),
-      );
-    }
-
-    if (selectedSubject) {
-      filtered = filtered.filter((tutor) =>
-        tutor.subjects.includes(selectedSubject),
-      );
-    }
-
-    filtered = filtered.filter(
-      (tutor) =>
-        tutor.hourlyRate >= priceRange[0] && tutor.hourlyRate <= priceRange[1],
-    );
-
-    if (minRating) {
-      filtered = filtered.filter((tutor) => tutor.rating >= minRating);
-    }
-
-    setFilteredTutors(filtered);
-  };
-
-  const getAllSubjects = () => {
-    const subjects = new Set<string>();
-    tutors.forEach((tutor) => {
-      tutor.subjects.forEach((subject) => subjects.add(subject));
-    });
-    return Array.from(subjects);
-  };
+  // Trigger reload on page changes
+  useEffect(() => {
+    loadTutors(page);
+  }, [page]);
 
   const clearAllFilters = () => {
     setSearchQuery("");
     setSelectedSubject(undefined);
     setPriceRange([0, 5000]);
     setMinRating(undefined);
+    setPage(1);
   };
 
   return (
@@ -142,7 +142,7 @@ export default function BrowseTutorsPage() {
               Find Your Perfect Tutor
             </h1>
             <p className="text-lg text-gray-600 dark:text-gray-400">
-              Browse {tutors.length} expert tutors across various subjects
+              Browse {totalTutors} expert tutors across various subjects
             </p>
           </div>
 
@@ -178,7 +178,7 @@ export default function BrowseTutorsPage() {
                       onChange={setSelectedSubject}
                       allowClear
                     >
-                      {getAllSubjects().map((subject) => (
+                      {subjects.map((subject) => (
                         <Option key={subject} value={subject}>
                           {subject}
                         </Option>
@@ -255,7 +255,8 @@ export default function BrowseTutorsPage() {
                   />
                 </Card>
               ) : (
-                <Row gutter={[16, 16]}>
+                <>
+                  <Row gutter={[16, 16]}>
                   {filteredTutors.map((tutor) => (
                     <Col xs={24} sm={12} xl={8} key={tutor.id}>
                       <Card
@@ -367,7 +368,18 @@ export default function BrowseTutorsPage() {
                     </Col>
                   ))}
                 </Row>
-              )}
+                <div className="flex justify-center mt-8">
+                  <Pagination
+                    current={page}
+                    pageSize={pageSize}
+                    total={totalTutors}
+                    onChange={(newPage) => setPage(newPage)}
+                    showSizeChanger={false}
+                    className="dark:text-white"
+                  />
+                </div>
+              </>
+            )}
             </Col>
           </Row>
         </div>

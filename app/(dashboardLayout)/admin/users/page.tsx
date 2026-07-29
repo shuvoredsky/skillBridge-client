@@ -35,22 +35,38 @@ export default function AdminUsersPage() {
   const [actionModalVisible, setActionModalVisible] = useState(false);
   const [actionType, setActionType] = useState<"ban" | "unban">("ban");
 
+  const [page, setPage] = useState(1);
+  const [pageSize] = useState(10);
+  const [totalUsers, setTotalUsers] = useState(0);
+
   useEffect(() => {
-    fetchUsers();
+    fetchUsers(1);
   }, []);
 
-  const fetchUsers = async (filters?: {
-    search?: string;
-    role?: string;
-    status?: string;
-  }) => {
+  const fetchUsers = async (
+    currentPage = page,
+    filters?: {
+      search?: string;
+      role?: string;
+      status?: string;
+    }
+  ) => {
     setLoading(true);
     try {
-      const { data, error } = await adminService.getAllUsers(filters);
+      const activeFilters = {
+        search: filters?.search !== undefined ? filters.search : searchText,
+        role: filters?.role !== undefined ? filters.role : roleFilter,
+        status: filters?.status !== undefined ? filters.status : statusFilter,
+        page: currentPage,
+        limit: pageSize,
+      };
+
+      const { data, error } = await adminService.getAllUsers(activeFilters);
       if (error) {
         message.error(error);
       } else if (data) {
-        setUsers(data);
+        setUsers(data.data);
+        setTotalUsers(data.meta.total);
       }
     } catch (error) {
       message.error("Failed to fetch users");
@@ -61,7 +77,8 @@ export default function AdminUsersPage() {
 
   const handleSearch = (value: string) => {
     setSearchText(value);
-    fetchUsers({
+    setPage(1);
+    fetchUsers(1, {
       search: value,
       role: roleFilter,
       status: statusFilter,
@@ -70,7 +87,8 @@ export default function AdminUsersPage() {
 
   const handleRoleFilter = (value: string | undefined) => {
     setRoleFilter(value);
-    fetchUsers({
+    setPage(1);
+    fetchUsers(1, {
       search: searchText,
       role: value,
       status: statusFilter,
@@ -79,7 +97,8 @@ export default function AdminUsersPage() {
 
   const handleStatusFilter = (value: string | undefined) => {
     setStatusFilter(value);
-    fetchUsers({
+    setPage(1);
+    fetchUsers(1, {
       search: searchText,
       role: roleFilter,
       status: value,
@@ -108,7 +127,7 @@ export default function AdminUsersPage() {
         message.success(
           `User ${actionType === "ban" ? "banned" : "unbanned"} successfully`
         );
-        fetchUsers({ search: searchText, role: roleFilter, status: statusFilter });
+        fetchUsers(page, { search: searchText, role: roleFilter, status: statusFilter });
         setActionModalVisible(false);
         setSelectedUser(null);
       }
@@ -249,7 +268,8 @@ export default function AdminUsersPage() {
               setSearchText("");
               setRoleFilter(undefined);
               setStatusFilter(undefined);
-              fetchUsers();
+              setPage(1);
+              fetchUsers(1, { search: "", role: undefined, status: undefined });
             }}
           >
             Reset Filters
@@ -265,7 +285,13 @@ export default function AdminUsersPage() {
           rowKey="id"
           loading={loading}
           pagination={{
-            pageSize: 10,
+            current: page,
+            pageSize: pageSize,
+            total: totalUsers,
+            onChange: (newPage) => {
+              setPage(newPage);
+              fetchUsers(newPage);
+            },
             showTotal: (total) => `Total ${total} users`,
           }}
         />

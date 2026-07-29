@@ -10,6 +10,8 @@ export interface BookingSession {
   subject: string;
   notes?: string;
   status: "CONFIRMED" | "COMPLETED" | "CANCELLED";
+  meetingLink?: string;
+  meetingPlatform?: "GOOGLE_MEET" | "ZOOM" | "MS_TEAMS";
   createdAt: string;
   tutor: {
     id: string;
@@ -55,5 +57,16 @@ export const bookingService = {
 
   updateBookingStatus: async (bookingId: string, status: "COMPLETED" | "CANCELLED") => {
     return api.patch(`/api/v1/bookings/${bookingId}/status`, { status });
+  },
+
+  updateMeetingLink: async (
+    bookingId: string,
+    meetingLink: string,
+    meetingPlatform: "GOOGLE_MEET" | "ZOOM" | "MS_TEAMS"
+  ) => {
+    return api.patch<{ message: string; data: BookingSession }>(
+      `/api/v1/bookings/${bookingId}/meeting-link`,
+      { meetingLink, meetingPlatform }
+    );
   }
 };
