@@ -263,8 +263,7 @@ export default function BrowseTutorsPage() {
                   {filteredTutors.map((tutor) => (
                     <Col xs={24} sm={12} xl={8} key={tutor.id}>
                       <Card
-                        hoverable
-                        className="h-full shadow-md hover:shadow-[0_10px_30px_-10px_rgba(16,185,129,0.25)] hover:border-emerald-400/50 dark:hover:border-emerald-500/40 hover:-translate-y-1 dark:bg-slate-900 dark:border-slate-800 transition-all duration-300 relative"
+                        className="h-full shadow-md hover:shadow-[0_10px_30px_-10px_rgba(16,185,129,0.25)] hover:border-emerald-400/50 dark:hover:border-emerald-500/40 hover:-translate-y-1 dark:bg-slate-900 dark:border-slate-800 transition-all duration-300 relative cursor-pointer"
                         onClick={() => router.push(`/tutors/${tutor.id}`)}
                       >
                         {/* Save Tutor Heart Button (Bug/Feature E) */}
