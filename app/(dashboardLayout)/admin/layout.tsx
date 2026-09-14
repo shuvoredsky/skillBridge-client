@@ -12,6 +12,7 @@ import {
   TagsOutlined,
   BellOutlined,
   SafetyCertificateOutlined,
+  SettingOutlined,
 } from "@ant-design/icons";
 import { usePathname, useRouter } from "next/navigation";
 import ThemeToggle from "@/components/ThemeToggle";
@@ -66,6 +67,11 @@ export default function AdminLayout({
         </Badge>
       ),
       label: "Notifications",
+    },
+    {
+      key: "/admin/settings",
+      icon: <SettingOutlined />,
+      label: "Settings",
     },
   ];
 
