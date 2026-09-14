@@ -9,7 +9,7 @@ import {
   Tag,
   Space,
   Modal,
-  message,
+  App,
   Card,
 } from "antd";
 import {
@@ -24,6 +24,7 @@ const { Search } = Input;
 const { Option } = Select;
 
 export default function AdminUsersPage() {
+  const { message } = App.useApp();
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(false);
   const [searchText, setSearchText] = useState("");
