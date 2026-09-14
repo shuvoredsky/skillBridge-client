@@ -52,9 +52,28 @@ const getPlatformStats = async () => {
   }
 };
 
+const getSiteSettings = async () => {
+  const cleanBaseUrl = getCleanBaseUrl();
+  try {
+    const res = await fetch(`${cleanBaseUrl}/api/v1/settings`, {
+      next: { revalidate: 60 }, // Cache for 60 seconds
+    });
+    if (!res.ok) return null;
+    const json = await res.json();
+    return json?.data || null;
+  } catch (err) {
+    console.error("Failed to fetch site settings on home page:", err);
+    return null;
+  }
+};
+
 export default async function HomePage() {
-  const tutors = await getFeaturedTutors();
-  const platformStats = await getPlatformStats();
+  const [tutors, platformStats, settings] = await Promise.all([
+    getFeaturedTutors(),
+    getPlatformStats(),
+    getSiteSettings(),
+  ]);
+
   const tutorList = Array.isArray(tutors?.data)
     ? tutors.data
     : Array.isArray(tutors)
@@ -62,6 +81,12 @@ export default async function HomePage() {
     : [];
   const featuredTutors = tutorList.slice(0, 8);
   const cleanBaseUrl = getCleanBaseUrl();
+
+  const heroBannerUrl = getImageUrl(settings?.bannerUrl);
+  const heroTitle = settings?.bannerTitle;
+  const heroSubtitle =
+    settings?.bannerSubtitle ||
+    "Connect with expert tutors for personalized 1-on-1 learning sessions. Master any subject at your own pace.";
 
   const features = [
     {
@@ -95,17 +120,38 @@ export default async function HomePage() {
 
   return (
     <div>
-      
-      <section className="bg-gradient-to-br from-emerald-50/60 via-teal-50/50 to-emerald-50/20 dark:from-slate-950 dark:via-slate-900/50 dark:to-slate-950 py-20 transition-colors duration-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* Hero Section with Dynamic Banner */}
+      <section className="relative overflow-hidden py-24 md:py-32 transition-colors duration-200">
+        {/* Background Banner Image or Gradient */}
+        {heroBannerUrl ? (
+          <div className="absolute inset-0 z-0">
+            <img
+              src={heroBannerUrl}
+              alt="Home Page Banner"
+              className="w-full h-full object-cover object-center"
+            />
+            {/* Contrast Overlays */}
+            <div className="absolute inset-0 bg-slate-950/70 dark:bg-slate-950/80 backdrop-blur-[1px]" />
+            <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-transparent to-slate-950/60" />
+          </div>
+        ) : (
+          <div className="absolute inset-0 z-0 bg-gradient-to-br from-emerald-50/60 via-teal-50/50 to-emerald-50/20 dark:from-slate-950 dark:via-slate-900/50 dark:to-slate-950" />
+        )}
+
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <h1 className="text-5xl md:text-6xl font-bold text-gray-900 dark:text-white mb-6">
-              Learn From The Best
-              <span className="block text-brand-green mt-2">Tutors Worldwide</span>
-            </h1>
-            <p className="text-xl text-gray-600 dark:text-gray-300 mb-8 max-w-3xl mx-auto">
-              Connect with expert tutors for personalized 1-on-1 learning sessions.
-              Master any subject at your own pace.
+            {heroTitle ? (
+              <h1 className={`text-5xl md:text-6xl font-bold mb-6 ${heroBannerUrl ? "text-white" : "text-gray-900 dark:text-white"}`}>
+                {heroTitle}
+              </h1>
+            ) : (
+              <h1 className={`text-5xl md:text-6xl font-bold mb-6 ${heroBannerUrl ? "text-white" : "text-gray-900 dark:text-white"}`}>
+                Learn From The Best
+                <span className="block text-brand-green mt-2">Tutors Worldwide</span>
+              </h1>
+            )}
+            <p className={`text-xl mb-8 max-w-3xl mx-auto ${heroBannerUrl ? "text-gray-200" : "text-gray-600 dark:text-gray-300"}`}>
+              {heroSubtitle}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link href="/tutors">
@@ -122,7 +168,11 @@ export default async function HomePage() {
                 <Button
                   size="large"
                   icon={<RocketOutlined />}
-                  className="h-12 px-8 text-lg dark:bg-slate-800 dark:text-white dark:border-slate-700"
+                  className={`h-12 px-8 text-lg ${
+                    heroBannerUrl
+                      ? "bg-white/10 hover:bg-white/20 text-white border-white/30 backdrop-blur-md"
+                      : "dark:bg-slate-800 dark:text-white dark:border-slate-700"
+                  }`}
                 >
                   Become a Tutor
                 </Button>
