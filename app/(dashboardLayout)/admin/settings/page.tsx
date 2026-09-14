@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef } from "react";
-import { Card, Button, message, Typography, Divider, Alert, Tag } from "antd";
+import { Card, Button, App, Typography, Divider, Alert, Tag } from "antd";
 import {
   UploadOutlined,
   PictureOutlined,
@@ -16,6 +16,7 @@ import { getImageUrl } from "@/lib/getImageUrl";
 const { Title, Text, Paragraph } = Typography;
 
 export default function AdminSettingsPage() {
+  const { message } = App.useApp();
   const { logoUrl, siteName, refreshSettings } = useSiteConfig();
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
@@ -267,7 +268,7 @@ export default function AdminSettingsPage() {
               <Divider className="my-2" />
 
               <Alert
-                message="Instant Synchronization"
+                title="Instant Synchronization"
                 description="Once uploaded, the new logo updates globally across public and admin layouts without requiring a server reboot."
                 type="info"
                 showIcon
