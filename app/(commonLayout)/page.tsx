@@ -20,7 +20,7 @@ const getCleanBaseUrl = () => {
 const getFeaturedTutors = async () => {
   const cleanBaseUrl = getCleanBaseUrl();
   try {
-    const res = await fetch(`${cleanBaseUrl}/api/v1/tutors`, {
+    const res = await fetch(`${cleanBaseUrl}/api/v1/tutors?limit=3`, {
       next: { revalidate: 60 }, // Cache for 60 seconds
     });
     if (!res.ok) return [];
@@ -55,7 +55,12 @@ const getPlatformStats = async () => {
 export default async function HomePage() {
   const tutors = await getFeaturedTutors();
   const platformStats = await getPlatformStats();
-  const featuredTutors = Array.isArray(tutors) ? tutors.slice(0, 3) : [];
+  const tutorList = Array.isArray(tutors?.data)
+    ? tutors.data
+    : Array.isArray(tutors)
+    ? tutors
+    : [];
+  const featuredTutors = tutorList.slice(0, 3);
   const cleanBaseUrl = getCleanBaseUrl();
 
   const features = [
