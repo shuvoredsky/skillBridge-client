@@ -264,7 +264,7 @@ export default function BrowseTutorsPage() {
                     <Col xs={24} sm={12} xl={8} key={tutor.id}>
                       <Card
                         hoverable
-                        className="h-full shadow-md hover:shadow-xl dark:bg-slate-900 dark:border-slate-800 transition-all duration-300 relative"
+                        className="h-full shadow-md hover:shadow-[0_10px_30px_-10px_rgba(16,185,129,0.25)] hover:border-emerald-400/50 dark:hover:border-emerald-500/40 hover:-translate-y-1 dark:bg-slate-900 dark:border-slate-800 transition-all duration-300 relative"
                         onClick={() => router.push(`/tutors/${tutor.id}`)}
                       >
                         {/* Save Tutor Heart Button (Bug/Feature E) */}
@@ -300,12 +300,12 @@ export default function BrowseTutorsPage() {
 
                         <div className="text-center mb-4">
                           <Avatar
-                            size={80}
+                            size={64}
                             src={getImageUrl(tutor.profilePhoto || tutor.user.image)}
                             icon={<UserOutlined />}
                             className="bg-gradient-to-br from-brand-green to-emerald-600"
                           />
-                          <h3 className="text-lg font-bold text-gray-900 dark:text-white mt-3 mb-1">
+                          <h3 className="text-base font-bold text-gray-900 dark:text-white mt-2 mb-1">
                             {tutor.user.name}
                           </h3>
                           <div className="flex items-center justify-center gap-2">
@@ -321,7 +321,7 @@ export default function BrowseTutorsPage() {
                           </div>
                         </div>
 
-                        <div className="space-y-3">
+                        <div className="space-y-2">
                           <div className="flex items-center gap-2 text-gray-600 dark:text-gray-300">
                             <DollarOutlined className="text-brand-green" />
                             <span className="font-semibold text-gray-900 dark:text-white">
@@ -337,7 +337,7 @@ export default function BrowseTutorsPage() {
                           )}
 
                           <div>
-                            <div className="flex flex-wrap gap-1 mt-2">
+                            <div className="flex flex-wrap gap-1 mt-1">
                               {tutor.subjects.slice(0, 3).map((subject) => (
                                 <Tag key={subject} color="success" className="font-medium">
                                   {subject}
@@ -359,7 +359,7 @@ export default function BrowseTutorsPage() {
                         <Button
                           type="primary"
                           block
-                          className="mt-4 bg-brand-green hover:bg-brand-green-hover border-0 text-white"
+                          className="mt-3 bg-brand-green hover:bg-brand-green-hover border-0 text-white"
                           onClick={(e) => {
                             e.stopPropagation();
                             router.push(`/tutors/${tutor.id}`);
