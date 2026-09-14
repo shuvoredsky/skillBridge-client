@@ -5,11 +5,15 @@ import Link from "next/link";
 import { Button, Dropdown, Avatar, MenuProps } from "antd";
 import { MenuOutlined, CloseOutlined, BookOutlined, UserOutlined, LogoutOutlined, DashboardOutlined } from "@ant-design/icons";
 import { useAuth } from "@/context/AuthContext";
+import { useSiteConfig } from "@/context/SiteConfigContext";
+import { getImageUrl } from "@/lib/getImageUrl";
 import ThemeToggle from "@/components/ThemeToggle";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const { user, logout } = useAuth(); 
+  const { logoUrl, siteName } = useSiteConfig();
+  const resolvedLogo = getImageUrl(logoUrl);
 
   
   const navLinks = [
@@ -54,11 +58,21 @@ export default function Navbar() {
         <div className="flex justify-between items-center h-16">
           
           <Link href="/" className="flex items-center space-x-2">
-            <div className="w-10 h-10 bg-brand-green rounded-lg flex items-center justify-center">
-              <BookOutlined className="text-white text-xl" />
-            </div>
+            {resolvedLogo ? (
+              <div className="relative h-10 w-auto flex items-center justify-center">
+                <img
+                  src={resolvedLogo}
+                  alt={siteName || "SkillBridge"}
+                  className="h-10 w-auto max-w-[150px] object-contain rounded-lg"
+                />
+              </div>
+            ) : (
+              <div className="w-10 h-10 bg-brand-green rounded-lg flex items-center justify-center">
+                <BookOutlined className="text-white text-xl" />
+              </div>
+            )}
             <span className="text-2xl font-bold text-gray-900 dark:text-white tracking-tight">
-              SkillBridge
+              {siteName || "SkillBridge"}
             </span>
           </Link>
 
