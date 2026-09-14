@@ -20,7 +20,7 @@ const getCleanBaseUrl = () => {
 const getFeaturedTutors = async () => {
   const cleanBaseUrl = getCleanBaseUrl();
   try {
-    const res = await fetch(`${cleanBaseUrl}/api/v1/tutors?limit=3`, {
+    const res = await fetch(`${cleanBaseUrl}/api/v1/tutors?limit=8`, {
       next: { revalidate: 60 }, // Cache for 60 seconds
     });
     if (!res.ok) return [];
@@ -60,7 +60,7 @@ export default async function HomePage() {
     : Array.isArray(tutors)
     ? tutors
     : [];
-  const featuredTutors = tutorList.slice(0, 3);
+  const featuredTutors = tutorList.slice(0, 8);
   const cleanBaseUrl = getCleanBaseUrl();
 
   const features = [
@@ -159,17 +159,19 @@ export default async function HomePage() {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid md:grid-cols-4 gap-8">
             {features.map((feature, index) => (
               <div
                 key={index}
-                className="bg-white dark:bg-slate-900 p-8 rounded-2xl shadow-sm hover:shadow-md border border-gray-100 dark:border-slate-800 transition-shadow duration-200"
+                className="bg-white dark:bg-slate-900 p-8 rounded-2xl border border-gray-100 dark:border-slate-800 shadow-sm hover:shadow-md transition-shadow duration-200"
               >
                 <div className="mb-4">{feature.icon}</div>
-                <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-3">
+                <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
                   {feature.title}
                 </h3>
-                <p className="text-gray-600 dark:text-gray-300">{feature.description}</p>
+                <p className="text-gray-600 dark:text-gray-300">
+                  {feature.description}
+                </p>
               </div>
             ))}
           </div>
@@ -193,13 +195,13 @@ export default async function HomePage() {
               No featured tutors available at the moment.
             </div>
           ) : (
-            <div className="grid md:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {featuredTutors.map((tutor: any) => {
                 const avatarUrl = getImageUrl(tutor.profilePhoto || tutor.user.image);
                 return (
                   <div
                     key={tutor.id}
-                    className="bg-slate-50 dark:bg-slate-800 border border-gray-100 dark:border-slate-700/60 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col text-center"
+                    className="bg-slate-50 dark:bg-slate-800 border border-gray-100 dark:border-slate-700/60 rounded-2xl p-6 shadow-sm hover:shadow-[0_10px_30px_-10px_rgba(16,185,129,0.25)] hover:border-emerald-400/50 dark:hover:border-emerald-500/40 hover:-translate-y-1 transition-all duration-300 flex flex-col text-center"
                   >
                     <div className="mb-4 flex justify-center">
                       <div className="relative rounded-full overflow-hidden w-20 h-20 bg-indigo-600 flex items-center justify-center text-white text-3xl font-semibold">
