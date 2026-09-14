@@ -32,7 +32,7 @@ export default function TutorProfilePage() {
   const [profile, setProfile] = useState<TutorProfile | null>(null);
   const [availableSubjects, setAvailableSubjects] = useState<string[]>([]);
   const router = useRouter();
-  const { user } = useAuth();
+  const { user, refreshUser } = useAuth();
 
   useEffect(() => {
     loadProfile();
@@ -126,6 +126,10 @@ export default function TutorProfilePage() {
               userId={profile.id}
               role="tutor"
               currentPhotoUrl={profile.profilePhoto || user.image}
+              onUploadSuccess={async (newPhotoUrl) => {
+                setProfile((prev) => (prev ? { ...prev, profilePhoto: newPhotoUrl } : null));
+                await refreshUser();
+              }}
             />
           </div>
         )}
