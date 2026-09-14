@@ -1,9 +1,16 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Table, Button, Space, Modal, Input, message, Card } from "antd";
-import { CheckCircleOutlined, CloseCircleOutlined, EyeOutlined } from "@ant-design/icons";
+import { Table, Button, Space, Modal, Input, message, Card, Image } from "antd";
+import {
+  CheckCircleOutlined,
+  CloseCircleOutlined,
+  EyeOutlined,
+  FileTextOutlined,
+  DownloadOutlined,
+} from "@ant-design/icons";
 import { adminService, PendingTutor } from "../../../../services/admin.service";
+import { getImageUrl } from "@/lib/getImageUrl";
 import type { ColumnsType } from "antd/es/table";
 
 const { TextArea } = Input;
@@ -16,6 +23,14 @@ export default function AdminTutorsPage() {
   const [rejectModalVisible, setRejectModalVisible] = useState(false);
   const [rejectionReason, setRejectionReason] = useState("");
   const [actionLoading, setActionLoading] = useState(false);
+
+  // Document preview modal state
+  const [previewDoc, setPreviewDoc] = useState<{
+    url: string;
+    title: string;
+    type: string;
+    tutorName: string;
+  } | null>(null);
 
   const [page, setPage] = useState(1);
   const [pageSize] = useState(10);
@@ -86,6 +101,16 @@ export default function AdminTutorsPage() {
     }
   };
 
+  const openDocumentPreview = (doc: any, label: string, tutorName: string) => {
+    const resolvedUrl = getImageUrl(doc.url) || doc.url;
+    setPreviewDoc({
+      url: resolvedUrl,
+      title: `${label} — ${tutorName}`,
+      type: doc.type,
+      tutorName,
+    });
+  };
+
   const columns: ColumnsType<PendingTutor> = [
     {
       title: "Name",
@@ -126,23 +151,35 @@ export default function AdminTutorsPage() {
         return (
           <Space size="middle" className="flex-wrap">
             {degree ? (
-              <a href={degree.url} target="_blank" rel="noreferrer" className="text-brand-green hover:text-brand-green-hover hover:underline font-semibold text-xs flex items-center gap-1">
+              <button
+                type="button"
+                onClick={() => openDocumentPreview(degree, "Degree Certificate", record.user.name)}
+                className="text-brand-green hover:text-brand-green-hover hover:underline font-semibold text-xs flex items-center gap-1 cursor-pointer bg-transparent border-0 p-0"
+              >
                 <EyeOutlined /> Degree
-              </a>
+              </button>
             ) : (
               <span className="text-gray-400 dark:text-gray-600 text-xs">No Degree</span>
             )}
             {nid ? (
-              <a href={nid.url} target="_blank" rel="noreferrer" className="text-brand-green hover:text-brand-green-hover hover:underline font-semibold text-xs flex items-center gap-1">
+              <button
+                type="button"
+                onClick={() => openDocumentPreview(nid, "National ID (NID)", record.user.name)}
+                className="text-brand-green hover:text-brand-green-hover hover:underline font-semibold text-xs flex items-center gap-1 cursor-pointer bg-transparent border-0 p-0"
+              >
                 <EyeOutlined /> NID
-              </a>
+              </button>
             ) : (
               <span className="text-gray-400 dark:text-gray-600 text-xs">No NID</span>
             )}
             {certificate ? (
-              <a href={certificate.url} target="_blank" rel="noreferrer" className="text-brand-green hover:text-brand-green-hover hover:underline font-semibold text-xs flex items-center gap-1">
+              <button
+                type="button"
+                onClick={() => openDocumentPreview(certificate, "Teaching Certificate", record.user.name)}
+                className="text-brand-green hover:text-brand-green-hover hover:underline font-semibold text-xs flex items-center gap-1 cursor-pointer bg-transparent border-0 p-0"
+              >
                 <EyeOutlined /> Certificate
-              </a>
+              </button>
             ) : (
               <span className="text-gray-400 dark:text-gray-600 text-xs">No Certificate</span>
             )}
@@ -210,6 +247,65 @@ export default function AdminTutorsPage() {
           locale={{ emptyText: "No pending tutor verification requests" }}
         />
       </Card>
+
+      {/* Document Viewer Modal */}
+      <Modal
+        title={
+          <div className="flex items-center gap-2 text-gray-900 dark:text-white">
+            <FileTextOutlined className="text-brand-green" />
+            <span>{previewDoc?.title || "Verification Document Preview"}</span>
+          </div>
+        }
+        open={!!previewDoc}
+        onCancel={() => setPreviewDoc(null)}
+        footer={[
+          <Button key="close" onClick={() => setPreviewDoc(null)}>
+            Close
+          </Button>,
+          previewDoc?.url ? (
+            <a
+              key="download"
+              href={previewDoc.url}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center justify-center px-4 py-1 text-sm bg-slate-100 dark:bg-slate-800 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
+            >
+              <DownloadOutlined className="mr-1" /> Open Direct Link
+            </a>
+          ) : null,
+        ]}
+        width={750}
+        centered
+        destroyOnClose
+      >
+        <div className="py-4">
+          {previewDoc?.url ? (
+            previewDoc.url.toLowerCase().includes(".pdf") ? (
+              <iframe
+                src={previewDoc.url}
+                title={previewDoc.title}
+                className="w-full h-[550px] rounded-lg border border-gray-200 dark:border-slate-700"
+              />
+            ) : (
+              <div className="flex flex-col items-center justify-center p-3 bg-slate-50 dark:bg-slate-900 rounded-xl border border-gray-100 dark:border-slate-800">
+                <Image
+                  src={previewDoc.url}
+                  alt={previewDoc.title}
+                  className="max-h-[520px] object-contain rounded-lg"
+                  preview={{
+                    mask: "Click to Zoom / Rotate",
+                  }}
+                />
+                <span className="text-xs text-gray-400 dark:text-gray-500 mt-3">
+                  Click on the image above for interactive zoom, rotation, and full-screen inspection.
+                </span>
+              </div>
+            )
+          ) : (
+            <div className="p-8 text-center text-gray-500">Document URL is not available</div>
+          )}
+        </div>
+      </Modal>
 
       {/* Approve Confirmation Modal */}
       <Modal
