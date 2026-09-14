@@ -111,7 +111,23 @@ export default function TutorDashboard() {
         message.error(error);
       } else {
         message.success(`${type.toUpperCase()} uploaded successfully!`);
-        await loadDashboardData();
+        // Optimistically update document in local state
+        if (data) {
+          const updatedDoc = (data as any).data || data;
+          setProfile((prev) => {
+            if (!prev) return prev;
+            const existingDocs = prev.documents || [];
+            const filteredDocs = existingDocs.filter(
+              (d) => d.type.toLowerCase() !== type.toLowerCase()
+            );
+            return {
+              ...prev,
+              documents: [...filteredDocs, updatedDoc],
+            };
+          });
+        }
+        // Refresh dashboard state silently in the background
+        await loadDashboardData(true);
       }
     } catch (err) {
       console.error(err);
@@ -121,8 +137,10 @@ export default function TutorDashboard() {
     }
   };
 
-  const loadDashboardData = async () => {
-    setLoading(true);
+  const loadDashboardData = async (silent = false) => {
+    if (!silent) {
+      setLoading(true);
+    }
     try {
       const [profileRes, sessionsRes] = await Promise.all([
         tutorService.getMyProfile(),
@@ -134,7 +152,9 @@ export default function TutorDashboard() {
     } catch (err) {
       console.error("Failed to load dashboard:", err);
     } finally {
-      setLoading(false);
+      if (!silent) {
+        setLoading(false);
+      }
     }
   };
 
