@@ -251,10 +251,10 @@ export default async function HomePage() {
                 return (
                   <div
                     key={tutor.id}
-                    className="bg-slate-50 dark:bg-slate-800 border border-gray-100 dark:border-slate-700/60 rounded-2xl p-6 shadow-sm hover:shadow-[0_10px_30px_-10px_rgba(16,185,129,0.25)] hover:border-emerald-400/50 dark:hover:border-emerald-500/40 hover:-translate-y-1 transition-all duration-300 flex flex-col text-center"
+                    className="bg-slate-50 dark:bg-slate-800 border border-gray-100 dark:border-slate-700/60 rounded-2xl p-4 shadow-sm hover:shadow-[0_10px_30px_-10px_rgba(16,185,129,0.25)] hover:border-emerald-400/50 dark:hover:border-emerald-500/40 hover:-translate-y-1 transition-all duration-300 flex flex-col text-center"
                   >
-                    <div className="mb-4 flex justify-center">
-                      <div className="relative rounded-full overflow-hidden w-20 h-20 bg-indigo-600 flex items-center justify-center text-white text-3xl font-semibold">
+                    <div className="mb-3 flex justify-center">
+                      <div className="relative rounded-full overflow-hidden w-16 h-16 bg-indigo-600 flex items-center justify-center text-white text-2xl font-semibold">
                         {avatarUrl ? (
                           <img
                             src={avatarUrl}
@@ -266,17 +266,17 @@ export default async function HomePage() {
                         )}
                       </div>
                     </div>
-                    <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
+                    <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-1">
                       {tutor.user.name}
                     </h3>
-                    <div className="flex items-center justify-center gap-1 mb-4 text-amber-500">
+                    <div className="flex items-center justify-center gap-1 mb-3 text-amber-500">
                       <span className="text-sm font-semibold">★ {tutor.rating.toFixed(1)}</span>
                       <span className="text-gray-400 dark:text-gray-500">({tutor.totalReviews})</span>
                     </div>
-                    <p className="text-sm text-gray-600 dark:text-gray-300 mb-6 line-clamp-3 min-h-[60px]">
+                    <p className="text-sm text-gray-600 dark:text-gray-300 mb-4 line-clamp-3 min-h-[48px]">
                       {tutor.bio || "No description provided."}
                     </p>
-                    <div className="mt-auto border-t border-gray-100 dark:border-slate-700 pt-4 flex justify-between items-center">
+                    <div className="mt-auto border-t border-gray-100 dark:border-slate-700 pt-3 flex justify-between items-center">
                       <span className="text-brand-green font-bold">
                         ${tutor.hourlyRate}/hr
                       </span>
