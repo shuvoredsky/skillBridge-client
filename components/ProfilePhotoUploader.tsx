@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { Avatar, Button, Spin, message } from "antd";
 import { CameraOutlined, UserOutlined } from "@ant-design/icons";
 import { userService } from "@/services/user.service";
@@ -8,6 +8,7 @@ import { useAuth } from "@/context/AuthContext";
 
 interface ProfilePhotoUploaderProps {
   userId: string;
+  authUserId?: string;
   role: "tutor" | "student";
   currentPhotoUrl?: string | null;
   onUploadSuccess?: (newPhotoUrl: string) => void;
@@ -15,15 +16,21 @@ interface ProfilePhotoUploaderProps {
 
 export default function ProfilePhotoUploader({
   userId,
+  authUserId,
   role,
   currentPhotoUrl,
   onUploadSuccess,
 }: ProfilePhotoUploaderProps) {
-  const { refreshUser } = useAuth();
+  const { user, refreshUser } = useAuth();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [loading, setLoading] = useState(false);
   const [previewUrl, setPreviewUrl] = useState<string | undefined>(currentPhotoUrl || undefined);
   const [error, setError] = useState<string | null>(null);
+
+  // Sync internal previewUrl whenever currentPhotoUrl changes from parent
+  useEffect(() => {
+    setPreviewUrl(currentPhotoUrl || undefined);
+  }, [currentPhotoUrl]);
 
   // Helper to construct absolute image URL using the backend base URL env
   const getFullImageUrl = (path: string | undefined | null) => {
@@ -87,7 +94,13 @@ export default function ProfilePhotoUploader({
         message.success("Profile photo updated successfully!");
         
         // Save to local storage cache so AuthContext reads it on refresh/reload
-        localStorage.setItem(`profilePhoto_${userId}`, newPhotoUrl);
+        const targetAuthId = authUserId || user?.id;
+        if (targetAuthId) {
+          localStorage.setItem(`profilePhoto_${targetAuthId}`, newPhotoUrl);
+        }
+        if (userId && userId !== targetAuthId) {
+          localStorage.setItem(`profilePhoto_${userId}`, newPhotoUrl);
+        }
 
         // Trigger AuthContext state update
         await refreshUser();
