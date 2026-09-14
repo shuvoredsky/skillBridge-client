@@ -3,7 +3,7 @@
 import { useAuth } from "@/context/AuthContext";
 import { useRouter, usePathname } from "next/navigation";
 import { useEffect } from "react";
-import { Spin } from "antd";
+import LogoSpinner from "@/components/LogoSpinner";
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
@@ -42,11 +42,7 @@ export function ProtectedRoute({
 
   // Loading state
   if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <Spin fullscreen size="large" />
-      </div>
-    );
+    return <LogoSpinner fullscreen tip="Verifying credentials..." />;
   }
 
   // Not logged in
