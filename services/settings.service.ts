@@ -5,6 +5,10 @@ export interface SiteSetting {
   siteName: string;
   logoUrl?: string | null;
   logoPublicId?: string | null;
+  bannerUrl?: string | null;
+  bannerPublicId?: string | null;
+  bannerTitle?: string | null;
+  bannerSubtitle?: string | null;
   createdAt: string;
   updatedAt: string;
 }
@@ -25,5 +29,20 @@ export const settingsService = {
     formData.append("logo", file);
 
     return api.upload<SiteSettingsResponse>("/api/v1/settings/logo", formData);
+  },
+
+  uploadSiteBanner: async (file: File) => {
+    const formData = new FormData();
+    formData.append("banner", file);
+
+    return api.upload<SiteSettingsResponse>("/api/v1/settings/banner", formData);
+  },
+
+  updateSiteTextSettings: async (payload: {
+    siteName?: string;
+    bannerTitle?: string;
+    bannerSubtitle?: string;
+  }) => {
+    return api.patch<SiteSettingsResponse>("/api/v1/settings/text", payload);
   },
 };

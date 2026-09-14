@@ -5,6 +5,9 @@ import { settingsService, SiteSetting } from "@/services/settings.service";
 
 interface SiteConfigContextType {
   logoUrl: string | null;
+  bannerUrl: string | null;
+  bannerTitle: string | null;
+  bannerSubtitle: string | null;
   siteName: string;
   loading: boolean;
   settings: SiteSetting | null;
@@ -16,6 +19,9 @@ const SiteConfigContext = createContext<SiteConfigContextType | undefined>(undef
 export function SiteConfigProvider({ children }: { children: React.ReactNode }) {
   const [settings, setSettings] = useState<SiteSetting | null>(null);
   const [logoUrl, setLogoUrl] = useState<string | null>(null);
+  const [bannerUrl, setBannerUrl] = useState<string | null>(null);
+  const [bannerTitle, setBannerTitle] = useState<string | null>(null);
+  const [bannerSubtitle, setBannerSubtitle] = useState<string | null>(null);
   const [siteName, setSiteName] = useState<string>("SkillBridge");
   const [loading, setLoading] = useState(true);
 
@@ -26,6 +32,9 @@ export function SiteConfigProvider({ children }: { children: React.ReactNode }) 
         const data = response.data.data;
         setSettings(data);
         setLogoUrl(data.logoUrl || null);
+        setBannerUrl(data.bannerUrl || null);
+        setBannerTitle(data.bannerTitle || null);
+        setBannerSubtitle(data.bannerSubtitle || null);
         if (data.siteName) {
           setSiteName(data.siteName);
         }
@@ -49,6 +58,9 @@ export function SiteConfigProvider({ children }: { children: React.ReactNode }) 
     <SiteConfigContext.Provider
       value={{
         logoUrl,
+        bannerUrl,
+        bannerTitle,
+        bannerSubtitle,
         siteName,
         loading,
         settings,
