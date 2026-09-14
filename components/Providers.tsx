@@ -6,6 +6,7 @@ import { ConfigProvider, App, theme } from "antd";
 import { AuthProvider } from "@/context/AuthContext";
 import { WishlistProvider } from "@/context/WishlistContext";
 import { NotificationProvider } from "@/context/NotificationContext";
+import { SiteConfigProvider } from "@/context/SiteConfigContext";
 
 function AntdThemeWrapper({ children }: { children: React.ReactNode }) {
   const { theme: currentTheme } = useTheme();
@@ -22,11 +23,13 @@ function AntdThemeWrapper({ children }: { children: React.ReactNode }) {
       }}
     >
       <App>
-        <AuthProvider>
-          <WishlistProvider>
-            <NotificationProvider>{children}</NotificationProvider>
-          </WishlistProvider>
-        </AuthProvider>
+        <SiteConfigProvider>
+          <AuthProvider>
+            <WishlistProvider>
+              <NotificationProvider>{children}</NotificationProvider>
+            </WishlistProvider>
+          </AuthProvider>
+        </SiteConfigProvider>
       </App>
     </ConfigProvider>
   );
