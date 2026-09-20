@@ -144,31 +144,35 @@ export default function BrowseTutorsPage() {
   const renderFilterControls = (isMobile = false) => (
     <div className="space-y-6">
       <div>
-        <h3 className="font-semibold text-gray-900 dark:text-white mb-2.5 flex items-center gap-2 text-sm">
+        <label htmlFor="tutors-search-input" className="font-semibold text-gray-900 dark:text-white mb-2.5 flex items-center gap-2 text-sm cursor-pointer">
           <SearchOutlined className="text-brand-green" />
           Search Tutors
-        </h3>
+        </label>
         <Input
+          id="tutors-search-input"
           placeholder="Search by name..."
           size="large"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
+          aria-label="Search tutors by name"
           allowClear
           className="dark:bg-slate-800 dark:border-slate-700 dark:text-white rounded-xl"
         />
       </div>
 
       <div>
-        <h3 className="font-semibold text-gray-900 dark:text-white mb-2.5 flex items-center gap-2 text-sm">
+        <label htmlFor="tutors-subject-select" className="font-semibold text-gray-900 dark:text-white mb-2.5 flex items-center gap-2 text-sm cursor-pointer">
           <BookOutlined className="text-brand-green" />
           Subject / Category
-        </h3>
+        </label>
         <Select
+          id="tutors-subject-select"
           placeholder="Select subject"
           size="large"
           className="w-full"
           value={selectedSubject}
           onChange={setSelectedSubject}
+          aria-label="Filter by subject or category"
           allowClear
         >
           {subjects.map((subject) => (
@@ -190,6 +194,7 @@ export default function BrowseTutorsPage() {
           max={5000}
           value={priceRange}
           onChange={(value) => setPriceRange(value as [number, number])}
+          aria-label="Filter by hourly rate range"
           tooltip={{
             formatter: (value) => `$${value}`,
           }}
@@ -201,16 +206,18 @@ export default function BrowseTutorsPage() {
       </div>
 
       <div>
-        <h3 className="font-semibold text-gray-900 dark:text-white mb-2.5 flex items-center gap-2 text-sm">
+        <label htmlFor="tutors-rating-select" className="font-semibold text-gray-900 dark:text-white mb-2.5 flex items-center gap-2 text-sm cursor-pointer">
           <StarOutlined className="text-brand-green" />
           Minimum Rating
-        </h3>
+        </label>
         <Select
+          id="tutors-rating-select"
           placeholder="Any rating"
           size="large"
           className="w-full"
           value={minRating}
           onChange={setMinRating}
+          aria-label="Filter by minimum rating"
           allowClear
         >
           <Option value={4.5}>★ 4.5+ Stars</Option>

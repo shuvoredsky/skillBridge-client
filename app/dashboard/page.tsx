@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Card, Row, Col, Tag, Empty, Spin, Button, Statistic } from "antd";
+import { Card, Row, Col, Tag, Empty, Spin, Button } from "antd";
 import {
   CalendarOutlined,
   ClockCircleOutlined,
@@ -12,12 +12,10 @@ import {
 } from "@ant-design/icons";
 import { useRouter } from "next/navigation";
 import { bookingService, BookingSession } from "../../services/booking.service";
+import StatCard from "@/components/shared/StatCard";
 import dayjs from "dayjs";
-import { useTheme } from "@/context/ThemeContext";
 
 export default function StudentDashboardPage() {
-  const { theme } = useTheme();
-  const isDark = theme === "dark";
   const [bookings, setBookings] = useState<BookingSession[]>([]);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
@@ -77,46 +75,43 @@ export default function StudentDashboardPage() {
         </p>
       </div>
 
+      {/* Task 3: Unified Reusable StatCards */}
       <Row gutter={[16, 16]}>
         <Col xs={24} sm={12} lg={6}>
-          <Card className="bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200 dark:from-slate-900 dark:to-slate-800 dark:border-slate-700">
-            <Statistic
-              title={<span className="text-blue-900 dark:text-blue-200">Total Sessions</span>}
-              value={bookings.length}
-              prefix={<BookOutlined className="text-blue-600 dark:text-blue-400" />}
-              styles={{ content: { color: isDark ? "#60a5fa" : "#1e40af", fontWeight: "bold" } }}
-            />
-          </Card>
+          <StatCard
+            title="Total Sessions"
+            value={bookings.length}
+            icon={<BookOutlined />}
+            color="blue"
+            description="All scheduled lessons"
+          />
         </Col>
         <Col xs={24} sm={12} lg={6}>
-          <Card className="bg-gradient-to-br from-emerald-50 to-emerald-100 border-emerald-200 dark:from-emerald-950/30 dark:to-emerald-900/10 dark:border-emerald-800/30">
-            <Statistic
-              title={<span className="text-emerald-900 dark:text-emerald-300 font-medium">Upcoming</span>}
-              value={upcomingBookings.length}
-              prefix={<CalendarOutlined className="text-brand-green" />}
-              styles={{ content: { color: isDark ? "#34d399" : "#059669", fontWeight: "bold" } }}
-            />
-          </Card>
+          <StatCard
+            title="Upcoming"
+            value={upcomingBookings.length}
+            icon={<CalendarOutlined />}
+            color="emerald"
+            description="Confirmed upcoming sessions"
+          />
         </Col>
         <Col xs={24} sm={12} lg={6}>
-          <Card className="bg-gradient-to-br from-green-50 to-green-100 border-green-200 dark:from-slate-900 dark:to-slate-800 dark:border-slate-700">
-            <Statistic
-              title={<span className="text-green-900 dark:text-emerald-300">Completed</span>}
-              value={completedBookings.length}
-              prefix={<CheckCircleOutlined className="text-green-600 dark:text-brand-green" />}
-              styles={{ content: { color: isDark ? "#34d399" : "#16a34a", fontWeight: "bold" } }}
-            />
-          </Card>
+          <StatCard
+            title="Completed"
+            value={completedBookings.length}
+            icon={<CheckCircleOutlined />}
+            color="emerald"
+            description="Successfully completed"
+          />
         </Col>
         <Col xs={24} sm={12} lg={6}>
-          <Card className="bg-gradient-to-br from-red-50 to-red-100 border-red-200 dark:from-red-950/20 dark:to-red-900/10 dark:border-red-900/30">
-            <Statistic
-              title={<span className="text-red-900 dark:text-red-300">Cancelled</span>}
-              value={cancelledBookings.length}
-              prefix={<CloseCircleOutlined className="text-red-600 dark:text-brand-red" />}
-              styles={{ content: { color: isDark ? "#f87171" : "#dc2626", fontWeight: "bold" } }}
-            />
-          </Card>
+          <StatCard
+            title="Cancelled"
+            value={cancelledBookings.length}
+            icon={<CloseCircleOutlined />}
+            color="red"
+            description="Cancelled or missed"
+          />
         </Col>
       </Row>
 
@@ -133,7 +128,7 @@ export default function StudentDashboardPage() {
             </Button>
           </div>
         }
-        className="shadow-lg dark:bg-slate-900 dark:border-slate-800"
+        className="shadow-lg dark:bg-slate-900 dark:border-slate-800 rounded-2xl"
       >
         {upcomingBookings.length === 0 ? (
           <Empty
@@ -142,7 +137,7 @@ export default function StudentDashboardPage() {
           >
             <Button
               type="primary"
-              className="bg-brand-green hover:bg-brand-green-hover border-0"
+              className="bg-brand-green hover:bg-brand-green-hover border-0 rounded-xl"
               onClick={() => router.push("/tutors")}
             >
               Find a Tutor
@@ -151,7 +146,10 @@ export default function StudentDashboardPage() {
         ) : (
           <div className="space-y-4">
             {upcomingBookings.slice(0, 5).map((booking) => (
-              <Card key={booking.id} className="bg-gray-50 dark:bg-slate-800 hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors border-0">
+              <Card
+                key={booking.id}
+                className="bg-gray-50 dark:bg-slate-800 hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors border-0 rounded-xl"
+              >
                 <div className="flex items-center justify-between">
                   <div className="flex items-start gap-4 flex-1">
                     <div className="w-12 h-12 bg-emerald-50 dark:bg-emerald-950/40 rounded-lg flex items-center justify-center">
@@ -181,14 +179,17 @@ export default function StudentDashboardPage() {
         )}
       </Card>
 
-      <Card title={<span className="dark:text-white">Quick Actions</span>} className="shadow-lg dark:bg-slate-900 dark:border-slate-800">
+      <Card
+        title={<span className="dark:text-white">Quick Actions</span>}
+        className="shadow-lg dark:bg-slate-900 dark:border-slate-800 rounded-2xl"
+      >
         <Row gutter={[16, 16]}>
           <Col xs={24} sm={12} md={8}>
             <Button
               type="primary"
               size="large"
               block
-              className="bg-brand-green hover:bg-brand-green-hover border-0 h-auto py-4 text-white"
+              className="bg-brand-green hover:bg-brand-green-hover border-0 h-auto py-4 text-white rounded-xl"
               onClick={() => router.push("/tutors")}
             >
               <div className="flex flex-col items-center gap-2">
@@ -201,7 +202,7 @@ export default function StudentDashboardPage() {
             <Button
               size="large"
               block
-              className="h-auto py-4 dark:bg-slate-800 dark:text-white dark:border-slate-700 hover:border-brand-green"
+              className="h-auto py-4 dark:bg-slate-800 dark:text-white dark:border-slate-700 hover:border-brand-green rounded-xl"
               onClick={() => router.push("/dashboard/bookings")}
             >
               <div className="flex flex-col items-center gap-2">
@@ -214,7 +215,7 @@ export default function StudentDashboardPage() {
             <Button
               size="large"
               block
-              className="h-auto py-4 dark:bg-slate-800 dark:text-white dark:border-slate-700 hover:border-brand-green"
+              className="h-auto py-4 dark:bg-slate-800 dark:text-white dark:border-slate-700 hover:border-brand-green rounded-xl"
               onClick={() => router.push("/dashboard/profile")}
             >
               <div className="flex flex-col items-center gap-2">

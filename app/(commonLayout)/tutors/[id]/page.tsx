@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Link from "next/link";
 import {
   Card,
   Row,
@@ -17,9 +18,9 @@ import {
   Select,
   Divider,
   Empty,
-  Spin,
   Space,
   message,
+  Alert,
 } from "antd";
 import {
   UserOutlined,
@@ -31,29 +32,39 @@ import {
   ArrowLeftOutlined,
   HeartOutlined,
   HeartFilled,
+  InfoCircleOutlined,
+  CheckCircleFilled,
 } from "@ant-design/icons";
 import { useParams, useRouter } from "next/navigation";
-import { tutorService, TutorProfile } from "../../../../services/tutor.service";
+import { tutorService, TutorProfile, Availability } from "../../../../services/tutor.service";
 import { bookingService } from "../../../../services/booking.service";
 import { useAuth } from "@/context/AuthContext";
 import { useWishlist } from "@/context/WishlistContext";
 import { getImageUrl } from "@/lib/getImageUrl";
 import { recentlyViewedService } from "@/services/recently-viewed.service";
-import dayjs from "dayjs";
+import TutorDetailsSkeleton from "@/components/shared/TutorDetailsSkeleton";
+import dayjs, { Dayjs } from "dayjs";
 
 const { TextArea } = Input;
 const { Option } = Select;
 
 export default function TutorDetailsPage() {
   const [tutor, setTutor] = useState<TutorProfile | null>(null);
+  const [availability, setAvailability] = useState<Availability[]>([]);
   const [loading, setLoading] = useState(true);
   const [bookingModalVisible, setBookingModalVisible] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [selectedSlotId, setSelectedSlotId] = useState<string | null>(null);
   const [form] = Form.useForm();
   const params = useParams();
   const router = useRouter();
   const { user } = useAuth();
   const { isSaved, toggleWishlist } = useWishlist();
+
+  // Live form watchers for booking price calculation
+  const watchDate = Form.useWatch("date", form) as Dayjs | undefined;
+  const watchStartTime = Form.useWatch("startTime", form) as Dayjs | undefined;
+  const watchEndTime = Form.useWatch("endTime", form) as Dayjs | undefined;
 
   useEffect(() => {
     if (params.id) {
@@ -76,6 +87,16 @@ export default function TutorDetailsPage() {
             console.error("Failed to record tutor view:", err);
           });
         }
+
+        // Fetch tutor's configured availability slots
+        try {
+          const availRes = await tutorService.getMyAvailability(data.id);
+          if (availRes.data && Array.isArray(availRes.data)) {
+            setAvailability(availRes.data);
+          }
+        } catch (availErr) {
+          console.error("Failed to load availability slots:", availErr);
+        }
       }
     } catch (error) {
       message.error("Failed to load tutor details");
@@ -97,6 +118,7 @@ export default function TutorDetailsPage() {
       return;
     }
 
+    setSelectedSlotId(null);
     setBookingModalVisible(true);
   };
 
@@ -114,9 +136,7 @@ export default function TutorDetailsPage() {
         notes: values.notes || "",
       };
 
-      console.log("Booking data:", bookingData);
-
-      const { data, error } = await bookingService.createBooking(bookingData);
+      const { error } = await bookingService.createBooking(bookingData);
 
       if (error) {
         message.error(error);
@@ -124,6 +144,7 @@ export default function TutorDetailsPage() {
         message.success("Session booked successfully!");
         setBookingModalVisible(false);
         form.resetFields();
+        setSelectedSlotId(null);
         router.push("/dashboard/bookings");
       }
     } catch (error: any) {
@@ -134,12 +155,80 @@ export default function TutorDetailsPage() {
     }
   };
 
+  // Helper to format ISO or HH:mm time strings to readable 12-hour format
+  const formatSlotTime = (timeVal: string) => {
+    if (!timeVal) return "";
+    if (timeVal.includes("T")) {
+      return dayjs(timeVal).format("h:mm A");
+    }
+    return dayjs(`2000-01-01 ${timeVal}`).format("h:mm A");
+  };
+
+  const getSlotRawTime = (timeVal: string) => {
+    if (!timeVal) return "00:00";
+    if (timeVal.includes("T")) {
+      return dayjs(timeVal).format("HH:mm");
+    }
+    return timeVal.substring(0, 5);
+  };
+
+  // Slots matching the selected date's day of week
+  const selectedDayOfWeek = watchDate ? watchDate.format("dddd").toUpperCase() : null;
+  const dayMatchingSlots = selectedDayOfWeek
+    ? availability.filter(
+        (slot) => slot.dayOfWeek && slot.dayOfWeek.toUpperCase() === selectedDayOfWeek
+      )
+    : [];
+
+  const handleSelectSlot = (slot: Availability) => {
+    setSelectedSlotId(slot.id);
+    const startStr = getSlotRawTime(slot.startTime);
+    const endStr = getSlotRawTime(slot.endTime);
+
+    form.setFieldsValue({
+      startTime: dayjs(startStr, "HH:mm"),
+      endTime: dayjs(endStr, "HH:mm"),
+    });
+  };
+
+  // Live duration and price calculation
+  let durationText = "";
+  let calculationFormula = "";
+  let totalCostFormatted = "0.00";
+  let isInvalidDuration = false;
+  let validationErrorMessage = "";
+
+  if (watchStartTime && watchEndTime) {
+    const startMinutes = watchStartTime.hour() * 60 + watchStartTime.minute();
+    const endMinutes = watchEndTime.hour() * 60 + watchEndTime.minute();
+    const diffMinutes = endMinutes - startMinutes;
+
+    if (diffMinutes <= 0) {
+      isInvalidDuration = true;
+      validationErrorMessage = "End time must be after start time (minimum 30 minutes).";
+    } else {
+      const hours = Math.floor(diffMinutes / 60);
+      const mins = diffMinutes % 60;
+      const totalHours = diffMinutes / 60;
+
+      const durationParts = [];
+      if (hours > 0) durationParts.push(`${hours} Hour${hours > 1 ? "s" : ""}`);
+      if (mins > 0) durationParts.push(`${mins} Minute${mins > 1 ? "s" : ""}`);
+      durationText = durationParts.join(" ") || "0 Minutes";
+
+      calculationFormula = `${totalHours.toFixed(1)} Hours × $${tutor?.hourlyRate || 0}/hr`;
+      totalCostFormatted = ((tutor?.hourlyRate || 0) * totalHours).toFixed(2);
+    }
+  }
+
+  const isFormBookingReady =
+    Boolean(watchDate) &&
+    Boolean(watchStartTime) &&
+    Boolean(watchEndTime) &&
+    !isInvalidDuration;
+
   if (loading) {
-    return (
-      <div className="flex justify-center items-center min-h-screen">
-        <Spin fullscreen size="large" />
-      </div>
-    );
+    return <TutorDetailsSkeleton />;
   }
 
   if (!tutor) {
@@ -150,16 +239,24 @@ export default function TutorDetailsPage() {
     );
   }
 
+  const ratingAriaLabel = `${tutor.rating.toFixed(1)} out of 5 stars based on ${tutor.totalReviews} reviews`;
+
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950 py-8 transition-colors duration-200">
       <div className="max-w-7xl mx-auto px-4">
-        <Button icon={<ArrowLeftOutlined />} onClick={() => router.back()} className="mb-6 dark:bg-slate-800 dark:text-white dark:border-slate-700">
-          Back to Tutors
-        </Button>
+        {/* Task 2: Robust Link Navigation for Back Button */}
+        <Link href="/tutors" className="inline-block mb-6">
+          <Button
+            icon={<ArrowLeftOutlined />}
+            className="dark:bg-slate-800 dark:text-white dark:border-slate-700 hover:border-brand-green"
+          >
+            Back to Tutors
+          </Button>
+        </Link>
 
         <Row gutter={[24, 24]}>
           <Col xs={24} lg={8}>
-            <Card className="shadow-lg sticky top-4 dark:bg-slate-900 dark:border-slate-800">
+            <Card className="shadow-lg sticky top-4 dark:bg-slate-900 dark:border-slate-800 rounded-2xl">
               <div className="text-center mb-6">
                 <Avatar
                   size={120}
@@ -167,10 +264,22 @@ export default function TutorDetailsPage() {
                   icon={<UserOutlined />}
                   className="bg-gradient-to-br from-brand-green to-emerald-600 mb-4"
                 />
-                <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">{tutor.user.name}</h2>
-                <div className="flex items-center justify-center gap-2 mb-4">
-                  <Rate disabled value={tutor.rating} allowHalf />
-                  <span className="text-gray-600 dark:text-gray-400">({tutor.totalReviews} reviews)</span>
+                <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+                  {tutor.user.name}
+                </h2>
+                <div
+                  className="flex items-center justify-center gap-2 mb-4"
+                  aria-label={ratingAriaLabel}
+                >
+                  <Rate
+                    disabled
+                    value={tutor.rating}
+                    allowHalf
+                    aria-label={ratingAriaLabel}
+                  />
+                  <span className="text-gray-600 dark:text-gray-400 font-medium">
+                    ({tutor.totalReviews} reviews)
+                  </span>
                 </div>
               </div>
 
@@ -178,24 +287,26 @@ export default function TutorDetailsPage() {
 
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <span className="text-gray-600 dark:text-gray-400 flex items-center gap-2">
-                    <DollarOutlined className="text-green-600" />
+                  <span className="text-gray-600 dark:text-gray-400 flex items-center gap-2 font-medium">
+                    <DollarOutlined className="text-brand-green text-lg" />
                     Hourly Rate
                   </span>
-                  <span className="text-2xl font-bold text-green-600">${tutor.hourlyRate}</span>
+                  <span className="text-2xl font-extrabold text-brand-green">
+                    ${tutor.hourlyRate}
+                  </span>
                 </div>
 
                 {tutor.experience && (
                   <div className="flex items-center gap-2 text-gray-600 dark:text-gray-300">
                     <ClockCircleOutlined className="text-brand-green" />
-                    <span>{tutor.experience}</span>
+                    <span className="font-medium">{tutor.experience} Experience</span>
                   </div>
                 )}
 
                 {tutor.education && (
                   <div className="flex items-center gap-2 text-gray-600 dark:text-gray-300">
                     <BookOutlined className="text-brand-green" />
-                    <span>{tutor.education}</span>
+                    <span className="font-medium">{tutor.education}</span>
                   </div>
                 )}
               </div>
@@ -206,7 +317,11 @@ export default function TutorDetailsPage() {
                 <h3 className="font-semibold text-gray-900 dark:text-white mb-3">Subjects</h3>
                 <div className="flex flex-wrap gap-2">
                   {tutor.subjects.map((subject: any) => (
-                    <Tag key={subject} color="success" className="text-sm font-medium">
+                    <Tag
+                      key={subject}
+                      color="success"
+                      className="text-sm font-medium px-2.5 py-0.5 rounded-full"
+                    >
                       {subject}
                     </Tag>
                   ))}
@@ -217,7 +332,7 @@ export default function TutorDetailsPage() {
                 <Button
                   type="primary"
                   size="large"
-                  className="flex-1 bg-brand-green hover:bg-brand-green-hover border-0 text-white h-12"
+                  className="flex-1 bg-brand-green hover:bg-brand-green-hover border-0 text-white h-12 rounded-xl font-semibold shadow-sm"
                   icon={<CalendarOutlined />}
                   onClick={handleBookSession}
                 >
@@ -225,7 +340,8 @@ export default function TutorDetailsPage() {
                 </Button>
                 <Button
                   size="large"
-                  className="h-12 w-12 flex items-center justify-center border-gray-200 dark:border-slate-700 dark:bg-slate-800 text-lg transition-transform duration-200 hover:scale-105"
+                  aria-label={isSaved(tutor.id) ? "Remove from wishlist" : "Add to wishlist"}
+                  className="h-12 w-12 flex items-center justify-center rounded-xl border-gray-200 dark:border-slate-700 dark:bg-slate-800 text-lg transition-transform duration-200 hover:scale-105"
                   icon={
                     isSaved(tutor.id) ? (
                       <HeartFilled className="text-brand-red text-xl" />
@@ -251,29 +367,44 @@ export default function TutorDetailsPage() {
           </Col>
 
           <Col xs={24} lg={16}>
-            <Card className="shadow-lg mb-6 dark:bg-slate-900 dark:border-slate-800">
+            <Card className="shadow-lg mb-6 dark:bg-slate-900 dark:border-slate-800 rounded-2xl">
               <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4">About Me</h3>
-              <p className="text-gray-700 dark:text-gray-300 leading-relaxed">{tutor.bio || "No bio available"}</p>
+              <p className="text-gray-700 dark:text-gray-300 leading-relaxed text-base">
+                {tutor.bio || "No bio available"}
+              </p>
             </Card>
 
-            <Card className="shadow-lg dark:bg-slate-900 dark:border-slate-800">
+            <Card className="shadow-lg dark:bg-slate-900 dark:border-slate-800 rounded-2xl">
               <div className="flex items-center justify-between mb-6">
                 <h3 className="text-xl font-bold text-gray-900 dark:text-white">Student Reviews</h3>
-                <div className="flex items-center gap-2">
+                <div
+                  className="flex items-center gap-2"
+                  aria-label={ratingAriaLabel}
+                >
                   <StarOutlined className="text-yellow-500 text-xl" />
-                  <span className="text-2xl font-bold dark:text-white">{tutor.rating.toFixed(1)}</span>
-                  <span className="text-gray-500 dark:text-gray-400">({tutor.totalReviews} reviews)</span>
+                  <span className="text-2xl font-bold dark:text-white">
+                    {tutor.rating.toFixed(1)}
+                  </span>
+                  <span className="text-gray-500 dark:text-gray-400">
+                    ({tutor.totalReviews} reviews)
+                  </span>
                 </div>
               </div>
 
               {tutor.totalReviews > 0 && tutor.ratingBreakdown && (
-                <div className="bg-gray-50 dark:bg-slate-800/50 p-6 rounded-xl mb-6 grid grid-cols-1 md:grid-cols-3 gap-6 items-center border border-gray-100 dark:border-slate-700/50">
+                <div className="bg-gray-50 dark:bg-slate-800/50 p-6 rounded-2xl mb-6 grid grid-cols-1 md:grid-cols-3 gap-6 items-center border border-gray-100 dark:border-slate-700/50">
                   <div className="text-center md:border-r border-gray-200 dark:border-slate-700 md:pr-6">
                     <div className="text-5xl font-extrabold text-gray-900 dark:text-white mb-2">
                       {tutor.rating.toFixed(1)}
                     </div>
-                    <Rate disabled value={tutor.rating} allowHalf className="mb-2" />
-                    <div className="text-xs text-gray-500 dark:text-gray-400">
+                    <Rate
+                      disabled
+                      value={tutor.rating}
+                      allowHalf
+                      className="mb-2"
+                      aria-label={ratingAriaLabel}
+                    />
+                    <div className="text-xs text-gray-500 dark:text-gray-400 font-medium">
                       Tutor Rating ({tutor.totalReviews} reviews)
                     </div>
                   </div>
@@ -301,31 +432,41 @@ export default function TutorDetailsPage() {
                 </div>
               )}
 
+              {/* Task 2: Clean Divided List / Row Layout (No Nested Cards) */}
               {tutor.reviews && tutor.reviews.length > 0 ? (
-                <div className="space-y-4">
+                <div className="divide-y divide-gray-100 dark:divide-slate-800">
                   {tutor.reviews.map((review: any) => (
-                    <Card key={review.id} className="bg-gray-50 dark:bg-slate-800 dark:border-slate-700">
+                    <div key={review.id} className="py-4 first:pt-0 last:pb-0">
                       <div className="flex items-start gap-4">
                         <Avatar
                           src={review.student.image}
                           icon={<UserOutlined />}
-                          size={48}
-                          className="bg-brand-green"
+                          size={46}
+                          className="bg-brand-green shrink-0 shadow-sm"
                         />
-                        <div className="flex-1">
-                          <div className="flex items-center justify-between mb-2">
+                        <div className="flex-1 min-w-0">
+                          <div className="flex flex-wrap items-center justify-between gap-2 mb-1">
                             <div>
-                              <h4 className="font-semibold text-gray-900 dark:text-white">{review.student.name}</h4>
-                              <Rate disabled value={review.rating} />
+                              <h4 className="font-semibold text-gray-900 dark:text-white text-base">
+                                {review.student.name}
+                              </h4>
+                              <Rate
+                                disabled
+                                value={review.rating}
+                                className="text-xs text-yellow-500"
+                                aria-label={`${review.rating} out of 5 stars`}
+                              />
                             </div>
-                            <span className="text-sm text-gray-500 dark:text-gray-400">
+                            <span className="text-xs text-gray-400 dark:text-gray-500 font-medium">
                               {dayjs(review.createdAt).format("MMM DD, YYYY")}
                             </span>
                           </div>
-                          <p className="text-gray-700 dark:text-gray-300">{review.comment}</p>
+                          <p className="text-gray-700 dark:text-gray-300 text-sm leading-relaxed mt-2">
+                            {review.comment}
+                          </p>
                         </div>
                       </div>
-                    </Card>
+                    </div>
                   ))}
                 </div>
               ) : (
@@ -336,10 +477,11 @@ export default function TutorDetailsPage() {
         </Row>
       </div>
 
+      {/* Task 1: Booking Modal with Dynamic Slot Selection & Live Price Calculator */}
       <Modal
         title={
-          <div className="flex items-center gap-2">
-            <CalendarOutlined className="text-indigo-600" />
+          <div className="flex items-center gap-2 text-lg font-bold text-gray-900 dark:text-white">
+            <CalendarOutlined className="text-brand-green" />
             <span>Book a Session with {tutor.user.name}</span>
           </div>
         }
@@ -347,17 +489,24 @@ export default function TutorDetailsPage() {
         onCancel={() => {
           setBookingModalVisible(false);
           form.resetFields();
+          setSelectedSlotId(null);
         }}
         footer={null}
-        width={600}
+        width={620}
+        className="dark:bg-slate-900"
       >
-        <Form form={form} layout="vertical" onFinish={handleBookingSubmit} className="mt-6">
+        <Form
+          form={form}
+          layout="vertical"
+          onFinish={handleBookingSubmit}
+          className="mt-6 space-y-4"
+        >
           <Form.Item
             name="subject"
-            label="Subject"
+            label={<span className="font-medium text-gray-700 dark:text-gray-300">Subject</span>}
             rules={[{ required: true, message: "Please select a subject" }]}
           >
-            <Select placeholder="Select subject" size="large">
+            <Select placeholder="Select subject" size="large" className="rounded-xl">
               {tutor.subjects.map((subject: any) => (
                 <Option key={subject} value={subject}>
                   {subject}
@@ -368,61 +517,183 @@ export default function TutorDetailsPage() {
 
           <Form.Item
             name="date"
-            label="Session Date"
+            label={<span className="font-medium text-gray-700 dark:text-gray-300">Session Date</span>}
             rules={[{ required: true, message: "Please select a date" }]}
           >
             <DatePicker
               size="large"
-              className="w-full"
+              className="w-full rounded-xl"
               disabledDate={(current) => current && current < dayjs().startOf("day")}
               format="YYYY-MM-DD"
+              onChange={() => {
+                setSelectedSlotId(null);
+                form.setFieldsValue({ startTime: undefined, endTime: undefined });
+              }}
             />
           </Form.Item>
 
+          {/* Dynamic Available Time Slots Section */}
+          {watchDate && (
+            <div className="bg-slate-50 dark:bg-slate-800/60 p-4 rounded-xl border border-slate-200/70 dark:border-slate-700/60">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider flex items-center gap-1.5">
+                  <ClockCircleOutlined className="text-brand-green" />
+                  Available Slots for {watchDate.format("dddd")}
+                </span>
+                {dayMatchingSlots.length > 0 && (
+                  <span className="text-xs font-semibold text-emerald-600 dark:text-emerald-400">
+                    {dayMatchingSlots.length} slot{dayMatchingSlots.length > 1 ? "s" : ""} found
+                  </span>
+                )}
+              </div>
+
+              {dayMatchingSlots.length > 0 ? (
+                <div className="flex flex-wrap gap-2 pt-1">
+                  {dayMatchingSlots.map((slot) => {
+                    const isSelected = selectedSlotId === slot.id;
+                    const formattedSlot = `${formatSlotTime(slot.startTime)} - ${formatSlotTime(
+                      slot.endTime
+                    )}`;
+                    return (
+                      <button
+                        key={slot.id}
+                        type="button"
+                        onClick={() => handleSelectSlot(slot)}
+                        className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all duration-200 flex items-center gap-1.5 border ${
+                          isSelected
+                            ? "bg-brand-green text-white border-brand-green shadow-sm ring-2 ring-emerald-300 dark:ring-emerald-800"
+                            : "bg-white dark:bg-slate-900 text-gray-700 dark:text-gray-200 border-gray-200 dark:border-slate-700 hover:border-brand-green hover:text-brand-green"
+                        }`}
+                      >
+                        {isSelected && <CheckCircleFilled />}
+                        <span>{formattedSlot}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+              ) : (
+                <div className="text-xs text-gray-500 dark:text-gray-400 flex items-center gap-1.5 pt-1">
+                  <InfoCircleOutlined className="text-blue-500" />
+                  <span>
+                    No pre-configured slots for {watchDate.format("dddd")}. You can select any custom
+                    time range below.
+                  </span>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Time Picker Controls */}
           <Row gutter={16}>
             <Col span={12}>
               <Form.Item
                 name="startTime"
-                label="Start Time"
+                label={
+                  <span className="font-medium text-gray-700 dark:text-gray-300">Start Time</span>
+                }
                 rules={[{ required: true, message: "Please select start time" }]}
               >
-                <TimePicker size="large" className="w-full" format="HH:mm" minuteStep={30} />
+                <TimePicker
+                  size="large"
+                  className="w-full rounded-xl"
+                  format="hh:mm A"
+                  use12Hours
+                  minuteStep={15}
+                  onChange={() => setSelectedSlotId(null)}
+                />
               </Form.Item>
             </Col>
             <Col span={12}>
               <Form.Item
                 name="endTime"
-                label="End Time"
+                label={<span className="font-medium text-gray-700 dark:text-gray-300">End Time</span>}
                 rules={[{ required: true, message: "Please select end time" }]}
               >
-                <TimePicker size="large" className="w-full" format="HH:mm" minuteStep={30} />
+                <TimePicker
+                  size="large"
+                  className="w-full rounded-xl"
+                  format="hh:mm A"
+                  use12Hours
+                  minuteStep={15}
+                  onChange={() => setSelectedSlotId(null)}
+                />
               </Form.Item>
             </Col>
           </Row>
 
-          <Form.Item name="notes" label="Additional Notes (Optional)">
+          {/* Duration validation error banner */}
+          {isInvalidDuration && (
+            <Alert
+              message={validationErrorMessage}
+              type="error"
+              showIcon
+              className="rounded-xl"
+            />
+          )}
+
+          {/* Live Price Calculator Breakdown */}
+          <div className="bg-gradient-to-br from-slate-50 to-emerald-50/40 dark:from-slate-800 dark:to-emerald-950/20 p-4 rounded-xl border border-emerald-100 dark:border-emerald-900/40 space-y-2">
+            <div className="flex items-center justify-between text-xs text-gray-600 dark:text-gray-400 font-medium">
+              <span>Hourly Rate:</span>
+              <span className="font-semibold text-gray-900 dark:text-white">
+                ${tutor.hourlyRate}/hr
+              </span>
+            </div>
+
+            {watchStartTime && watchEndTime && !isInvalidDuration ? (
+              <>
+                <div className="flex items-center justify-between text-xs text-gray-600 dark:text-gray-400 font-medium">
+                  <span>Selected Duration:</span>
+                  <span className="font-semibold text-gray-900 dark:text-white">
+                    {durationText}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between text-xs text-gray-500 dark:text-gray-400">
+                  <span>Calculation:</span>
+                  <span className="font-mono text-xs">{calculationFormula}</span>
+                </div>
+                <div className="h-px bg-emerald-200/60 dark:bg-emerald-800/40 my-1" />
+                <div className="flex items-center justify-between pt-1">
+                  <span className="font-bold text-gray-800 dark:text-gray-200 text-sm">
+                    Total Session Fee:
+                  </span>
+                  <span className="text-2xl font-extrabold text-brand-green">
+                    ${totalCostFormatted}
+                  </span>
+                </div>
+              </>
+            ) : (
+              <div className="text-xs text-gray-400 dark:text-gray-500 italic pt-1">
+                Select start and end time to calculate total session duration and fee.
+              </div>
+            )}
+          </div>
+
+          <Form.Item
+            name="notes"
+            label={
+              <span className="font-medium text-gray-700 dark:text-gray-300">
+                Additional Notes (Optional)
+              </span>
+            }
+          >
             <TextArea
-              rows={4}
+              rows={3}
               placeholder="Any specific topics or questions you'd like to cover?"
-              size="large"
+              className="rounded-xl"
             />
           </Form.Item>
 
-          <div className="bg-gray-50 dark:bg-slate-800 p-4 rounded-lg mb-4">
-            <div className="flex items-center justify-between">
-              <span className="text-gray-700 dark:text-gray-200">Hourly Rate:</span>
-              <span className="text-2xl font-bold text-green-600">${tutor.hourlyRate}/hr</span>
-            </div>
-          </div>
-
           <Form.Item style={{ marginBottom: 0 }}>
-            <Space className="w-full justify-end">
+            <Space className="w-full justify-end pt-2">
               <Button
                 onClick={() => {
                   setBookingModalVisible(false);
                   form.resetFields();
+                  setSelectedSlotId(null);
                 }}
                 size="large"
+                className="rounded-xl font-medium"
               >
                 Cancel
               </Button>
@@ -430,8 +701,9 @@ export default function TutorDetailsPage() {
                 type="primary"
                 htmlType="submit"
                 loading={submitting}
+                disabled={!isFormBookingReady}
                 size="large"
-                className="bg-brand-green hover:bg-brand-green-hover border-0 text-white"
+                className="bg-brand-green hover:bg-brand-green-hover border-0 text-white rounded-xl font-semibold shadow-md disabled:opacity-50"
               >
                 Confirm Booking
               </Button>

@@ -145,7 +145,12 @@ export default function Navbar() {
           </div>
 
           
-          <button onClick={() => setIsOpen(!isOpen)} className="md:hidden text-gray-700 dark:text-gray-200">
+          <button
+            onClick={() => setIsOpen(!isOpen)}
+            className="md:hidden text-gray-700 dark:text-gray-200 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors"
+            aria-label="Toggle navigation menu"
+            aria-expanded={isOpen}
+          >
             {isOpen ? <CloseOutlined className="text-2xl" /> : <MenuOutlined className="text-2xl" />}
           </button>
         </div>

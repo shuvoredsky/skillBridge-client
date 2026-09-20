@@ -125,12 +125,20 @@ export default function RegisterPage() {
               rules={[{ required: true, message: "Please select your role" }]}
               className="mb-4"
             >
-              <Radio.Group className="w-full">
+              <Radio.Group className="w-full" aria-label="Select account role">
                 <div className="grid grid-cols-2 gap-4">
-                  <Radio.Button value="STUDENT" className="text-center h-12 flex items-center justify-center rounded-xl font-medium dark:bg-slate-800 dark:text-gray-200 dark:border-slate-700">
+                  <Radio.Button
+                    value="STUDENT"
+                    aria-label="Register as Student"
+                    className="text-center h-12 flex items-center justify-center rounded-xl font-medium dark:bg-slate-800 dark:text-gray-200 dark:border-slate-700"
+                  >
                     Student
                   </Radio.Button>
-                  <Radio.Button value="TUTOR" className="text-center h-12 flex items-center justify-center rounded-xl font-medium dark:bg-slate-800 dark:text-gray-200 dark:border-slate-700">
+                  <Radio.Button
+                    value="TUTOR"
+                    aria-label="Register as Tutor"
+                    className="text-center h-12 flex items-center justify-center rounded-xl font-medium dark:bg-slate-800 dark:text-gray-200 dark:border-slate-700"
+                  >
                     Tutor
                   </Radio.Button>
                 </div>

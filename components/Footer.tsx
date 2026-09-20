@@ -83,24 +83,28 @@ export default function Footer() {
             <div className="flex gap-3">
               <a
                 href="#"
+                aria-label="Visit our Facebook page"
                 className="w-8 h-8 rounded-lg bg-slate-200 dark:bg-slate-800 hover:bg-brand-green flex items-center justify-center text-gray-600 dark:text-gray-300 hover:text-white transition-all"
               >
                 <Facebook size={16} />
               </a>
               <a
                 href="#"
+                aria-label="Follow us on Twitter"
                 className="w-8 h-8 rounded-lg bg-slate-200 dark:bg-slate-800 hover:bg-brand-green flex items-center justify-center text-gray-600 dark:text-gray-300 hover:text-white transition-all"
               >
                 <Twitter size={16} />
               </a>
               <a
                 href="#"
+                aria-label="Follow us on Instagram"
                 className="w-8 h-8 rounded-lg bg-slate-200 dark:bg-slate-800 hover:bg-brand-green flex items-center justify-center text-gray-600 dark:text-gray-300 hover:text-white transition-all"
               >
                 <Instagram size={16} />
               </a>
               <a
                 href="#"
+                aria-label="Connect with us on LinkedIn"
                 className="w-8 h-8 rounded-lg bg-slate-200 dark:bg-slate-800 hover:bg-brand-green flex items-center justify-center text-gray-600 dark:text-gray-300 hover:text-white transition-all"
               >
                 <Linkedin size={16} />

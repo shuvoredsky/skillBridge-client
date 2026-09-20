@@ -9,9 +9,9 @@ import {
   CheckCircleOutlined,
   CloseCircleOutlined,
   ClockCircleOutlined,
-} from "@ant-design/icons";
 import { adminService } from "../../../services/admin.service";
 import { useTheme } from "@/context/ThemeContext";
+import StatCard from "@/components/shared/StatCard";
 
 interface DashboardStats {
   users: {
@@ -117,56 +117,52 @@ export default function AdminDashboardPage() {
 
       <Row gutter={[20, 20]}>
         <Col xs={24} sm={12} lg={6}>
-          <Card className="h-full shadow-sm hover:shadow-md transition-shadow border-0 rounded-xl dark:bg-slate-900 dark:border-slate-800">
-            <Statistic
-              title={<span className="text-gray-400 dark:text-gray-400 font-semibold uppercase text-xs tracking-wider">Total Users</span>}
-              value={stats?.users.total || 0}
-              prefix={<UserOutlined className="text-brand-green bg-green-50 dark:bg-emerald-950/40 p-2 rounded-lg" />}
-              styles={{ content: { fontWeight: "800", fontSize: "24px", color: isDark ? "#ffffff" : "#111827" } }}
-            />
-            <div className="mt-4 flex flex-wrap gap-2">
-              <span className="px-2 py-1 bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 text-xs rounded-md font-medium">{stats?.users.students} Students</span>
-              <span className="px-2 py-1 bg-purple-50 dark:bg-purple-950/40 text-purple-600 dark:text-purple-400 text-xs rounded-md font-medium">{stats?.users.tutors} Tutors</span>
-            </div>
-          </Card>
+          <StatCard
+            title="Total Users"
+            value={stats?.users.total || 0}
+            icon={<UserOutlined />}
+            color="emerald"
+            footer={
+              <div className="flex flex-wrap gap-2">
+                <span className="px-2 py-0.5 bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 text-xs rounded-md font-medium">
+                  {stats?.users.students || 0} Students
+                </span>
+                <span className="px-2 py-0.5 bg-purple-50 dark:bg-purple-950/40 text-purple-600 dark:text-purple-400 text-xs rounded-md font-medium">
+                  {stats?.users.tutors || 0} Tutors
+                </span>
+              </div>
+            }
+          />
         </Col>
 
         <Col xs={24} sm={12} lg={6}>
-          <Card className="h-full shadow-sm hover:shadow-md transition-shadow border-0 rounded-xl dark:bg-slate-900 dark:border-slate-800">
-            <Statistic
-              title={<span className="text-gray-400 dark:text-gray-400 font-semibold uppercase text-xs tracking-wider">Total Bookings</span>}
-              value={stats?.bookings.total || 0}
-              prefix={<BookOutlined className="text-blue-600 bg-blue-50 dark:bg-blue-950/40 p-2 rounded-lg" />}
-              styles={{ content: { fontWeight: "800", fontSize: "24px", color: isDark ? "#ffffff" : "#111827" } }}
-            />
-            <div className="mt-4 flex flex-wrap gap-2 text-xs text-gray-500 dark:text-gray-400 italic">
-              All recorded sessions
-            </div>
-          </Card>
+          <StatCard
+            title="Total Bookings"
+            value={stats?.bookings.total || 0}
+            icon={<BookOutlined />}
+            color="blue"
+            description="All recorded sessions"
+          />
         </Col>
 
         <Col xs={24} sm={12} lg={6}>
-          <Card className="h-full shadow-sm hover:shadow-md transition-shadow border-0 rounded-xl dark:bg-slate-900 dark:border-slate-800">
-            <Statistic
-              title={<span className="text-gray-400 dark:text-gray-400 font-semibold uppercase text-xs tracking-wider">Total Reviews</span>}
-              value={stats?.reviews.total || 0}
-              prefix={<StarOutlined className="text-yellow-500 bg-yellow-50 dark:bg-yellow-950/40 p-2 rounded-lg" />}
-              styles={{ content: { fontWeight: "800", fontSize: "24px", color: isDark ? "#ffffff" : "#111827" } }}
-            />
-            <div className="mt-4 text-xs text-gray-400 dark:text-gray-400">Feedback from students</div>
-          </Card>
+          <StatCard
+            title="Total Reviews"
+            value={stats?.reviews.total || 0}
+            icon={<StarOutlined />}
+            color="amber"
+            description="Feedback from students"
+          />
         </Col>
 
         <Col xs={24} sm={12} lg={6}>
-          <Card className="h-full shadow-sm hover:shadow-md transition-shadow border-0 rounded-xl dark:bg-slate-900 dark:border-slate-800">
-            <Statistic
-              title={<span className="text-gray-400 dark:text-gray-400 font-semibold uppercase text-xs tracking-wider">Active Categories</span>}
-              value={stats?.categories.total || 0}
-              prefix={<CheckCircleOutlined className="text-purple-600 bg-purple-50 dark:bg-purple-950/40 p-2 rounded-lg" />}
-              styles={{ content: { fontWeight: "800", fontSize: "24px", color: isDark ? "#ffffff" : "#111827" } }}
-            />
-            <div className="mt-4 text-xs text-gray-400 dark:text-gray-400">Available subjects</div>
-          </Card>
+          <StatCard
+            title="Active Categories"
+            value={stats?.categories.total || 0}
+            icon={<CheckCircleOutlined />}
+            color="purple"
+            description="Available subjects"
+          />
         </Col>
       </Row>
 

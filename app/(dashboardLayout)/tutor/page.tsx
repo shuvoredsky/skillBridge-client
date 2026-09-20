@@ -10,9 +10,10 @@ import {
   UploadOutlined,
   FileImageOutlined,
 } from "@ant-design/icons";
-import { tutorService } from  "../../../services/tutor.service";;
+import { tutorService } from "../../../services/tutor.service";
 import { useRouter } from "next/navigation";
 import type { TutorProfile, Session } from "@/types/tutor";
+import StatCard from "@/components/shared/StatCard";
 
 function DocumentUploadCard({
   label,
@@ -329,51 +330,44 @@ export default function TutorDashboard() {
 
       <Row gutter={[16, 16]}>
         <Col xs={24} sm={12} lg={6}>
-          <Card className="dark:bg-slate-900 dark:border-slate-800 shadow-sm">
-            <Statistic
-              title={<span className="dark:text-gray-400">Total Sessions</span>}
-              value={sessions.length}
-              prefix={<CalendarOutlined className="text-brand-green" />}
-              styles={{ content: { color: "#10b981" } }}
-            />
-          </Card>
+          <StatCard
+            title="Total Sessions"
+            value={sessions.length}
+            icon={<CalendarOutlined />}
+            color="emerald"
+            description="All scheduled sessions"
+          />
         </Col>
 
         <Col xs={24} sm={12} lg={6}>
-          <Card className="dark:bg-slate-900 dark:border-slate-800 shadow-sm">
-            <Statistic
-              title={<span className="dark:text-gray-400">Upcoming</span>}
-              value={confirmedSessions.length}
-              prefix={<ClockCircleOutlined className="text-amber-500" />}
-              styles={{ content: { color: "#f59e0b" } }}
-            />
-          </Card>
+          <StatCard
+            title="Upcoming"
+            value={confirmedSessions.length}
+            icon={<ClockCircleOutlined />}
+            color="amber"
+            description="Confirmed sessions"
+          />
         </Col>
 
         <Col xs={24} sm={12} lg={6}>
-          <Card className="dark:bg-slate-900 dark:border-slate-800 shadow-sm">
-            <Statistic
-              title={<span className="dark:text-gray-400">Completed</span>}
-              value={completedSessions.length}
-              prefix={<CheckCircleOutlined className="text-brand-green" />}
-              styles={{ content: { color: "#10b981" } }}
-            />
-          </Card>
+          <StatCard
+            title="Completed"
+            value={completedSessions.length}
+            icon={<CheckCircleOutlined />}
+            color="emerald"
+            description="Successfully finished"
+          />
         </Col>
 
         <Col xs={24} sm={12} lg={6}>
-          <Card className="dark:bg-slate-900 dark:border-slate-800 shadow-sm">
-            <Statistic
-              title={<span className="dark:text-gray-400">Rating</span>}
-              value={profile.rating.toFixed(1)}
-              prefix={<StarOutlined className="text-amber-500" />}
-              suffix={`/ 5.0`}
-              styles={{ content: { color: "#f59e0b" } }}
-            />
-            <div className="text-xs text-gray-500 dark:text-gray-400 mt-2">
-              {profile.totalReviews} reviews
-            </div>
-          </Card>
+          <StatCard
+            title="Rating"
+            value={profile.rating.toFixed(1)}
+            suffix="/ 5.0"
+            icon={<StarOutlined />}
+            color="amber"
+            description={`${profile.totalReviews} total student reviews`}
+          />
         </Col>
       </Row>
 
