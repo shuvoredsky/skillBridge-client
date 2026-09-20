@@ -2,8 +2,9 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Button, Dropdown, Avatar, MenuProps } from "antd";
-import { MenuOutlined, CloseOutlined, BookOutlined, UserOutlined, LogoutOutlined, DashboardOutlined } from "@ant-design/icons";
+import { useRouter } from "next/navigation";
+import { Button, Dropdown, Avatar, MenuProps, Modal } from "antd";
+import { MenuOutlined, CloseOutlined, BookOutlined, UserOutlined, LogoutOutlined, DashboardOutlined, ExclamationCircleOutlined } from "@ant-design/icons";
 import { useAuth } from "@/context/AuthContext";
 import { useSiteConfig } from "@/context/SiteConfigContext";
 import { getImageUrl } from "@/lib/getImageUrl";
@@ -14,6 +15,24 @@ export default function Navbar() {
   const { user, logout } = useAuth(); 
   const { logoUrl, siteName } = useSiteConfig();
   const resolvedLogo = getImageUrl(logoUrl);
+  const router = useRouter();
+
+  const handleBecomeTutor = () => {
+    Modal.confirm({
+      title: "Become a Tutor",
+      icon: <ExclamationCircleOutlined className="text-amber-500" />,
+      content: "আপনি একজন Tutor হিসেবে register করতে চাইলে আপনার current session logout হয়ে যাবে, আপনি কি continue করতে চান?",
+      okText: "Continue",
+      cancelText: "Cancel",
+      okButtonProps: {
+        className: "bg-brand-green hover:bg-brand-green-hover border-0 text-white font-medium",
+      },
+      onOk: async () => {
+        await logout();
+        router.push("/register");
+      },
+    });
+  };
 
   
   const navLinks = [
@@ -95,9 +114,13 @@ export default function Navbar() {
               <div className="flex items-center space-x-4">
                 
                 {user.role === "STUDENT" && (
-                  <Link href="/register">
-                    <Button onClick={logout} type="link" className="text-brand-green dark:text-brand-green font-semibold">Become a Tutor</Button>
-                  </Link>
+                  <Button 
+                    onClick={handleBecomeTutor} 
+                    type="link" 
+                    className="text-brand-green dark:text-brand-green font-semibold"
+                  >
+                    Become a Tutor
+                  </Button>
                 )}
                 
                 <Dropdown menu={{ items: studentItems }} placement="bottomRight" arrow>
@@ -149,7 +172,19 @@ export default function Navbar() {
                 {user ? (
                   <div className="space-y-3">
                     <div className="text-sm text-gray-500 dark:text-gray-400 mb-2">Logged in as {user.role}</div>
-                    <Link href="/dashboard" className="block py-2 text-brand-green dark:text-brand-green font-medium">My Dashboard</Link>
+                    {user.role === "STUDENT" && (
+                      <Button 
+                        onClick={() => {
+                          setIsOpen(false);
+                          handleBecomeTutor();
+                        }} 
+                        type="link" 
+                        className="p-0 text-brand-green dark:text-brand-green font-semibold block text-left"
+                      >
+                        Become a Tutor
+                      </Button>
+                    )}
+                    <Link href="/dashboard" className="block py-2 text-brand-green dark:text-brand-green font-medium" onClick={() => setIsOpen(false)}>My Dashboard</Link>
                     <Button onClick={logout} danger className="w-full">Logout</Button>
                   </div>
                 ) : (
