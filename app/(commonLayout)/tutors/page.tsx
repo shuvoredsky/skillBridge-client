@@ -10,31 +10,23 @@ import {
   Slider,
   Button,
   Tag,
-  Avatar,
-  Rate,
   Empty,
-  Spin,
-  Space,
-  message,
   Pagination,
+  Drawer,
 } from "antd";
 import {
   SearchOutlined,
   DollarOutlined,
   BookOutlined,
-  UserOutlined,
   StarOutlined,
-  ClockCircleOutlined,
-  HeartOutlined,
-  HeartFilled,
+  FilterOutlined,
 } from "@ant-design/icons";
-import { useRouter } from "next/navigation";
-import { useAuth } from "@/context/AuthContext";
-import { useWishlist } from "@/context/WishlistContext";
-import { getImageUrl } from "@/lib/getImageUrl";
 import { tutorService } from "@/services/tutor.service";
 import { adminService } from "@/services/admin.service";
 import RecentlyViewedRow from "@/components/RecentlyViewedRow";
+import TutorCard from "@/components/shared/TutorCard";
+import { SingleTutorCardSkeleton } from "@/components/shared/TutorCardSkeleton";
+import { useDebounce } from "@/hooks/useDebounce";
 
 const { Option } = Select;
 
@@ -66,13 +58,15 @@ export default function BrowseTutorsPage() {
   const [minRating, setMinRating] = useState<number | undefined>();
   const [subjects, setSubjects] = useState<string[]>([]);
 
+  // Mobile Filter Drawer state
+  const [drawerOpen, setDrawerOpen] = useState(false);
+
+  // Debounce search query by 350ms to eliminate unnecessary API requests on every keystroke
+  const debouncedSearchQuery = useDebounce(searchQuery, 350);
+
   const [page, setPage] = useState(1);
   const [pageSize] = useState(9); // 9 matches the 3-column responsive layout
   const [totalTutors, setTotalTutors] = useState(0);
-
-  const router = useRouter();
-  const { user } = useAuth();
-  const { isSaved, toggleWishlist } = useWishlist();
 
   // Load categories / subjects list from database dynamically on mount
   useEffect(() => {
@@ -89,15 +83,22 @@ export default function BrowseTutorsPage() {
     fetchSubjects();
   }, []);
 
-  const loadTutors = async (currentPage = page, size = pageSize) => {
+  const loadTutors = async (
+    currentPage = page,
+    size = pageSize,
+    search = debouncedSearchQuery,
+    subject = selectedSubject,
+    price = priceRange,
+    rating = minRating
+  ) => {
     setLoading(true);
     try {
       const { data, error } = await tutorService.getAllTutors({
-        search: searchQuery || undefined,
-        subject: selectedSubject || undefined,
-        minPrice: priceRange[0],
-        maxPrice: priceRange[1],
-        minRating: minRating || undefined,
+        search: search || undefined,
+        subject: subject || undefined,
+        minPrice: price[0],
+        maxPrice: price[1],
+        minRating: rating || undefined,
         page: currentPage,
         limit: size,
       });
@@ -118,12 +119,12 @@ export default function BrowseTutorsPage() {
   // Trigger search on filter changes (always reset to page 1 on filter tweak)
   useEffect(() => {
     setPage(1);
-    loadTutors(1);
-  }, [searchQuery, selectedSubject, priceRange, minRating]);
+    loadTutors(1, pageSize, debouncedSearchQuery, selectedSubject, priceRange, minRating);
+  }, [debouncedSearchQuery, selectedSubject, priceRange, minRating]);
 
   // Trigger reload on page changes
   useEffect(() => {
-    loadTutors(page);
+    loadTutors(page, pageSize, debouncedSearchQuery, selectedSubject, priceRange, minRating);
   }, [page]);
 
   const clearAllFilters = () => {
@@ -133,6 +134,116 @@ export default function BrowseTutorsPage() {
     setMinRating(undefined);
     setPage(1);
   };
+
+  const activeFiltersCount =
+    (searchQuery ? 1 : 0) +
+    (selectedSubject ? 1 : 0) +
+    (minRating ? 1 : 0) +
+    (priceRange[0] > 0 || priceRange[1] < 5000 ? 1 : 0);
+
+  const renderFilterControls = (isMobile = false) => (
+    <div className="space-y-6">
+      <div>
+        <h3 className="font-semibold text-gray-900 dark:text-white mb-2.5 flex items-center gap-2 text-sm">
+          <SearchOutlined className="text-brand-green" />
+          Search Tutors
+        </h3>
+        <Input
+          placeholder="Search by name..."
+          size="large"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          allowClear
+          className="dark:bg-slate-800 dark:border-slate-700 dark:text-white rounded-xl"
+        />
+      </div>
+
+      <div>
+        <h3 className="font-semibold text-gray-900 dark:text-white mb-2.5 flex items-center gap-2 text-sm">
+          <BookOutlined className="text-brand-green" />
+          Subject / Category
+        </h3>
+        <Select
+          placeholder="Select subject"
+          size="large"
+          className="w-full"
+          value={selectedSubject}
+          onChange={setSelectedSubject}
+          allowClear
+        >
+          {subjects.map((subject) => (
+            <Option key={subject} value={subject}>
+              {subject}
+            </Option>
+          ))}
+        </Select>
+      </div>
+
+      <div>
+        <h3 className="font-semibold text-gray-900 dark:text-white mb-2.5 flex items-center gap-2 text-sm">
+          <DollarOutlined className="text-brand-green" />
+          Hourly Rate Range
+        </h3>
+        <Slider
+          range
+          min={0}
+          max={5000}
+          value={priceRange}
+          onChange={(value) => setPriceRange(value as [number, number])}
+          tooltip={{
+            formatter: (value) => `$${value}`,
+          }}
+        />
+        <div className="flex justify-between text-xs font-semibold text-gray-600 dark:text-gray-300 mt-1">
+          <span>Min: ${priceRange[0]}</span>
+          <span>Max: ${priceRange[1]}</span>
+        </div>
+      </div>
+
+      <div>
+        <h3 className="font-semibold text-gray-900 dark:text-white mb-2.5 flex items-center gap-2 text-sm">
+          <StarOutlined className="text-brand-green" />
+          Minimum Rating
+        </h3>
+        <Select
+          placeholder="Any rating"
+          size="large"
+          className="w-full"
+          value={minRating}
+          onChange={setMinRating}
+          allowClear
+        >
+          <Option value={4.5}>★ 4.5+ Stars</Option>
+          <Option value={4.0}>★ 4.0+ Stars</Option>
+          <Option value={3.5}>★ 3.5+ Stars</Option>
+          <Option value={3.0}>★ 3.0+ Stars</Option>
+        </Select>
+      </div>
+
+      <div className="pt-2 flex flex-col gap-2.5">
+        {isMobile && (
+          <Button
+            type="primary"
+            block
+            size="large"
+            onClick={() => setDrawerOpen(false)}
+            className="bg-brand-green hover:bg-brand-green-hover border-0 text-white rounded-xl font-semibold"
+          >
+            Apply Filters
+          </Button>
+        )}
+        <Button
+          type="default"
+          block
+          size="large"
+          onClick={clearAllFilters}
+          className="dark:bg-slate-800 dark:text-white dark:border-slate-700 rounded-xl"
+        >
+          Clear All Filters
+        </Button>
+      </div>
+    </div>
+  );
 
   return (
     <>
@@ -149,239 +260,130 @@ export default function BrowseTutorsPage() {
 
           <RecentlyViewedRow />
 
+          {/* Mobile Filter Trigger Bar */}
+          <div className="lg:hidden flex items-center justify-between gap-3 mb-6 p-3.5 bg-white dark:bg-slate-900 rounded-2xl border border-gray-100 dark:border-slate-800 shadow-sm">
+            <div className="flex items-center gap-2">
+              <span className="text-sm font-semibold text-gray-800 dark:text-gray-200">
+                {totalTutors} Tutors
+              </span>
+              {activeFiltersCount > 0 && (
+                <Tag color="success" className="m-0 rounded-full font-bold text-xs bg-emerald-50 text-brand-green dark:bg-emerald-950/40 border-0">
+                  {activeFiltersCount} active
+                </Tag>
+              )}
+            </div>
+            <div className="flex items-center gap-2">
+              {activeFiltersCount > 0 && (
+                <Button
+                  size="small"
+                  type="text"
+                  onClick={clearAllFilters}
+                  className="text-xs text-gray-500 hover:text-brand-red"
+                >
+                  Reset
+                </Button>
+              )}
+              <Button
+                type="primary"
+                icon={<FilterOutlined />}
+                onClick={() => setDrawerOpen(true)}
+                className="bg-brand-green hover:bg-brand-green-hover border-0 text-white font-medium rounded-xl h-9 flex items-center gap-1.5"
+              >
+                Filters {activeFiltersCount > 0 && `(${activeFiltersCount})`}
+              </Button>
+            </div>
+          </div>
+
+          {/* Mobile Drawer */}
+          <Drawer
+            title={
+              <div className="flex items-center justify-between pr-4">
+                <span className="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                  <FilterOutlined className="text-brand-green" /> Filter Tutors
+                </span>
+                {activeFiltersCount > 0 && (
+                  <span className="text-xs text-brand-green font-semibold">
+                    {activeFiltersCount} active
+                  </span>
+                )}
+              </div>
+            }
+            placement="left"
+            width={320}
+            onClose={() => setDrawerOpen(false)}
+            open={drawerOpen}
+            className="dark:bg-slate-900"
+            styles={{
+              body: {
+                padding: "24px 20px",
+                backgroundColor: "transparent",
+              },
+              header: {
+                borderBottom: "1px solid rgba(148, 163, 184, 0.15)",
+              },
+            }}
+          >
+            {renderFilterControls(true)}
+          </Drawer>
+
           <Row gutter={[24, 24]}>
-            <Col xs={24} lg={6}>
-              <Card className="sticky top-4 shadow-lg dark:bg-slate-900 dark:border-slate-800">
-                <div className="space-y-6">
-                  <div>
-                    <h3 className="font-semibold text-gray-900 dark:text-white mb-3 flex items-center gap-2">
-                      <SearchOutlined className="text-brand-green" />
-                      Search Tutors
-                    </h3>
-                    <Input
-                      placeholder="Search by name..."
-                      size="large"
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                      allowClear
-                      className="dark:bg-slate-800 dark:border-slate-700 dark:text-white"
-                    />
-                  </div>
-
-                  <div>
-                    <h3 className="font-semibold text-gray-900 dark:text-white mb-3 flex items-center gap-2">
-                      <BookOutlined className="text-brand-green" />
-                      Subject
-                    </h3>
-                    <Select
-                      placeholder="Select subject"
-                      size="large"
-                      className="w-full"
-                      value={selectedSubject}
-                      onChange={setSelectedSubject}
-                      allowClear
-                    >
-                      {subjects.map((subject) => (
-                        <Option key={subject} value={subject}>
-                          {subject}
-                        </Option>
-                      ))}
-                    </Select>
-                  </div>
-
-                  <div>
-                    <h3 className="font-semibold text-gray-900 dark:text-white mb-3 flex items-center gap-2">
-                      <DollarOutlined className="text-brand-green" />
-                      Hourly Rate
-                    </h3>
-                    <Slider
-                      range
-                      min={0}
-                      max={5000}
-                      value={priceRange}
-                      onChange={(value) =>
-                        setPriceRange(value as [number, number])
-                      }
-                      tooltip={{
-                        formatter: (value) => `$${value}`,
-                      }}
-                    />
-                    <div className="flex justify-between text-sm text-gray-600 dark:text-gray-300 mt-2">
-                      <span>${priceRange[0]}</span>
-                      <span>${priceRange[1]}</span>
-                    </div>
-                  </div>
-
-                  <div>
-                    <h3 className="font-semibold text-gray-900 dark:text-white mb-3 flex items-center gap-2">
-                      <StarOutlined className="text-brand-green" />
-                      Minimum Rating
-                    </h3>
-                    <Select
-                      placeholder="Any rating"
-                      size="large"
-                      className="w-full"
-                      value={minRating}
-                      onChange={setMinRating}
-                      allowClear
-                    >
-                      <Option value={4.5}>4.5+ Stars</Option>
-                      <Option value={4.0}>4.0+ Stars</Option>
-                      <Option value={3.5}>3.5+ Stars</Option>
-                      <Option value={3.0}>3.0+ Stars</Option>
-                    </Select>
-                  </div>
-
-                  <Button
-                    type="default"
-                    block
-                    size="large"
-                    onClick={clearAllFilters}
-                    className="dark:bg-slate-800 dark:text-white dark:border-slate-700"
-                  >
-                    Clear Filters
-                  </Button>
-                </div>
+            {/* Desktop Filter Sidebar */}
+            <Col xs={0} lg={6} className="hidden lg:block">
+              <Card className="sticky top-20 shadow-sm border border-gray-100 dark:border-slate-800 rounded-2xl dark:bg-slate-900">
+                {renderFilterControls(false)}
               </Card>
             </Col>
 
+            {/* Tutors Grid Column */}
             <Col xs={24} lg={18}>
               {loading ? (
-                <div className="flex justify-center items-center h-96">
-                  <Spin size="large" />
-                </div>
+                <Row gutter={[16, 16]}>
+                  {Array.from({ length: 6 }).map((_, idx) => (
+                    <Col xs={24} sm={12} xl={8} key={idx}>
+                      <SingleTutorCardSkeleton />
+                    </Col>
+                  ))}
+                </Row>
               ) : filteredTutors.length === 0 ? (
-                <Card className="dark:bg-slate-900 dark:border-slate-800">
+                <Card className="rounded-2xl border border-gray-100 dark:border-slate-800 dark:bg-slate-900 py-16 text-center">
                   <Empty
-                    description={<span className="dark:text-gray-400">No tutors found matching your criteria</span>}
+                    description={
+                      <span className="text-gray-500 dark:text-gray-400 text-base">
+                        No tutors found matching your criteria
+                      </span>
+                    }
                     image={Empty.PRESENTED_IMAGE_SIMPLE}
-                  />
+                  >
+                    <Button
+                      type="primary"
+                      onClick={clearAllFilters}
+                      className="bg-brand-green hover:bg-brand-green-hover border-0 text-white rounded-xl font-medium mt-2"
+                    >
+                      Clear All Filters
+                    </Button>
+                  </Empty>
                 </Card>
               ) : (
                 <>
                   <Row gutter={[16, 16]}>
-                  {filteredTutors.map((tutor) => (
-                    <Col xs={24} sm={12} xl={8} key={tutor.id}>
-                      <Card
-                        className="h-full shadow-md hover:shadow-[0_10px_30px_-10px_rgba(16,185,129,0.25)] hover:border-emerald-400/50 dark:hover:border-emerald-500/40 hover:-translate-y-1 dark:bg-slate-900 dark:border-slate-800 transition-all duration-300 relative cursor-pointer"
-                        onClick={() => router.push(`/tutors/${tutor.id}`)}
-                      >
-                        {/* Save Tutor Heart Button (Bug/Feature E) */}
-                        <div
-                          className="absolute top-4 right-4 z-10"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            if (!user) {
-                              message.warning("Please login to save tutors");
-                              router.push("/login");
-                              return;
-                            }
-                            if (user.role !== "STUDENT") {
-                              message.warning("Only students can save tutors to wishlist");
-                              return;
-                            }
-                            toggleWishlist(tutor.id);
-                          }}
-                        >
-                          <Button
-                            type="text"
-                            shape="circle"
-                            className="bg-slate-100/80 dark:bg-slate-800/80 hover:bg-slate-200 dark:hover:bg-slate-700 shadow-sm flex items-center justify-center border-0 text-lg transition-transform duration-200 hover:scale-110"
-                            icon={
-                              isSaved(tutor.id) ? (
-                                <HeartFilled className="text-brand-red text-xl" />
-                              ) : (
-                                <HeartOutlined className="text-gray-400 dark:text-gray-300 hover:text-brand-red text-xl" />
-                              )
-                            }
-                          />
-                        </div>
-
-                        <div className="text-center mb-4">
-                          <Avatar
-                            size={64}
-                            src={getImageUrl(tutor.profilePhoto || tutor.user.image)}
-                            icon={<UserOutlined />}
-                            className="bg-gradient-to-br from-brand-green to-emerald-600"
-                          />
-                          <h3 className="text-base font-bold text-gray-900 dark:text-white mt-2 mb-1">
-                            {tutor.user.name}
-                          </h3>
-                          <div className="flex items-center justify-center gap-2">
-                            <Rate
-                              disabled
-                              value={tutor.rating}
-                              allowHalf
-                              className="text-sm"
-                            />
-                            <span className="text-sm text-gray-600 dark:text-gray-400">
-                              ({tutor.totalReviews})
-                            </span>
-                          </div>
-                        </div>
-
-                        <div className="space-y-2">
-                          <div className="flex items-center gap-2 text-gray-600 dark:text-gray-300">
-                            <DollarOutlined className="text-brand-green" />
-                            <span className="font-semibold text-gray-900 dark:text-white">
-                              ${tutor.hourlyRate}/hr
-                            </span>
-                          </div>
-
-                          {tutor.experience && (
-                            <div className="flex items-center gap-2 text-gray-600 dark:text-gray-300 text-sm">
-                              <ClockCircleOutlined className="text-brand-green" />
-                              <span>{tutor.experience}</span>
-                            </div>
-                          )}
-
-                          <div>
-                            <div className="flex flex-wrap gap-1 mt-1">
-                              {tutor.subjects.slice(0, 3).map((subject) => (
-                                <Tag key={subject} color="success" className="font-medium">
-                                  {subject}
-                                </Tag>
-                              ))}
-                              {tutor.subjects.length > 3 && (
-                                <Tag className="dark:bg-slate-800 dark:text-gray-300">+{tutor.subjects.length - 3} more</Tag>
-                              )}
-                            </div>
-                          </div>
-
-                          {tutor.bio && (
-                            <p className="text-sm text-gray-600 dark:text-gray-300 line-clamp-2">
-                              {tutor.bio}
-                            </p>
-                          )}
-                        </div>
-
-                        <Button
-                          type="primary"
-                          block
-                          className="mt-3 bg-brand-green hover:bg-brand-green-hover border-0 text-white"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            router.push(`/tutors/${tutor.id}`);
-                          }}
-                        >
-                          View Profile
-                        </Button>
-                      </Card>
-                    </Col>
-                  ))}
-                </Row>
-                <div className="flex justify-center mt-8">
-                  <Pagination
-                    current={page}
-                    pageSize={pageSize}
-                    total={totalTutors}
-                    onChange={(newPage) => setPage(newPage)}
-                    showSizeChanger={false}
-                    className="dark:text-white"
-                  />
-                </div>
-              </>
-            )}
+                    {filteredTutors.map((tutor) => (
+                      <Col xs={24} sm={12} xl={8} key={tutor.id}>
+                        <TutorCard tutor={tutor} />
+                      </Col>
+                    ))}
+                  </Row>
+                  <div className="flex justify-center mt-8">
+                    <Pagination
+                      current={page}
+                      pageSize={pageSize}
+                      total={totalTutors}
+                      onChange={(newPage) => setPage(newPage)}
+                      showSizeChanger={false}
+                      className="dark:text-white"
+                    />
+                  </div>
+                </>
+              )}
             </Col>
           </Row>
         </div>
@@ -389,3 +391,4 @@ export default function BrowseTutorsPage() {
     </>
   );
 }
+
