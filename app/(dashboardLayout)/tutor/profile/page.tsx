@@ -64,9 +64,6 @@ export default function TutorProfilePage() {
           experience: data.experience,
           education: data.education,
         });
-      } else if (error) {
-        // Profile doesn't exist yet - that's okay
-        console.log("No profile found, user can create one");
       }
     } catch (err) {
       console.error("Error fetching profile:", err);

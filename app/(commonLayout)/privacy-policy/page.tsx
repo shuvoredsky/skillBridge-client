@@ -46,8 +46,8 @@ export default function PrivacyPolicyPage() {
                       href={`#${sec.id}`}
                       className="flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-brand-green dark:hover:text-emerald-400 hover:bg-emerald-50/50 dark:hover:bg-emerald-950/20 transition-all duration-200 group"
                     >
-                      <span className="w-5 h-5 rounded-md bg-gray-100 dark:bg-slate-800 text-gray-500 dark:text-gray-400 text-xs flex items-center justify-center font-bold group-hover:bg-brand-green group-hover:text-white transition-colors">
-                        {sec.number}
+                      <span className="w-6 h-6 rounded-md bg-gray-100 dark:bg-slate-800 text-gray-500 dark:text-gray-400 text-xs flex items-center justify-center font-bold group-hover:bg-brand-green group-hover:text-white transition-colors">
+                        <Icon size={12} />
                       </span>
                       <span className="truncate">{sec.title}</span>
                     </a>

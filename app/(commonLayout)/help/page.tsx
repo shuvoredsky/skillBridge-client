@@ -1,7 +1,7 @@
 "use client";
 
 import { Collapse, Card, Button } from "antd";
-import { QuestionCircleOutlined, BookOutlined, UserOutlined } from "@ant-design/icons";
+import { BookOutlined, UserOutlined } from "@ant-design/icons";
 import PageHeader from "@/components/PageHeader";
 import Link from "next/link";
 import { ArrowRight, HelpCircle } from "lucide-react";

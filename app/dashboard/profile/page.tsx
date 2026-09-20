@@ -24,7 +24,6 @@ export default function StudentProfilePage() {
   const handleSubmit = async (values: any) => {
     setLoading(true);
     try {
-      console.log("Profile update:", values);
       message.success("Profile updated successfully!");
       await refreshUser();
     } catch (error) {

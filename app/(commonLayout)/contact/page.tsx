@@ -7,8 +7,7 @@ import PageHeader from "@/components/PageHeader";
 export default function ContactPage() {
   const [form] = Form.useForm();
 
-  const onFinish = (values: any) => {
-    console.log("Contact form submitted:", values);
+  const onFinish = (_values: { name: string; email: string; subject: string; message: string }) => {
     // TODO: wire this up to a real contact endpoint when available
     message.success("Thank you! Your message has been sent successfully.");
     form.resetFields();

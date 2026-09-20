@@ -29,23 +29,19 @@ export const authService = {
   },
 
 
-login: async (data: { email: string; password: string }) => {
-  const result = await api.post<AuthResponse>("/api/auth/sign-in/email", data);
-  console.log("🔴 RAW LOGIN RESPONSE:", JSON.stringify(result, null, 2));
-  return result;
-},
+  login: async (data: { email: string; password: string }) => {
+    const result = await api.post<AuthResponse>("/api/auth/sign-in/email", data);
+    return result;
+  },
 
-  
   logout: async () => {
     return api.post("/api/auth/sign-out", {});
   },
 
-  
-getMe: async () => {
-  const result = await api.get<User>("/api/v1/users/me"); // ✅ আগের endpoint এ ফিরে যাও
-  console.log("🔴 RAW GETME RESPONSE:", JSON.stringify(result, null, 2));
-  return result;
-},
+  getMe: async () => {
+    const result = await api.get<User>("/api/v1/users/me");
+    return result;
+  },
 
   
   getSession: async () => {
