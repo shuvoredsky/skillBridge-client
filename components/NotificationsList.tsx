@@ -2,8 +2,9 @@
 
 import { useEffect } from "react";
 import { useNotification } from "@/context/NotificationContext";
-import { Card, Button, Empty, Badge, Spin } from "antd";
+import { Card, Button, Badge, Spin } from "antd";
 import { BellOutlined, CheckOutlined } from "@ant-design/icons";
+import EmptyState from "@/components/shared/EmptyState";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 
@@ -48,16 +49,11 @@ export default function NotificationsList() {
       </div>
 
       {notifications.length === 0 ? (
-        <Card className="shadow-sm border-0 rounded-2xl dark:bg-slate-900 dark:border-slate-800 text-center py-16">
-          <Empty
-            image={Empty.PRESENTED_IMAGE_SIMPLE}
-            description={
-              <p className="text-gray-500 dark:text-gray-400 text-lg">
-                No notifications found
-              </p>
-            }
-          />
-        </Card>
+        <EmptyState
+          icon={<BellOutlined className="text-2xl text-brand-green" />}
+          title="No Notifications"
+          description="You're all caught up! New updates regarding your sessions and bookings will appear here."
+        />
       ) : (
         <Card className="shadow-sm border-0 rounded-2xl overflow-hidden p-0 dark:bg-slate-900 dark:border-slate-800">
           <div className="divide-y divide-gray-100 dark:divide-slate-800">

@@ -216,12 +216,12 @@ export default function AdminSettingsPage() {
             title={
               <div className="flex items-center gap-2">
                 <PictureOutlined className="text-brand-green" />
-                <span>Site Logo & Branding</span>
+                <span className="font-semibold text-gray-900 dark:text-white">Site Logo & Branding</span>
               </div>
             }
-            className="shadow-sm rounded-xl border border-gray-100 dark:border-slate-800 dark:bg-slate-900"
+            className="shadow-sm rounded-2xl border border-gray-100 dark:border-slate-800 dark:bg-slate-900 overflow-hidden"
           >
-            <Paragraph className="text-gray-600 dark:text-gray-300 text-sm mb-6">
+            <Paragraph className="text-gray-600 dark:text-gray-300 text-sm mb-6 leading-relaxed">
               Upload a custom logo for the platform. This image will appear in the main navigation bar across all pages, in page loading animations, and in platform branding assets.
             </Paragraph>
 
@@ -232,7 +232,7 @@ export default function AdminSettingsPage() {
                   Current Active Logo:
                 </Text>
                 <div className="flex items-center gap-4">
-                  <div className="h-16 w-36 bg-white dark:bg-slate-900 rounded-lg border border-gray-200 dark:border-slate-700 flex items-center justify-center p-2 shadow-inner">
+                  <div className="h-16 w-36 bg-white dark:bg-slate-900 rounded-xl border border-gray-200 dark:border-slate-700 flex items-center justify-center p-2 shadow-inner">
                     {resolvedCurrentLogo ? (
                       <img
                         src={resolvedCurrentLogo}
@@ -247,7 +247,7 @@ export default function AdminSettingsPage() {
                     )}
                   </div>
                   <div>
-                    <Tag color={resolvedCurrentLogo ? "green" : "default"}>
+                    <Tag color={resolvedCurrentLogo ? "green" : "default"} className="font-semibold rounded-full px-2.5 py-0.5">
                       {resolvedCurrentLogo ? "Custom Logo Active" : "Default Fallback"}
                     </Tag>
                     <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">
@@ -274,11 +274,11 @@ export default function AdminSettingsPage() {
 
                 <div
                   onClick={() => fileInputRef.current?.click()}
-                  className="border-2 border-dashed border-gray-200 dark:border-slate-700 hover:border-brand-green dark:hover:border-brand-green rounded-xl p-6 text-center cursor-pointer transition-colors bg-white dark:bg-slate-900"
+                  className="border-2 border-dashed border-gray-200 dark:border-slate-700 hover:border-brand-green dark:hover:border-brand-green rounded-2xl p-6 text-center cursor-pointer transition-colors bg-white dark:bg-slate-900"
                 >
                   {previewUrl ? (
                     <div className="space-y-3">
-                      <div className="h-20 w-44 mx-auto bg-slate-50 dark:bg-slate-800 rounded-lg p-2 border border-gray-200 dark:border-slate-700 flex items-center justify-center">
+                      <div className="h-20 w-44 mx-auto bg-slate-50 dark:bg-slate-800 rounded-xl p-2 border border-gray-200 dark:border-slate-700 flex items-center justify-center">
                         <img
                           src={previewUrl}
                           alt="New Logo Preview"
@@ -314,7 +314,7 @@ export default function AdminSettingsPage() {
                   loading={uploading}
                   disabled={!selectedFile}
                   onClick={handleSaveLogo}
-                  className="bg-brand-green hover:bg-brand-green-hover text-white font-medium border-0 h-10 px-6 rounded-lg"
+                  className="bg-brand-green hover:bg-brand-green-hover text-white font-semibold border-0 h-11 px-6 rounded-xl hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 shadow-sm disabled:opacity-50 disabled:pointer-events-none"
                 >
                   Save & Apply Logo
                 </Button>
@@ -323,7 +323,7 @@ export default function AdminSettingsPage() {
                   <Button
                     onClick={handleCancelSelection}
                     disabled={uploading}
-                    className="h-10 rounded-lg"
+                    className="h-11 px-5 rounded-xl font-medium active:scale-[0.98] transition-all duration-200"
                   >
                     Cancel
                   </Button>
@@ -336,28 +336,28 @@ export default function AdminSettingsPage() {
           <Card
             title={
               <div className="flex items-center gap-2">
-                <FileImageOutlined className="text-emerald-500" />
-                <span>Home Page Hero Banner & Text</span>
+                <FileImageOutlined className="text-brand-green" />
+                <span className="font-semibold text-gray-900 dark:text-white">Home Page Hero Banner & Text</span>
               </div>
             }
-            className="shadow-sm rounded-xl border border-gray-100 dark:border-slate-800 dark:bg-slate-900"
+            className="shadow-sm rounded-2xl border border-gray-100 dark:border-slate-800 dark:bg-slate-900 overflow-hidden"
           >
-            <Paragraph className="text-gray-600 dark:text-gray-300 text-sm mb-6">
+            <Paragraph className="text-gray-600 dark:text-gray-300 text-sm mb-6 leading-relaxed">
               Customize the dynamic hero section on the Home page. Upload a high-resolution background banner image and set custom headline & subtitle copy.
             </Paragraph>
 
             <div className="space-y-6">
               {/* Text Settings Form */}
-              <div className="space-y-4 p-4 bg-slate-50 dark:bg-slate-800/60 rounded-xl border border-gray-100 dark:border-slate-700/60">
+              <div className="space-y-4 p-5 bg-slate-50 dark:bg-slate-800/60 rounded-xl border border-gray-100 dark:border-slate-700/60">
                 <div className="flex items-center gap-2 mb-1">
                   <EditOutlined className="text-brand-green text-sm" />
-                  <Text strong className="text-gray-700 dark:text-gray-200">
+                  <Text strong className="text-gray-800 dark:text-gray-200 text-sm">
                     Hero Section Headlines
                   </Text>
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase mb-1">
+                  <label className="block text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider mb-1.5">
                     Hero Title / Headline
                   </label>
                   <Input
@@ -365,15 +365,16 @@ export default function AdminSettingsPage() {
                     value={heroTitle}
                     onChange={(e) => setHeroTitle(e.target.value)}
                     maxLength={100}
-                    className="rounded-lg h-10"
+                    size="large"
+                    className="rounded-xl"
                   />
-                  <span className="text-[11px] text-gray-400 block mt-1">
+                  <span className="text-[11px] text-gray-400 dark:text-gray-500 block mt-1.5">
                     Leave blank to use the default title: "Learn From The Best Tutors Worldwide"
                   </span>
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase mb-1">
+                  <label className="block text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider mb-1.5">
                     Hero Subtitle / Description
                   </label>
                   <TextArea
@@ -382,20 +383,20 @@ export default function AdminSettingsPage() {
                     value={heroSubtitle}
                     onChange={(e) => setHeroSubtitle(e.target.value)}
                     maxLength={250}
-                    className="rounded-lg"
+                    className="rounded-xl"
                   />
-                  <span className="text-[11px] text-gray-400 block mt-1">
+                  <span className="text-[11px] text-gray-400 dark:text-gray-500 block mt-1.5">
                     Leave blank to use the default platform subtitle.
                   </span>
                 </div>
 
-                <div className="pt-1">
+                <div className="pt-2">
                   <Button
                     type="primary"
                     icon={<CheckCircleOutlined />}
                     loading={savingText}
                     onClick={handleSaveTextSettings}
-                    className="bg-brand-green hover:bg-brand-green-hover text-white font-medium border-0 h-9 px-5 rounded-lg text-xs"
+                    className="bg-brand-green hover:bg-brand-green-hover text-white font-semibold border-0 h-10 px-5 rounded-xl text-xs hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 shadow-sm"
                   >
                     Save Text Settings
                   </Button>
@@ -408,12 +409,12 @@ export default function AdminSettingsPage() {
                   Current Active Banner:
                 </Text>
                 <div className="space-y-3">
-                  <div className="h-32 w-full bg-white dark:bg-slate-900 rounded-lg border border-gray-200 dark:border-slate-700 flex items-center justify-center p-2 shadow-inner overflow-hidden">
+                  <div className="h-32 w-full bg-white dark:bg-slate-900 rounded-xl border border-gray-200 dark:border-slate-700 flex items-center justify-center p-2 shadow-inner overflow-hidden">
                     {resolvedCurrentBanner ? (
                       <img
                         src={resolvedCurrentBanner}
                         alt="Current Site Banner"
-                        className="max-h-full max-w-full object-cover rounded"
+                        className="max-h-full max-w-full object-cover rounded-lg"
                       />
                     ) : (
                       <div className="flex flex-col items-center gap-1 text-gray-400 text-xs">
@@ -423,7 +424,7 @@ export default function AdminSettingsPage() {
                     )}
                   </div>
                   <div className="flex items-center justify-between">
-                    <Tag color={resolvedCurrentBanner ? "green" : "default"}>
+                    <Tag color={resolvedCurrentBanner ? "green" : "default"} className="font-semibold rounded-full px-2.5 py-0.5">
                       {resolvedCurrentBanner ? "Custom Banner Active" : "Default Gradient Active"}
                     </Tag>
                     <span className="text-xs text-gray-500 dark:text-gray-400">
@@ -450,15 +451,15 @@ export default function AdminSettingsPage() {
 
                 <div
                   onClick={() => bannerFileInputRef.current?.click()}
-                  className="border-2 border-dashed border-gray-200 dark:border-slate-700 hover:border-emerald-500 dark:hover:border-emerald-500 rounded-xl p-6 text-center cursor-pointer transition-colors bg-white dark:bg-slate-900"
+                  className="border-2 border-dashed border-gray-200 dark:border-slate-700 hover:border-brand-green dark:hover:border-brand-green rounded-2xl p-6 text-center cursor-pointer transition-colors bg-white dark:bg-slate-900"
                 >
                   {bannerPreviewUrl ? (
                     <div className="space-y-3">
-                      <div className="h-32 w-full max-w-md mx-auto bg-slate-50 dark:bg-slate-800 rounded-lg p-2 border border-gray-200 dark:border-slate-700 flex items-center justify-center overflow-hidden">
+                      <div className="h-32 w-full max-w-md mx-auto bg-slate-50 dark:bg-slate-800 rounded-xl p-2 border border-gray-200 dark:border-slate-700 flex items-center justify-center overflow-hidden">
                         <img
                           src={bannerPreviewUrl}
                           alt="New Banner Preview"
-                          className="max-h-full max-w-full object-cover rounded"
+                          className="max-h-full max-w-full object-cover rounded-lg"
                         />
                       </div>
                       <div className="text-xs text-brand-green font-medium">
@@ -470,7 +471,7 @@ export default function AdminSettingsPage() {
                     </div>
                   ) : (
                     <div className="space-y-2">
-                      <UploadOutlined className="text-3xl text-emerald-500" />
+                      <UploadOutlined className="text-3xl text-brand-green" />
                       <div className="text-sm font-medium text-gray-700 dark:text-gray-200">
                         Click to browse or drag & drop your hero banner image
                       </div>
@@ -490,7 +491,7 @@ export default function AdminSettingsPage() {
                   loading={uploadingBanner}
                   disabled={!selectedBannerFile}
                   onClick={handleSaveBanner}
-                  className="bg-brand-green hover:bg-brand-green-hover text-white font-medium border-0 h-10 px-6 rounded-lg"
+                  className="bg-brand-green hover:bg-brand-green-hover text-white font-semibold border-0 h-11 px-6 rounded-xl hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 shadow-sm disabled:opacity-50 disabled:pointer-events-none"
                 >
                   Save & Apply Hero Banner
                 </Button>
@@ -499,7 +500,7 @@ export default function AdminSettingsPage() {
                   <Button
                     onClick={handleCancelBannerSelection}
                     disabled={uploadingBanner}
-                    className="h-10 rounded-lg"
+                    className="h-11 px-5 rounded-xl font-medium active:scale-[0.98] transition-all duration-200"
                   >
                     Cancel
                   </Button>
@@ -514,11 +515,11 @@ export default function AdminSettingsPage() {
           <Card
             title={
               <div className="flex items-center gap-2">
-                <InfoCircleOutlined className="text-indigo-500" />
-                <span>Branding Overview</span>
+                <InfoCircleOutlined className="text-emerald-500" />
+                <span className="font-semibold text-gray-900 dark:text-white">Branding Overview</span>
               </div>
             }
-            className="shadow-sm rounded-xl border border-gray-100 dark:border-slate-800 dark:bg-slate-900 sticky top-6"
+            className="shadow-sm rounded-2xl border border-gray-100 dark:border-slate-800 dark:bg-slate-900 sticky top-6 overflow-hidden"
           >
             <div className="space-y-4 text-sm">
               <div>
@@ -536,7 +537,7 @@ export default function AdminSettingsPage() {
                 <Text strong className="block text-gray-500 dark:text-gray-400 text-xs uppercase tracking-wider">
                   Navbar Preview Simulation
                 </Text>
-                <div className="mt-2 p-3 bg-white dark:bg-slate-950 rounded-lg border border-gray-100 dark:border-slate-800 flex items-center space-x-2">
+                <div className="mt-2 p-3 bg-white dark:bg-slate-950 rounded-xl border border-gray-100 dark:border-slate-800 flex items-center space-x-2">
                   {previewUrl || resolvedCurrentLogo ? (
                     <img
                       src={previewUrl || resolvedCurrentLogo || ""}
@@ -544,7 +545,7 @@ export default function AdminSettingsPage() {
                       className="h-8 w-auto max-w-[100px] object-contain rounded"
                     />
                   ) : (
-                    <div className="w-8 h-8 bg-brand-green rounded flex items-center justify-center">
+                    <div className="w-8 h-8 bg-brand-green rounded-lg flex items-center justify-center">
                       <BookOutlined className="text-white text-sm" />
                     </div>
                   )}
@@ -560,7 +561,7 @@ export default function AdminSettingsPage() {
                 <Text strong className="block text-gray-500 dark:text-gray-400 text-xs uppercase tracking-wider">
                   Hero Banner Simulation
                 </Text>
-                <div className="mt-2 p-3 bg-slate-950 rounded-lg border border-slate-800 text-white relative overflow-hidden min-h-[100px] flex flex-col justify-center">
+                <div className="mt-2 p-3 bg-slate-950 rounded-xl border border-slate-800 text-white relative overflow-hidden min-h-[100px] flex flex-col justify-center">
                   {(bannerPreviewUrl || resolvedCurrentBanner) && (
                     <img
                       src={bannerPreviewUrl || resolvedCurrentBanner || ""}
@@ -586,7 +587,7 @@ export default function AdminSettingsPage() {
                 description="Uploaded banners and text updates automatically sync across public layouts in real time."
                 type="info"
                 showIcon
-                className="text-xs"
+                className="text-xs rounded-xl"
               />
             </div>
           </Card>

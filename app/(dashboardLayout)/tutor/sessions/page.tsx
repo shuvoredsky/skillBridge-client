@@ -10,8 +10,6 @@ import {
   Modal,
   message,
   Tabs,
-  Empty,
-  Rate,
   Form,
   Input,
   Select,
@@ -23,6 +21,7 @@ import {
 } from "@ant-design/icons";
 import { tutorService } from "../../../../services/tutor.service";
 import { bookingService } from "../../../../services/booking.service";
+import EmptyState from "@/components/shared/EmptyState";
 import type { Session } from "@/types/tutor";
 import type { ColumnsType } from "antd/es/table";
 
@@ -232,7 +231,15 @@ export default function SessionsPage() {
                   dataSource={upcoming}
                   rowKey="id"
                   loading={loading}
-                  locale={{ emptyText: <Empty description="No upcoming sessions" /> }}
+                  locale={{
+                    emptyText: (
+                      <EmptyState
+                        title="No Upcoming Sessions"
+                        description="You don't have any upcoming sessions scheduled right now."
+                        className="border-0 bg-transparent py-8"
+                      />
+                    ),
+                  }}
                 />
               ),
             },
@@ -245,7 +252,15 @@ export default function SessionsPage() {
                   dataSource={completed}
                   rowKey="id"
                   loading={loading}
-                  locale={{ emptyText: <Empty description="No completed sessions" /> }}
+                  locale={{
+                    emptyText: (
+                      <EmptyState
+                        title="No Completed Sessions"
+                        description="Finished sessions will be recorded here."
+                        className="border-0 bg-transparent py-8"
+                      />
+                    ),
+                  }}
                 />
               ),
             },
@@ -258,7 +273,15 @@ export default function SessionsPage() {
                   dataSource={cancelled}
                   rowKey="id"
                   loading={loading}
-                  locale={{ emptyText: <Empty description="No cancelled sessions" /> }}
+                  locale={{
+                    emptyText: (
+                      <EmptyState
+                        title="No Cancelled Sessions"
+                        description="You don't have any cancelled sessions."
+                        className="border-0 bg-transparent py-8"
+                      />
+                    ),
+                  }}
                 />
               ),
             },

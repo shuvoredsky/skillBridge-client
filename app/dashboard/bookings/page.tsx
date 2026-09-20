@@ -7,7 +7,6 @@ import {
   Tag,
   Button,
   Tabs,
-  Empty,
   Spin,
   Popconfirm,
   message,
@@ -26,12 +25,15 @@ import {
 import { bookingService, BookingSession } from "../../../services/booking.service";
 import { reviewService } from "../../../services/review.service"; 
 import type { ColumnsType } from "antd/es/table";
+import { useRouter } from "next/navigation";
+import EmptyState from "@/components/shared/EmptyState";
 import dayjs from "dayjs";
 
 const { TabPane } = Tabs;
 const { TextArea } = Input;
 
 export default function MyBookingsPage() {
+  const router = useRouter();
   const [bookings, setBookings] = useState<BookingSession[]>([]);
   const [loading, setLoading] = useState(true);
   const [cancelling, setCancelling] = useState<string | null>(null);
@@ -179,13 +181,13 @@ export default function MyBookingsPage() {
               href={record.meetingLink}
               target="_blank"
               rel="noopener noreferrer"
-              className="bg-brand-green hover:bg-brand-green-hover border-0 text-white font-medium shadow-sm"
+              className="bg-brand-green hover:bg-brand-green-hover border-0 text-white font-medium shadow-sm rounded-lg active:scale-[0.96] transition-all"
             >
               Join Meeting ({record.meetingPlatform === "GOOGLE_MEET" ? "Google Meet" : record.meetingPlatform === "ZOOM" ? "Zoom" : "Microsoft Teams"})
             </Button>
           ) : record.status === "CONFIRMED" ? (
             <span className="text-gray-500 dark:text-gray-400 text-xs font-normal">
-              Your tutor hasn't added a meeting link yet
+              Your tutor hasn&apos;t added a meeting link yet
             </span>
           ) : null}
           {record.status === "CONFIRMED" && (
@@ -195,13 +197,15 @@ export default function MyBookingsPage() {
               onConfirm={() => handleCancelBooking(record.id)}
               okText="Yes"
               cancelText="No"
-              okButtonProps={{ danger: true }}
+              okButtonProps={{ danger: true, className: "rounded-lg" }}
+              cancelButtonProps={{ className: "rounded-lg" }}
             >
               <Button
                 danger
                 size="small"
                 icon={<DeleteOutlined />}
                 loading={cancelling === record.id}
+                className="rounded-lg active:scale-[0.96] transition-all"
               >
                 Cancel
               </Button>
@@ -213,7 +217,7 @@ export default function MyBookingsPage() {
               size="small"
               icon={<StarOutlined />}
               onClick={() => openReviewModal(record)}
-              className="bg-brand-green border-0 hover:bg-brand-green-hover text-white"
+              className="bg-brand-green border-0 hover:bg-brand-green-hover text-white rounded-lg active:scale-[0.96] transition-all"
             >
               Review
             </Button>
@@ -249,11 +253,16 @@ export default function MyBookingsPage() {
         <p className="text-gray-600 dark:text-gray-400">Manage your tutoring sessions</p>
       </div>
 
-      <Card className="shadow-lg dark:bg-slate-900 dark:border-slate-800">
+      <Card className="shadow-lg dark:bg-slate-900 dark:border-slate-800 rounded-2xl">
         <Tabs defaultActiveKey="all">
           <TabPane tab={`All (${bookings.length})`} key="all">
             {bookings.length === 0 ? (
-              <Empty description="No bookings yet" />
+              <EmptyState
+                title="No Bookings Yet"
+                description="You haven't booked any tutoring sessions. Find an expert tutor and start learning today!"
+                actionLabel="Find a Tutor"
+                onAction={() => router.push("/tutors")}
+              />
             ) : (
               <Table
                 columns={columns}
@@ -265,7 +274,12 @@ export default function MyBookingsPage() {
           </TabPane>
           <TabPane tab={`Upcoming (${upcomingBookings.length})`} key="upcoming">
             {upcomingBookings.length === 0 ? (
-              <Empty description="No upcoming bookings" />
+              <EmptyState
+                title="No Upcoming Bookings"
+                description="You have no upcoming sessions scheduled. Browse tutors to schedule your next session."
+                actionLabel="Explore Tutors"
+                onAction={() => router.push("/tutors")}
+              />
             ) : (
               <Table
                 columns={columns}
@@ -277,7 +291,10 @@ export default function MyBookingsPage() {
           </TabPane>
           <TabPane tab={`Past (${pastBookings.length})`} key="past">
             {pastBookings.length === 0 ? (
-              <Empty description="No past bookings" />
+              <EmptyState
+                title="No Past Sessions"
+                description="Completed sessions will appear here once your lessons are finished."
+              />
             ) : (
               <Table
                 columns={columns}
@@ -289,7 +306,10 @@ export default function MyBookingsPage() {
           </TabPane>
           <TabPane tab={`Cancelled (${cancelledBookings.length})`} key="cancelled">
             {cancelledBookings.length === 0 ? (
-              <Empty description="No cancelled bookings" />
+              <EmptyState
+                title="No Cancelled Bookings"
+                description="You don't have any cancelled sessions."
+              />
             ) : (
               <Table
                 columns={columns}

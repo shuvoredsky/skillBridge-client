@@ -71,7 +71,7 @@ export default function StudentDashboardPage() {
       <div>
         <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Welcome Back!</h1>
         <p className="text-gray-600 dark:text-gray-400 mt-1">
-          Here's what's happening with your learning journey
+          Here&apos;s what&apos;s happening with your learning journey
         </p>
       </div>
 

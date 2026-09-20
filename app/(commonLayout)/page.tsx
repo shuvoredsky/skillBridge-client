@@ -160,7 +160,7 @@ export default async function HomePage() {
                   type="primary"
                   size="large"
                   icon={<SearchOutlined />}
-                  className="bg-brand-green hover:bg-brand-green-hover h-12 px-8 text-lg border-0"
+                  className="bg-brand-green hover:bg-brand-green-hover h-12 px-8 text-lg border-0 shadow-md hover:shadow-lg transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-emerald-500 rounded-xl font-semibold text-white"
                 >
                   Find a Tutor
                 </Button>
@@ -169,7 +169,7 @@ export default async function HomePage() {
                 <Button
                   size="large"
                   icon={<RocketOutlined />}
-                  className={`h-12 px-8 text-lg ${
+                  className={`h-12 px-8 text-lg rounded-xl font-semibold shadow-sm transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-emerald-500 ${
                     heroBannerUrl
                       ? "bg-white/10 hover:bg-white/20 text-white border-white/30 backdrop-blur-md"
                       : "dark:bg-slate-800 dark:text-white dark:border-slate-700"
@@ -184,7 +184,7 @@ export default async function HomePage() {
       </section>
 
 
-      <section className="py-16 bg-white dark:bg-slate-900 border-b border-gray-100 dark:border-slate-800 transition-colors duration-200">
+      <section className="py-20 md:py-28 bg-white dark:bg-slate-900 border-b border-gray-100 dark:border-slate-800 transition-colors duration-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             {stats.map((stat, index) => (
@@ -199,7 +199,7 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <section className="py-20 bg-gray-50 dark:bg-slate-950 transition-colors duration-200">
+      <section className="py-20 md:py-28 bg-gray-50 dark:bg-slate-950 transition-colors duration-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
@@ -230,7 +230,7 @@ export default async function HomePage() {
       </section>
 
       {/* Featured Tutors Section */}
-      <section className="py-20 bg-white dark:bg-slate-900 border-t border-b border-gray-100 dark:border-slate-800 transition-colors duration-200">
+      <section className="py-20 md:py-28 bg-white dark:bg-slate-900 border-t border-b border-gray-100 dark:border-slate-800 transition-colors duration-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
@@ -245,7 +245,10 @@ export default async function HomePage() {
 
           <div className="text-center mt-12">
             <Link href="/tutors">
-              <Button size="large" className="bg-brand-green hover:bg-brand-green-hover text-white font-semibold h-12 px-8 rounded-xl border-0">
+              <Button
+                size="large"
+                className="bg-brand-green hover:bg-brand-green-hover text-white font-semibold h-12 px-8 rounded-xl border-0 shadow-md hover:shadow-lg transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-emerald-500"
+              >
                 Browse All Tutors
               </Button>
             </Link>
@@ -254,7 +257,7 @@ export default async function HomePage() {
       </section>
 
       
-      <section className="py-20 bg-brand-green dark:bg-brand-green-hover transition-colors duration-200">
+      <section className="py-20 md:py-28 bg-brand-green dark:bg-brand-green-hover transition-colors duration-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-4xl font-bold text-white mb-6">
             Ready to Start Learning?
@@ -265,7 +268,7 @@ export default async function HomePage() {
           <Link href="/register">
             <Button
               size="large"
-              className="bg-white text-brand-green hover:bg-gray-50 h-12 px-8 text-lg font-semibold border-0"
+              className="bg-white text-brand-green hover:bg-gray-50 h-12 px-8 text-lg font-bold border-0 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-emerald-500"
             >
               Get Started Today
             </Button>

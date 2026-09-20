@@ -97,7 +97,7 @@ export default function StudentProfilePage() {
               loading={loading}
               block
               size="large"
-              className="bg-brand-green hover:bg-brand-green-hover border-0 h-12 mt-4"
+              className="bg-brand-green hover:bg-brand-green-hover border-0 h-12 mt-4 text-white font-semibold rounded-xl hover:scale-[1.01] active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-emerald-500 transition-all shadow-sm"
             >
               Save Changes
             </Button>
@@ -105,7 +105,7 @@ export default function StudentProfilePage() {
         </Form>
       </Card>
 
-      <Card title={<span className="dark:text-white">Account Information</span>} className="shadow-lg dark:bg-slate-900 dark:border-slate-800">
+      <Card title={<span className="dark:text-white font-bold">Account Information</span>} className="shadow-lg dark:bg-slate-900 dark:border-slate-800 rounded-2xl">
         <div className="space-y-4">
           <div className="flex justify-between items-center py-3 border-b dark:border-slate-800">
             <div>
@@ -113,11 +113,10 @@ export default function StudentProfilePage() {
               <p className="font-semibold text-gray-900 dark:text-gray-100">Student Account</p>
             </div>
           </div>
-          {/* ❌ REMOVED: Email Verified section */}
         </div>
       </Card>
 
-      <Card title={<span className="text-brand-red font-bold">Danger Zone</span>} className="shadow-lg border-red-200 dark:bg-slate-900 dark:border-red-950/40">
+      <Card title={<span className="text-brand-red font-bold">Danger Zone</span>} className="shadow-lg border-red-200 dark:bg-slate-900 dark:border-red-950/40 rounded-2xl">
         <div className="space-y-4">
           <div className="flex justify-between items-center">
             <div>

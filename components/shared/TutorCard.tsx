@@ -246,7 +246,7 @@ export default function TutorCard({
             <Button
               type="primary"
               block
-              className="bg-brand-green hover:bg-brand-green-hover border-0 text-white font-medium rounded-xl h-9.5 shadow-sm transition-all text-sm"
+              className="bg-brand-green hover:bg-brand-green-hover border-0 text-white font-medium rounded-xl h-9.5 shadow-sm transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-emerald-500 text-sm"
               onClick={(e) => {
                 e.stopPropagation();
                 router.push(`/tutors/${tutor.id}`);

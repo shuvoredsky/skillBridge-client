@@ -97,9 +97,9 @@ export default function TutorLayout({
                 onClick: ({ key }) => key === "logout" && logout(),
               }}
             >
-              <div className="text-gray-700 dark:text-gray-200" style={{ display: "flex", alignItems: "center", gap: 8, cursor: "pointer" }}>
+              <div className="text-gray-700 dark:text-gray-200 flex items-center gap-2 cursor-pointer">
                 <Avatar icon={<UserOutlined />} className="bg-brand-green" src={user?.image} />
-                <span style={{ display: typeof window !== "undefined" && window.innerWidth > 768 ? "inline" : "none" }}>
+                <span className="hidden md:inline font-medium">
                   {user?.name}
                 </span>
               </div>

@@ -16,9 +16,12 @@ import {
   SearchOutlined,
   UserOutlined,
   StopOutlined,
+  CheckCircleOutlined,
 } from "@ant-design/icons";
 import { adminService, User } from "../../../../services/admin.service";
 import type { ColumnsType } from "antd/es/table";
+import EmptyState from "@/components/shared/EmptyState";
+import dayjs from "dayjs";
 
 const { Search } = Input;
 const { Option } = Select;
@@ -145,9 +148,11 @@ export default function AdminUsersPage() {
       dataIndex: "name",
       key: "name",
       render: (name) => (
-        <div className="flex items-center gap-2">
-          <UserOutlined className="text-gray-400" />
-          <span className="font-medium">{name}</span>
+        <div className="flex items-center gap-2.5">
+          <div className="w-8 h-8 rounded-full bg-emerald-50 dark:bg-emerald-950/40 flex items-center justify-center text-brand-green">
+            <UserOutlined />
+          </div>
+          <span className="font-semibold text-gray-900 dark:text-white">{name}</span>
         </div>
       ),
     },
@@ -155,6 +160,9 @@ export default function AdminUsersPage() {
       title: "Email",
       dataIndex: "email",
       key: "email",
+      render: (email) => (
+        <span className="text-gray-600 dark:text-gray-300 text-sm">{email}</span>
+      ),
     },
     {
       title: "Role",
@@ -167,17 +175,21 @@ export default function AdminUsersPage() {
           STUDENT: "blue",
         };
         return (
-          <Tag color={colors[role as keyof typeof colors]}>{role}</Tag>
+          <Tag color={colors[role as keyof typeof colors]} className="font-semibold text-xs px-2.5 py-0.5 rounded-full">
+            {role}
+          </Tag>
         );
       },
     },
-    // ❌ REMOVED: Email Verified column
     {
       title: "Status",
       dataIndex: "status",
       key: "status",
       render: (status: string) => (
-        <Tag color={status === "ACTIVE" ? "success" : "error"}>
+        <Tag
+          color={status === "ACTIVE" ? "success" : "error"}
+          className="font-semibold text-xs px-2.5 py-0.5 rounded-full"
+        >
           {status || "ACTIVE"}
         </Tag>
       ),
@@ -186,7 +198,11 @@ export default function AdminUsersPage() {
       title: "Joined",
       dataIndex: "createdAt",
       key: "createdAt",
-      render: (date: string) => new Date(date).toLocaleDateString(),
+      render: (date: string) => (
+        <span className="text-gray-500 dark:text-gray-400 text-xs">
+          {dayjs(date).format("MMM DD, YYYY")}
+        </span>
+      ),
     },
     {
       title: "Actions",
@@ -201,6 +217,7 @@ export default function AdminUsersPage() {
                   size="small"
                   icon={<StopOutlined />}
                   onClick={() => openActionModal(record, "ban")}
+                  className="rounded-lg font-medium hover:bg-red-50 dark:hover:bg-red-950/30 active:scale-[0.96] transition-all"
                 >
                   Ban
                 </Button>
@@ -208,7 +225,9 @@ export default function AdminUsersPage() {
                 <Button
                   type="primary"
                   size="small"
+                  icon={<CheckCircleOutlined />}
                   onClick={() => openActionModal(record, "unban")}
+                  className="bg-brand-green hover:bg-brand-green-hover border-0 text-white rounded-lg font-medium active:scale-[0.96] transition-all"
                 >
                   Unban
                 </Button>
@@ -223,28 +242,32 @@ export default function AdminUsersPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold">Users Management</h1>
-        <p className="text-gray-500">Manage all users on the platform</p>
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Users Management</h1>
+        <p className="text-gray-500 dark:text-gray-400 mt-1 text-sm">
+          View, filter, and manage student, tutor, and admin accounts across the platform
+        </p>
       </div>
 
       {/* Filters */}
-      <Card>
-        <div className="flex flex-wrap gap-4">
+      <Card className="dark:bg-slate-900 dark:border-slate-800 shadow-sm rounded-2xl">
+        <div className="flex flex-wrap items-center gap-4">
           <Search
             placeholder="Search by name or email"
             allowClear
             enterButton={<SearchOutlined />}
             size="large"
             onSearch={handleSearch}
-            className="flex-1 min-w-[300px]"
+            className="flex-1 min-w-[280px]"
           />
 
           <Select
             placeholder="Filter by Role"
             allowClear
             size="large"
-            style={{ minWidth: 150 }}
+            style={{ minWidth: 160 }}
             onChange={handleRoleFilter}
+            value={roleFilter}
+            className="rounded-xl"
           >
             <Option value="STUDENT">Student</Option>
             <Option value="TUTOR">Tutor</Option>
@@ -255,8 +278,10 @@ export default function AdminUsersPage() {
             placeholder="Filter by Status"
             allowClear
             size="large"
-            style={{ minWidth: 150 }}
+            style={{ minWidth: 160 }}
             onChange={handleStatusFilter}
+            value={statusFilter}
+            className="rounded-xl"
           >
             <Option value="ACTIVE">Active</Option>
             <Option value="BANNED">Banned</Option>
@@ -272,6 +297,7 @@ export default function AdminUsersPage() {
               setPage(1);
               fetchUsers(1, { search: "", role: undefined, status: undefined });
             }}
+            className="rounded-xl font-medium hover:border-brand-green hover:text-brand-green active:scale-[0.98] transition-all duration-200"
           >
             Reset Filters
           </Button>
@@ -279,7 +305,7 @@ export default function AdminUsersPage() {
       </Card>
 
       {/* Users Table */}
-      <Card>
+      <Card className="dark:bg-slate-900 dark:border-slate-800 shadow-sm rounded-2xl overflow-hidden">
         <Table
           columns={columns}
           dataSource={users}
@@ -295,31 +321,56 @@ export default function AdminUsersPage() {
             },
             showTotal: (total) => `Total ${total} users`,
           }}
+          locale={{
+            emptyText: (
+              <EmptyState
+                title="No Users Found"
+                description={
+                  searchText || roleFilter || statusFilter
+                    ? "No users match your active search and filter criteria."
+                    : "There are no registered users in the platform."
+                }
+                className="border-0 bg-transparent py-8"
+              />
+            ),
+          }}
         />
       </Card>
 
       {/* Action Confirmation Modal */}
       <Modal
-        title={`${actionType === "ban" ? "Ban" : "Unban"} User`}
+        title={
+          <div className="text-lg font-bold text-gray-900 dark:text-white">
+            {actionType === "ban" ? "Ban User Account" : "Unban User Account"}
+          </div>
+        }
         open={actionModalVisible}
         onOk={handleUserAction}
         onCancel={() => {
           setActionModalVisible(false);
           setSelectedUser(null);
         }}
-        okText={actionType === "ban" ? "Ban User" : "Unban User"}
+        okText={actionType === "ban" ? "Yes, Ban User" : "Yes, Unban User"}
+        centered
+        className="rounded-2xl overflow-hidden"
         okButtonProps={{
           danger: actionType === "ban",
           loading,
+          className: actionType === "ban" 
+            ? "bg-red-500 hover:bg-red-600 text-white rounded-xl font-medium" 
+            : "bg-brand-green hover:bg-brand-green-hover border-0 text-white rounded-xl font-medium",
+        }}
+        cancelButtonProps={{
+          className: "rounded-xl font-medium",
         }}
       >
-        <p>
+        <p className="text-gray-700 dark:text-gray-300 mt-3">
           Are you sure you want to {actionType}{" "}
-          <strong>{selectedUser?.name}</strong>?
+          <strong className="text-gray-900 dark:text-white">{selectedUser?.name}</strong>?
         </p>
         {actionType === "ban" && (
-          <p className="text-gray-500 mt-2">
-            This user will not be able to access the platform.
+          <p className="text-red-500 dark:text-red-400 text-xs mt-2">
+            This user will immediately lose login access to the platform.
           </p>
         )}
       </Modal>

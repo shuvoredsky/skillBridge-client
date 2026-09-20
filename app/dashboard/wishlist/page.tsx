@@ -1,11 +1,13 @@
 "use client";
 
 import { useWishlist } from "@/context/WishlistContext";
-import { Card, Row, Col, Button, Empty } from "antd";
+import { Row, Col, Button } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
+import { Heart } from "lucide-react";
 import { useRouter } from "next/navigation";
 import TutorCard from "@/components/shared/TutorCard";
 import { SingleTutorCardSkeleton } from "@/components/shared/TutorCardSkeleton";
+import EmptyState from "@/components/shared/EmptyState";
 
 export default function WishlistPage() {
   const { wishlist, loading, toggleWishlist } = useWishlist();
@@ -45,7 +47,7 @@ export default function WishlistPage() {
             type="primary"
             icon={<SearchOutlined />}
             onClick={() => router.push("/tutors")}
-            className="bg-brand-green hover:bg-brand-green-hover border-0 text-white font-medium rounded-xl h-10 px-5"
+            className="bg-brand-green hover:bg-brand-green-hover border-0 text-white font-medium rounded-xl h-10 px-5 shadow-sm transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
           >
             Find More Tutors
           </Button>
@@ -53,26 +55,13 @@ export default function WishlistPage() {
       </div>
 
       {wishlist.length === 0 ? (
-        <Card className="shadow-sm border-0 rounded-2xl dark:bg-slate-900 dark:border-slate-800 text-center py-12">
-          <Empty
-            image={Empty.PRESENTED_IMAGE_SIMPLE}
-            description={
-              <div className="space-y-4">
-                <p className="text-gray-500 dark:text-gray-400 text-lg">
-                  You haven&apos;t saved any tutors to your wishlist yet.
-                </p>
-                <Button
-                  type="primary"
-                  size="large"
-                  onClick={() => router.push("/tutors")}
-                  className="bg-brand-green hover:bg-brand-green-hover border-0 text-white font-semibold rounded-xl"
-                >
-                  Browse Tutors
-                </Button>
-              </div>
-            }
-          />
-        </Card>
+        <EmptyState
+          icon={<Heart size={28} className="text-rose-500" />}
+          title="Your Wishlist is Empty"
+          description="You haven't saved any tutors to your wishlist yet. Explore our top-rated tutors and save your favorites!"
+          actionLabel="Browse Tutors"
+          onAction={() => router.push("/tutors")}
+        />
       ) : (
         <Row gutter={[16, 16]}>
           {wishlist.map((item) => {

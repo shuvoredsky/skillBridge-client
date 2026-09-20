@@ -4,8 +4,7 @@ import { Collapse, Card, Button } from "antd";
 import { QuestionCircleOutlined, BookOutlined, UserOutlined } from "@ant-design/icons";
 import PageHeader from "@/components/PageHeader";
 import Link from "next/link";
-
-const { Panel } = Collapse;
+import { ArrowRight, HelpCircle } from "lucide-react";
 
 export default function HelpPage() {
   const studentFaqs = [
@@ -46,11 +45,23 @@ export default function HelpPage() {
     }
   ];
 
+  const studentItems = studentFaqs.map((faq, idx) => ({
+    key: `s-${idx}`,
+    label: <span className="font-semibold text-gray-900 dark:text-gray-100 text-base">{faq.q}</span>,
+    children: <p className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed">{faq.a}</p>,
+  }));
+
+  const tutorItems = tutorFaqs.map((faq, idx) => ({
+    key: `t-${idx}`,
+    label: <span className="font-semibold text-gray-900 dark:text-gray-100 text-base">{faq.q}</span>,
+    children: <p className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed">{faq.a}</p>,
+  }));
+
   return (
-    <div className="bg-slate-50 dark:bg-slate-950 min-h-screen pb-16 transition-colors duration-200">
+    <div className="bg-slate-50 dark:bg-slate-950 min-h-screen pb-20 transition-colors duration-200">
       <PageHeader
         title="Help & Support"
-        description="Frequently asked questions and guides to help you navigate SkillBridge."
+        description="Frequently asked questions, guides, and troubleshooting tips to help you navigate SkillBridge."
         breadcrumbs={[{ label: "Help" }]}
       />
 
@@ -58,62 +69,60 @@ export default function HelpPage() {
         {/* For Students Accordion */}
         <section>
           <div className="flex items-center gap-3 mb-6">
-            <BookOutlined className="text-2xl text-brand-green" />
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white">For Students</h2>
+            <div className="w-10 h-10 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 flex items-center justify-center text-brand-green">
+              <BookOutlined className="text-xl" />
+            </div>
+            <div>
+              <h2 className="text-2xl font-bold text-gray-900 dark:text-white">For Students</h2>
+              <p className="text-xs text-gray-500 dark:text-gray-400">Everything you need to know about booking and learning</p>
+            </div>
           </div>
           
           <Collapse 
             accordion 
             expandIconPosition="end"
-            className="bg-white dark:bg-slate-900 border-none shadow-sm rounded-2xl overflow-hidden transition-colors"
-          >
-            {studentFaqs.map((faq, idx) => (
-              <Panel 
-                header={<span className="font-semibold text-gray-900 dark:text-gray-100">{faq.q}</span>} 
-                key={`s-${idx}`}
-                className="border-b border-gray-50 dark:border-slate-800 dark:bg-slate-900"
-              >
-                <p className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed">{faq.a}</p>
-              </Panel>
-            ))}
-          </Collapse>
+            items={studentItems}
+            className="bg-white dark:bg-slate-900 border border-gray-100 dark:border-slate-800 shadow-sm rounded-2xl overflow-hidden transition-all duration-200"
+          />
         </section>
 
         {/* For Tutors Accordion */}
         <section>
           <div className="flex items-center gap-3 mb-6">
-            <UserOutlined className="text-2xl text-brand-green" />
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white">For Tutors</h2>
+            <div className="w-10 h-10 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 flex items-center justify-center text-brand-green">
+              <UserOutlined className="text-xl" />
+            </div>
+            <div>
+              <h2 className="text-2xl font-bold text-gray-900 dark:text-white">For Tutors</h2>
+              <p className="text-xs text-gray-500 dark:text-gray-400">Managing schedules, profiles, and student sessions</p>
+            </div>
           </div>
           
           <Collapse 
             accordion 
             expandIconPosition="end"
-            className="bg-white dark:bg-slate-900 border-none shadow-sm rounded-2xl overflow-hidden transition-colors"
-          >
-            {tutorFaqs.map((faq, idx) => (
-              <Panel 
-                header={<span className="font-semibold text-gray-900 dark:text-gray-100">{faq.q}</span>} 
-                key={`t-${idx}`}
-                className="border-b border-gray-50 dark:border-slate-800 dark:bg-slate-900"
-              >
-                <p className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed">{faq.a}</p>
-              </Panel>
-            ))}
-          </Collapse>
+            items={tutorItems}
+            className="bg-white dark:bg-slate-900 border border-gray-100 dark:border-slate-800 shadow-sm rounded-2xl overflow-hidden transition-all duration-200"
+          />
         </section>
 
         {/* Still Need Help? Callout */}
-        <Card className="rounded-3xl border-none shadow-lg bg-brand-green dark:bg-brand-green-hover text-center p-6 text-white transition-colors duration-200">
-          <QuestionCircleOutlined className="text-4xl mb-4 text-white" />
-          <h3 className="text-2xl font-bold mb-2">Still Need Help?</h3>
-          <p className="text-emerald-100 max-w-xl mx-auto mb-6 text-sm">
-            Can't find the answer you are looking for? Our friendly support team is here to assist you with any questions.
+        <Card className="rounded-3xl border-none shadow-xl bg-gradient-to-r from-emerald-600 to-teal-700 dark:from-emerald-700 dark:to-teal-900 text-center p-8 sm:p-10 text-white transition-colors duration-200">
+          <div className="w-16 h-16 rounded-2xl bg-white/10 backdrop-blur-md flex items-center justify-center mx-auto mb-5 text-white">
+            <HelpCircle size={32} />
+          </div>
+          <h3 className="text-2xl sm:text-3xl font-bold mb-3 text-white">Still Need Help?</h3>
+          <p className="text-emerald-100 max-w-xl mx-auto mb-8 text-sm sm:text-base leading-relaxed">
+            Can&apos;t find the answer you are looking for? Our friendly support team is here to assist you with any questions or issues.
           </p>
           <div className="flex justify-center">
             <Link href="/contact">
-              <Button size="large" className="bg-white hover:bg-gray-50 text-brand-green font-bold border-none rounded-xl">
-                Contact Support
+              <Button
+                size="large"
+                className="bg-white hover:bg-gray-50 text-emerald-700 font-bold border-none rounded-xl h-12 px-8 shadow-md hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 inline-flex items-center gap-2"
+              >
+                <span>Contact Support</span>
+                <ArrowRight size={16} />
               </Button>
             </Link>
           </div>

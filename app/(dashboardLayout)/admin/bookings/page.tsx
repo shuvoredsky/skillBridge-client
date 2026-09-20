@@ -8,17 +8,22 @@ import {
   Tag,
   Card,
   message,
-  Space,
-  DatePicker,
+  Row,
+  Col,
 } from "antd";
 import {
   CalendarOutlined,
   ClockCircleOutlined,
   UserOutlined,
   BookOutlined,
+  CheckCircleOutlined,
+  CloseCircleOutlined,
+  FilterOutlined,
 } from "@ant-design/icons";
 import { adminService, Booking, DashboardStats } from "../../../../services/admin.service";
 import type { ColumnsType } from "antd/es/table";
+import StatCard from "@/components/shared/StatCard";
+import EmptyState from "@/components/shared/EmptyState";
 import dayjs from "dayjs";
 
 const { Option } = Select;
@@ -86,11 +91,13 @@ export default function AdminBookingsPage() {
   const getStatusColor = (status: string) => {
     switch (status) {
       case "CONFIRMED":
-        return "blue";
-      case "COMPLETED":
         return "green";
+      case "COMPLETED":
+        return "blue";
       case "CANCELLED":
         return "red";
+      case "PENDING":
+        return "gold";
       default:
         return "default";
     }
@@ -101,7 +108,11 @@ export default function AdminBookingsPage() {
       title: "Booking ID",
       dataIndex: "id",
       key: "id",
-      render: (id) => <span className="font-mono text-xs">{id.slice(0, 8)}...</span>,
+      render: (id) => (
+        <span className="font-mono text-xs text-gray-600 dark:text-gray-400 bg-gray-100 dark:bg-slate-800 px-2 py-0.5 rounded">
+          {id.slice(0, 8)}...
+        </span>
+      ),
     },
     {
       title: "Student",
@@ -109,10 +120,14 @@ export default function AdminBookingsPage() {
       key: "student",
       render: (student) => (
         <div className="flex items-center gap-2">
-          <UserOutlined className="text-gray-400" />
+          <div className="w-8 h-8 rounded-full bg-emerald-50 dark:bg-emerald-950/40 flex items-center justify-center text-brand-green">
+            <UserOutlined />
+          </div>
           <div>
-            <div className="font-medium">{student.name}</div>
-            <div className="text-xs text-gray-500">{student.email}</div>
+            <div className="font-semibold text-gray-900 dark:text-white text-sm">
+              {student.name}
+            </div>
+            <div className="text-xs text-gray-500 dark:text-gray-400">{student.email}</div>
           </div>
         </div>
       ),
@@ -123,10 +138,14 @@ export default function AdminBookingsPage() {
       key: "tutor",
       render: (tutor) => (
         <div className="flex items-center gap-2">
-          <UserOutlined className="text-gray-400" />
+          <div className="w-8 h-8 rounded-full bg-blue-50 dark:bg-blue-950/40 flex items-center justify-center text-blue-600">
+            <UserOutlined />
+          </div>
           <div>
-            <div className="font-medium">{tutor.user.name}</div>
-            <div className="text-xs text-gray-500">{tutor.user.email}</div>
+            <div className="font-semibold text-gray-900 dark:text-white text-sm">
+              {tutor.user.name}
+            </div>
+            <div className="text-xs text-gray-500 dark:text-gray-400">{tutor.user.email}</div>
           </div>
         </div>
       ),
@@ -136,9 +155,9 @@ export default function AdminBookingsPage() {
       dataIndex: "subject",
       key: "subject",
       render: (subject) => (
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1.5">
           <BookOutlined className="text-brand-green" />
-          <span className="font-medium dark:text-gray-200">{subject}</span>
+          <span className="font-medium text-gray-800 dark:text-gray-200">{subject}</span>
         </div>
       ),
     },
@@ -147,11 +166,11 @@ export default function AdminBookingsPage() {
       key: "datetime",
       render: (_, record) => (
         <div>
-          <div className="flex items-center gap-1 text-sm text-gray-700 dark:text-gray-200">
+          <div className="flex items-center gap-1.5 text-sm font-medium text-gray-800 dark:text-gray-200">
             <CalendarOutlined className="text-gray-400" />
             <span>{dayjs(record.date).format("MMM DD, YYYY")}</span>
           </div>
-          <div className="flex items-center gap-1 text-xs text-gray-500 dark:text-gray-400">
+          <div className="flex items-center gap-1 text-xs text-gray-500 dark:text-gray-400 mt-0.5">
             <ClockCircleOutlined />
             <span>
               {record.startTime} - {record.endTime}
@@ -165,7 +184,9 @@ export default function AdminBookingsPage() {
       dataIndex: "status",
       key: "status",
       render: (status: string) => (
-        <Tag color={getStatusColor(status)}>{status}</Tag>
+        <Tag color={getStatusColor(status)} className="font-semibold text-xs px-2.5 py-0.5 rounded-full">
+          {status}
+        </Tag>
       ),
     },
     {
@@ -174,16 +195,20 @@ export default function AdminBookingsPage() {
       key: "review",
       render: (review) =>
         review ? (
-          <Tag color="gold">⭐ {review.rating}/5</Tag>
+          <Tag color="gold" className="font-medium">⭐ {review.rating}/5</Tag>
         ) : (
-          <Tag color="default">No review</Tag>
+          <span className="text-xs text-gray-400 dark:text-gray-500 italic">No review</span>
         ),
     },
     {
       title: "Booked On",
       dataIndex: "createdAt",
       key: "createdAt",
-      render: (date: string) => dayjs(date).format("MMM DD, YYYY"),
+      render: (date: string) => (
+        <span className="text-xs text-gray-500 dark:text-gray-400">
+          {dayjs(date).format("MMM DD, YYYY")}
+        </span>
+      ),
     },
   ];
 
@@ -191,24 +216,69 @@ export default function AdminBookingsPage() {
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Bookings Management</h1>
-        <p className="text-gray-500 dark:text-gray-400">View and manage all bookings on the platform</p>
+        <p className="text-gray-500 dark:text-gray-400">View and manage all bookings across the platform</p>
       </div>
 
+      {/* Unified StatCards */}
+      <Row gutter={[16, 16]}>
+        <Col xs={24} sm={12} lg={6}>
+          <StatCard
+            title="Total Bookings"
+            value={stats?.bookings.total ?? totalBookings}
+            icon={<BookOutlined />}
+            color="emerald"
+            description="All recorded sessions"
+          />
+        </Col>
+        <Col xs={24} sm={12} lg={6}>
+          <StatCard
+            title="Confirmed"
+            value={stats?.bookings.confirmed ?? 0}
+            icon={<CheckCircleOutlined />}
+            color="emerald"
+            description="Upcoming scheduled"
+          />
+        </Col>
+        <Col xs={24} sm={12} lg={6}>
+          <StatCard
+            title="Completed"
+            value={stats?.bookings.completed ?? 0}
+            icon={<CalendarOutlined />}
+            color="blue"
+            description="Finished sessions"
+          />
+        </Col>
+        <Col xs={24} sm={12} lg={6}>
+          <StatCard
+            title="Cancelled"
+            value={stats?.bookings.cancelled ?? 0}
+            icon={<CloseCircleOutlined />}
+            color="red"
+            description="Cancelled or missed"
+          />
+        </Col>
+      </Row>
+
       {/* Filters */}
-      <Card className="dark:bg-slate-900 dark:border-slate-800 shadow-sm">
-        <div className="flex flex-wrap gap-4">
-          <Select
-            placeholder="Filter by Status"
-            allowClear
-            size="large"
-            style={{ minWidth: 200 }}
-            onChange={handleStatusFilter}
-            value={statusFilter}
-          >
-            <Option value="CONFIRMED">Confirmed</Option>
-            <Option value="COMPLETED">Completed</Option>
-            <Option value="CANCELLED">Cancelled</Option>
-          </Select>
+      <Card className="dark:bg-slate-900 dark:border-slate-800 shadow-sm rounded-2xl">
+        <div className="flex flex-wrap items-center justify-between gap-4">
+          <div className="flex items-center gap-3">
+            <FilterOutlined className="text-brand-green text-base" />
+            <span className="text-sm font-semibold text-gray-700 dark:text-gray-300">Filter Bookings:</span>
+            <Select
+              placeholder="Filter by Status"
+              allowClear
+              size="large"
+              style={{ minWidth: 200 }}
+              onChange={handleStatusFilter}
+              value={statusFilter}
+              className="rounded-xl"
+            >
+              <Option value="CONFIRMED">Confirmed</Option>
+              <Option value="COMPLETED">Completed</Option>
+              <Option value="CANCELLED">Cancelled</Option>
+            </Select>
+          </div>
 
           <Button
             type="default"
@@ -218,50 +288,15 @@ export default function AdminBookingsPage() {
               setPage(1);
               fetchBookings(1, { status: undefined });
             }}
+            className="rounded-xl font-medium hover:border-brand-green hover:text-brand-green transition-all duration-200 active:scale-[0.98]"
           >
             Reset Filters
           </Button>
         </div>
       </Card>
 
-      {/* Statistics */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card className="bg-blue-50 border-blue-200 dark:from-slate-900 dark:to-slate-800 dark:border-slate-700">
-          <div className="text-center">
-            <div className="text-3xl font-bold text-blue-600 dark:text-blue-400">
-              {stats?.bookings.confirmed ?? 0}
-            </div>
-            <div className="text-gray-600 dark:text-gray-300 mt-1">Confirmed</div>
-          </div>
-        </Card>
-        <Card className="bg-green-50 border-green-200 dark:from-slate-900 dark:to-slate-800 dark:border-slate-700">
-          <div className="text-center">
-            <div className="text-3xl font-bold text-brand-green">
-              {stats?.bookings.completed ?? 0}
-            </div>
-            <div className="text-gray-600 dark:text-gray-300 mt-1">Completed</div>
-          </div>
-        </Card>
-        <Card className="bg-red-50 border-red-200 dark:from-slate-900 dark:to-slate-800 dark:border-slate-700">
-          <div className="text-center">
-            <div className="text-3xl font-bold text-brand-red">
-              {stats?.bookings.cancelled ?? 0}
-            </div>
-            <div className="text-gray-600 dark:text-gray-300 mt-1">Cancelled</div>
-          </div>
-        </Card>
-        <Card className="bg-emerald-50 border-emerald-200 dark:from-slate-900 dark:to-slate-800 dark:border-slate-700">
-          <div className="text-center">
-            <div className="text-3xl font-bold text-brand-green">
-              {stats?.bookings.total ?? 0}
-            </div>
-            <div className="text-gray-600 dark:text-gray-300 mt-1">Total Bookings</div>
-          </div>
-        </Card>
-      </div>
-
-      {/* Bookings Table */}
-      <Card className="dark:bg-slate-900 dark:border-slate-800 shadow-sm">
+      {/* Bookings Table with EmptyState */}
+      <Card className="dark:bg-slate-900 dark:border-slate-800 shadow-sm rounded-2xl overflow-hidden">
         <Table
           columns={columns}
           dataSource={bookings}
@@ -277,7 +312,20 @@ export default function AdminBookingsPage() {
             },
             showTotal: (total) => `Total ${total} bookings`,
           }}
-          scroll={{ x: 1200 }}
+          scroll={{ x: 1000 }}
+          locale={{
+            emptyText: (
+              <EmptyState
+                title="No Bookings Found"
+                description={
+                  statusFilter
+                    ? `No bookings match the "${statusFilter}" status filter.`
+                    : "There are no bookings recorded in the system yet."
+                }
+                className="border-0 bg-transparent py-8"
+              />
+            ),
+          }}
         />
       </Card>
     </div>

@@ -12,6 +12,7 @@ import {
 import { adminService, PendingTutor } from "../../../../services/admin.service";
 import { getImageUrl } from "@/lib/getImageUrl";
 import type { ColumnsType } from "antd/es/table";
+import EmptyState from "@/components/shared/EmptyState";
 
 const { TextArea } = Input;
 
@@ -200,7 +201,7 @@ export default function AdminTutorsPage() {
               setSelectedTutor(record);
               setApproveModalVisible(true);
             }}
-            className="bg-brand-green hover:bg-brand-green-hover border-0 text-white font-medium rounded-lg animate-pulse hover:animate-none"
+            className="bg-brand-green hover:bg-brand-green-hover border-0 text-white font-medium rounded-lg active:scale-[0.96] transition-all"
           >
             Approve
           </Button>
@@ -212,7 +213,7 @@ export default function AdminTutorsPage() {
               setSelectedTutor(record);
               setRejectModalVisible(true);
             }}
-            className="bg-brand-red hover:bg-brand-red-hover border-0 text-white font-medium rounded-lg"
+            className="bg-brand-red hover:bg-brand-red-hover border-0 text-white font-medium rounded-lg active:scale-[0.96] transition-all"
           >
             Reject
           </Button>
@@ -228,7 +229,7 @@ export default function AdminTutorsPage() {
         <p className="text-gray-500 dark:text-gray-400">Review and verify tutor credentials and document submissions</p>
       </div>
 
-      <Card className="dark:bg-slate-900 dark:border-slate-800 shadow-sm">
+      <Card className="dark:bg-slate-900 dark:border-slate-800 shadow-sm rounded-2xl overflow-hidden">
         <Table
           columns={columns}
           dataSource={tutors}
@@ -244,7 +245,15 @@ export default function AdminTutorsPage() {
             },
             showTotal: (total) => `Total ${total} tutors pending review`,
           }}
-          locale={{ emptyText: "No pending tutor verification requests" }}
+          locale={{
+            emptyText: (
+              <EmptyState
+                title="No Pending Verification Requests"
+                description="All tutor verification applications have been reviewed and processed."
+                className="border-0 bg-transparent py-8"
+              />
+            ),
+          }}
         />
       </Card>
 

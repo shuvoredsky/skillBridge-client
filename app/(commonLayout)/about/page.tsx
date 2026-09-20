@@ -34,7 +34,7 @@ export default function AboutPage() {
       />
 
       {/* Intro Section */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+      <section className="py-20 md:py-28 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div>
             <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
@@ -62,7 +62,7 @@ export default function AboutPage() {
       </section>
 
       {/* How it Works Section */}
-      <section className="bg-white dark:bg-slate-900 py-16 px-4 sm:px-6 lg:px-8 transition-colors duration-200 border-t border-b border-gray-100 dark:border-slate-800">
+      <section className="bg-white dark:bg-slate-900 py-20 md:py-28 px-4 sm:px-6 lg:px-8 transition-colors duration-200 border-t border-b border-gray-100 dark:border-slate-800">
         <div className="max-w-7xl mx-auto">
           <h2 className="text-3xl font-bold text-gray-900 dark:text-white text-center mb-12">
             How It Works
@@ -93,7 +93,7 @@ export default function AboutPage() {
       </section>
 
       {/* Core Values Section */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+      <section className="py-20 md:py-28 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
         <h2 className="text-3xl font-bold text-gray-900 dark:text-white text-center mb-12">
           Our Core Values
         </h2>

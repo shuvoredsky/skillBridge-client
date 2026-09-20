@@ -150,7 +150,7 @@ export default function ProfilePhotoUploader({
           icon={<CameraOutlined />}
           shape="circle"
           size="middle"
-          className="absolute bottom-0 right-0 shadow-md bg-white hover:bg-gray-50 flex items-center justify-center border border-gray-200 z-20"
+          className="absolute bottom-0 right-0 shadow-md bg-white dark:bg-slate-800 hover:bg-gray-50 dark:hover:bg-slate-700 flex items-center justify-center border border-gray-200 dark:border-slate-700 text-gray-700 dark:text-gray-200 z-20 active:scale-95 transition-all"
           onClick={(e) => {
             e.stopPropagation();
             handleAvatarClick();
