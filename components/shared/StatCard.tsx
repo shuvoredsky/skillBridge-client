@@ -56,7 +56,7 @@ export default function StatCard({
   value,
   icon,
   trend,
-  color = "emerald",
+  color = "blue",
   description,
   suffix,
   prefix,
@@ -64,7 +64,7 @@ export default function StatCard({
   className = "",
   onClick,
 }: StatCardProps) {
-  const activeColor = colorMap[color] || colorMap.emerald;
+  const activeColor = colorMap[color] || colorMap.blue;
 
   const renderTrend = () => {
     if (!trend) return null;
@@ -97,7 +97,7 @@ export default function StatCard({
     <div
       onClick={onClick}
       className={`relative bg-white dark:bg-slate-900 border border-gray-100 dark:border-slate-800 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all duration-200 flex flex-col justify-between ${
-        onClick ? "cursor-pointer hover:border-emerald-400/50" : ""
+        onClick ? "cursor-pointer hover:border-blue-400/50" : ""
       } ${className}`}
     >
       <div>

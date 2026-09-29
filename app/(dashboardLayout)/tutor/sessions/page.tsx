@@ -196,7 +196,7 @@ export default function SessionsPage() {
                 setSelectedSession(record);
                 setModalVisible(true);
               }}
-              className="bg-brand-green hover:bg-brand-green-hover border-0 text-white"
+              className="bg-blue-600 hover:bg-blue-700 border-0 text-white"
             >
               Mark Complete
             </Button>
@@ -301,7 +301,7 @@ export default function SessionsPage() {
       >
         <p className="text-gray-800 dark:text-gray-200">
           Are you sure you want to mark this session with{" "}
-          <strong className="text-brand-green">{selectedSession?.student.name}</strong> as completed?
+          <strong className="text-blue-600 dark:text-blue-400">{selectedSession?.student.name}</strong> as completed?
         </p>
         <p className="text-sm text-gray-500 dark:text-gray-400">
           This will allow the student to leave a review.
@@ -358,7 +358,7 @@ export default function SessionsPage() {
               <Button
                 type="primary"
                 htmlType="submit"
-                className="bg-brand-green hover:bg-brand-green-hover border-0 text-white"
+                className="bg-blue-600 hover:bg-blue-700 border-0 text-white"
                 loading={submittingLink}
               >
                 Save Meeting Details

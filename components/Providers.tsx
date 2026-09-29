@@ -16,7 +16,7 @@ function AntdThemeWrapper({ children }: { children: React.ReactNode }) {
       theme={{
         algorithm: currentTheme === "dark" ? theme.darkAlgorithm : theme.defaultAlgorithm,
         token: {
-          colorPrimary: "#10b981", // brand-green
+          colorPrimary: "#2563EB", // brand-blue
           colorError: "#ef4444", // brand-red
           borderRadius: 6,
         },

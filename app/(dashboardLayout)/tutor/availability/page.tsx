@@ -106,7 +106,7 @@ export default function AvailabilityPage() {
       key: "day",
       width: 160,
       render: (day: string) => (
-        <Tag color="green" className="font-semibold text-xs px-2.5 py-0.5 rounded-full border-emerald-200 dark:border-emerald-800">
+        <Tag color="blue" className="font-semibold text-xs px-2.5 py-0.5 rounded-full border-blue-200 dark:border-blue-800">
           {day}
         </Tag>
       ),
@@ -124,9 +124,9 @@ export default function AvailabilityPage() {
             record.slots.map((slot) => (
               <div
                 key={slot.id}
-                className="group flex items-center gap-2 px-3 py-1.5 bg-slate-50 dark:bg-slate-800/80 text-gray-800 dark:text-gray-200 border border-slate-200/80 dark:border-slate-700/80 rounded-xl text-sm transition-all duration-200 hover:border-emerald-300 dark:hover:border-emerald-700 hover:shadow-xs"
+                className="group flex items-center gap-2 px-3 py-1.5 bg-slate-50 dark:bg-slate-800/80 text-gray-800 dark:text-gray-200 border border-slate-200/80 dark:border-slate-700/80 rounded-xl text-sm transition-all duration-200 hover:border-blue-300 dark:hover:border-blue-700 hover:shadow-xs"
               >
-                <ClockCircleOutlined className="text-brand-green text-xs" />
+                <ClockCircleOutlined className="text-blue-600 dark:text-blue-400 text-xs" />
                 <span className="font-medium text-xs">
                   {slot.startTime} - {slot.endTime}
                 </span>
@@ -170,7 +170,7 @@ export default function AvailabilityPage() {
           type="primary"
           icon={<PlusOutlined />}
           size="large"
-          className="bg-brand-green hover:bg-brand-green-hover border-0 text-white font-semibold rounded-xl shadow-sm hover:scale-[1.02] active:scale-[0.98] transition-all duration-200"
+          className="bg-blue-600 hover:bg-blue-700 border-0 text-white font-semibold rounded-xl shadow-sm hover:scale-[1.02] active:scale-[0.98] transition-all duration-200"
           onClick={() => setModalVisible(true)}
         >
           Add Time Slot
@@ -263,7 +263,7 @@ export default function AvailabilityPage() {
                 type="primary"
                 htmlType="submit"
                 size="large"
-                className="bg-brand-green hover:bg-brand-green-hover border-0 text-white font-semibold rounded-xl active:scale-[0.98] transition-all duration-200"
+                className="bg-blue-600 hover:bg-blue-700 border-0 text-white font-semibold rounded-xl active:scale-[0.98] transition-all duration-200"
               >
                 Add Slot
               </Button>

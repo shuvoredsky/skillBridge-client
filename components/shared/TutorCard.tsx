@@ -133,7 +133,7 @@ export default function TutorCard({
       <Card
         hoverable
         onClick={handleCardClick}
-        className={`h-full flex flex-col justify-between rounded-2xl border border-gray-100 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm hover:shadow-[0_12px_30px_-8px_rgba(16,185,129,0.22)] hover:border-emerald-400/60 dark:hover:border-emerald-500/50 hover:-translate-y-1 transition-all duration-300 relative cursor-pointer overflow-hidden ${className}`}
+        className={`h-full flex flex-col justify-between rounded-2xl border border-gray-100 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm hover:shadow-[0_12px_30px_-8px_rgba(37,99,235,0.22)] hover:border-blue-400/60 dark:hover:border-blue-500/50 hover:-translate-y-1 transition-all duration-300 relative cursor-pointer overflow-hidden ${className}`}
         styles={{
           body: {
             padding: "20px",
@@ -175,7 +175,7 @@ export default function TutorCard({
             size={68}
             src={avatarUrl}
             icon={<UserOutlined />}
-            className="bg-gradient-to-br from-brand-green to-emerald-600 shadow-md ring-2 ring-emerald-500/20"
+            className="bg-gradient-to-br from-blue-600 to-blue-700 shadow-md ring-2 ring-blue-500/20"
           >
             {tutorName.charAt(0)}
           </Avatar>
@@ -203,16 +203,16 @@ export default function TutorCard({
           <div className="space-y-2">
             <div className="flex items-center justify-between text-sm pt-1 border-t border-gray-50 dark:border-slate-800/80">
               <span className="flex items-center gap-1.5 text-gray-500 dark:text-gray-400 text-xs">
-                <DollarOutlined className="text-brand-green" /> Rate:
+                <DollarOutlined className="text-blue-600" /> Rate:
               </span>
-              <span className="font-bold text-brand-green dark:text-emerald-400 text-sm">
+              <span className="font-bold text-blue-600 dark:text-blue-400 text-sm">
                 ${tutor.hourlyRate || 0}/hr
               </span>
             </div>
 
             {tutor.experience && (
               <div className="flex items-center gap-1.5 text-gray-600 dark:text-gray-400 text-xs">
-                <ClockCircleOutlined className="text-brand-green text-xs flex-shrink-0" />
+                <ClockCircleOutlined className="text-blue-600 text-xs flex-shrink-0" />
                 <span className="truncate">{tutor.experience}</span>
               </div>
             )}
@@ -222,8 +222,8 @@ export default function TutorCard({
                 {tutor.subjects.slice(0, 3).map((subject) => (
                   <Tag
                     key={subject}
-                    color="success"
-                    className="font-medium text-[11px] px-1.5 py-0 border-0 m-0 bg-emerald-50 dark:bg-emerald-950/40 text-brand-green dark:text-emerald-300 rounded"
+                    color="blue"
+                    className="font-medium text-[11px] px-1.5 py-0 border-0 m-0 bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-300 rounded"
                   >
                     {subject}
                   </Tag>
@@ -246,7 +246,7 @@ export default function TutorCard({
             <Button
               type="primary"
               block
-              className="bg-brand-green hover:bg-brand-green-hover border-0 text-white font-medium rounded-xl h-9.5 shadow-sm transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-emerald-500 text-sm"
+              className="bg-blue-600 hover:bg-blue-700 border-0 text-white font-medium rounded-xl h-9.5 shadow-sm transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-blue-500 text-sm"
               onClick={(e) => {
                 e.stopPropagation();
                 router.push(`/tutors/${tutor.id}`);

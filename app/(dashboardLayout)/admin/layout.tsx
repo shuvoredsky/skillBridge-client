@@ -91,7 +91,7 @@ export default function AdminLayout({
           className="bg-white dark:bg-slate-900 border-b border-gray-100 dark:border-slate-800 shadow-sm px-6 flex items-center justify-between sticky top-0 z-10 transition-colors duration-200"
           style={{ backgroundColor: isDark ? "#0f172a" : "#ffffff", color: isDark ? "#ffffff" : "#000000" }}
         >
-          <div className="text-xl font-bold text-brand-green">
+          <div className="text-xl font-bold text-blue-600 dark:text-blue-400">
             SkillBridge - Admin
           </div>
           <div className="flex items-center gap-4">
@@ -103,7 +103,7 @@ export default function AdminLayout({
               }}
             >
               <div className="flex items-center gap-2 cursor-pointer text-gray-700 dark:text-gray-200">
-                <Avatar icon={<UserOutlined />} className="bg-brand-green" />
+                <Avatar icon={<UserOutlined />} className="bg-blue-600" />
                 <span className="hidden md:inline">{user?.name}</span>
               </div>
             </Dropdown>

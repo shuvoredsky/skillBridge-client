@@ -9,17 +9,17 @@ export const metadata = {
 export default function AboutPage() {
   const values = [
     {
-      icon: <BulbOutlined className="text-3xl text-brand-green" />,
+      icon: <BulbOutlined className="text-3xl text-blue-600 dark:text-blue-400" />,
       title: "Our Mission",
       desc: "To democratize education by connecting curious learners with expert tutors worldwide, making personalized learning accessible to everyone.",
     },
     {
-      icon: <TeamOutlined className="text-3xl text-brand-green" />,
+      icon: <TeamOutlined className="text-3xl text-blue-600 dark:text-blue-400" />,
       title: "Our Community",
       desc: "A vibrant ecosystem of 10,000+ students and 500+ tutors sharing knowledge and growing together every single day.",
     },
     {
-      icon: <SafetyCertificateOutlined className="text-3xl text-brand-green" />,
+      icon: <SafetyCertificateOutlined className="text-3xl text-blue-600 dark:text-blue-400" />,
       title: "Quality Assured",
       desc: "We verify every tutor's credentials and use student reviews to ensure the highest standards of teaching on SkillBridge.",
     },
@@ -51,7 +51,7 @@ export default function AboutPage() {
             </p>
           </div>
           
-          <div className="bg-emerald-50 dark:bg-slate-900 p-8 rounded-3xl border border-emerald-100/50 dark:border-slate-800 flex justify-center items-center">
+          <div className="bg-blue-50 dark:bg-slate-900 p-8 rounded-3xl border border-blue-100/50 dark:border-slate-800 flex justify-center items-center">
             <img 
               src="https://img.freepik.com/free-vector/learning-concept-illustration_114360-6186.jpg" 
               alt="About SkillBridge illustration" 
@@ -69,22 +69,22 @@ export default function AboutPage() {
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div className="text-center p-4">
-              <div className="w-12 h-12 bg-brand-green rounded-full flex items-center justify-center text-white font-bold text-lg mx-auto mb-4">1</div>
+              <div className="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold text-lg mx-auto mb-4">1</div>
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Search</h3>
               <p className="text-sm text-gray-500 dark:text-gray-400">Search for tutors by subject, price point, or rating reviews.</p>
             </div>
             <div className="text-center p-4">
-              <div className="w-12 h-12 bg-brand-green rounded-full flex items-center justify-center text-white font-bold text-lg mx-auto mb-4">2</div>
+              <div className="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold text-lg mx-auto mb-4">2</div>
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Check Profile</h3>
               <p className="text-sm text-gray-500 dark:text-gray-400">View teaching experience, bio, and reviews from past students.</p>
             </div>
             <div className="text-center p-4">
-              <div className="w-12 h-12 bg-brand-green rounded-full flex items-center justify-center text-white font-bold text-lg mx-auto mb-4">3</div>
+              <div className="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold text-lg mx-auto mb-4">3</div>
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Book Session</h3>
               <p className="text-sm text-gray-500 dark:text-gray-400">Schedule tutoring sessions that fit your weekly calendar.</p>
             </div>
             <div className="text-center p-4">
-              <div className="w-12 h-12 bg-brand-green rounded-full flex items-center justify-center text-white font-bold text-lg mx-auto mb-4">4</div>
+              <div className="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold text-lg mx-auto mb-4">4</div>
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Learn</h3>
               <p className="text-sm text-gray-500 dark:text-gray-400">Connect with your tutor, discuss study notes, and master skills.</p>
             </div>
@@ -103,7 +103,7 @@ export default function AboutPage() {
               key={index}
               className="bg-white dark:bg-slate-900 p-8 rounded-2xl shadow-sm hover:shadow-md border border-gray-100 dark:border-slate-800 text-center transition-all duration-200"
             >
-              <div className="mb-4 inline-block p-3 bg-emerald-50 dark:bg-slate-800 rounded-xl">{item.icon}</div>
+              <div className="mb-4 inline-block p-3 bg-blue-50 dark:bg-slate-800 rounded-xl">{item.icon}</div>
               <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-3">{item.title}</h3>
               <p className="text-gray-500 dark:text-gray-400 text-sm leading-relaxed">{item.desc}</p>
             </div>

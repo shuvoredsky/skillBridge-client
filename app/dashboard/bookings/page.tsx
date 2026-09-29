@@ -181,7 +181,7 @@ export default function MyBookingsPage() {
               href={record.meetingLink}
               target="_blank"
               rel="noopener noreferrer"
-              className="bg-brand-green hover:bg-brand-green-hover border-0 text-white font-medium shadow-sm rounded-lg active:scale-[0.96] transition-all"
+              className="bg-blue-600 hover:bg-blue-700 border-0 text-white font-medium shadow-sm rounded-lg active:scale-[0.96] transition-all"
             >
               Join Meeting ({record.meetingPlatform === "GOOGLE_MEET" ? "Google Meet" : record.meetingPlatform === "ZOOM" ? "Zoom" : "Microsoft Teams"})
             </Button>
@@ -217,7 +217,7 @@ export default function MyBookingsPage() {
               size="small"
               icon={<StarOutlined />}
               onClick={() => openReviewModal(record)}
-              className="bg-brand-green border-0 hover:bg-brand-green-hover text-white rounded-lg active:scale-[0.96] transition-all"
+              className="bg-blue-600 border-0 hover:bg-blue-700 text-white rounded-lg active:scale-[0.96] transition-all"
             >
               Review
             </Button>
@@ -371,7 +371,7 @@ export default function MyBookingsPage() {
               <Button 
                 type="primary" 
                 htmlType="submit" 
-                className="bg-brand-green hover:bg-brand-green-hover border-0 text-white"
+                className="bg-blue-600 hover:bg-blue-700 border-0 text-white"
                 loading={submittingReview} // 👈 Show loading state
               >
                 Submit Review

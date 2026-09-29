@@ -78,8 +78,8 @@ export default async function HomePage() {
   const tutorList = Array.isArray(tutors?.data)
     ? tutors.data
     : Array.isArray(tutors)
-    ? tutors
-    : [];
+      ? tutors
+      : [];
   const featuredTutors = tutorList.slice(0, 8);
   const cleanBaseUrl = getCleanBaseUrl();
 
@@ -91,22 +91,22 @@ export default async function HomePage() {
 
   const features = [
     {
-      icon: <SearchOutlined className="text-4xl text-brand-green" />,
+      icon: <SearchOutlined className="text-4xl text-blue-600" />,
       title: "Find Expert Tutors",
       description: "Browse through qualified tutors in various subjects",
     },
     {
-      icon: <ClockCircleOutlined className="text-4xl text-brand-green" />,
+      icon: <ClockCircleOutlined className="text-4xl text-blue-600" />,
       title: "Flexible Scheduling",
       description: "Book sessions at your convenience with easy rescheduling options",
     },
     {
-      icon: <SafetyOutlined className="text-4xl text-brand-green" />,
+      icon: <SafetyOutlined className="text-4xl text-blue-600" />,
       title: "Secure Payments",
       description: "Safe and secure payment processing for all transactions",
     },
     {
-      icon: <TeamOutlined className="text-4xl text-brand-green" />,
+      icon: <TeamOutlined className="text-4xl text-blue-600" />,
       title: "1-on-1 Sessions",
       description: "Personalized learning experience with dedicated tutors",
     },
@@ -148,7 +148,7 @@ export default async function HomePage() {
             ) : (
               <h1 className={`text-5xl md:text-6xl font-bold mb-6 ${heroBannerUrl ? "text-white" : "text-gray-900 dark:text-white"}`}>
                 Learn From The Best
-                <span className="block text-brand-green mt-2">Tutors Worldwide</span>
+                <span className="block text-blue-600 mt-2">Tutors Worldwide</span>
               </h1>
             )}
             <p className={`text-xl mb-8 max-w-3xl mx-auto ${heroBannerUrl ? "text-gray-200" : "text-gray-600 dark:text-gray-300"}`}>
@@ -160,7 +160,7 @@ export default async function HomePage() {
                   type="primary"
                   size="large"
                   icon={<SearchOutlined />}
-                  className="bg-brand-green hover:bg-brand-green-hover h-12 px-8 text-lg border-0 shadow-md hover:shadow-lg transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-emerald-500 rounded-xl font-semibold text-white"
+                  className="bg-blue-600 hover:bg-blue-700 h-12 px-8 text-lg border-0 shadow-md hover:shadow-lg transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-blue-500 rounded-xl font-semibold text-white"
                 >
                   Find a Tutor
                 </Button>
@@ -169,11 +169,10 @@ export default async function HomePage() {
                 <Button
                   size="large"
                   icon={<RocketOutlined />}
-                  className={`h-12 px-8 text-lg rounded-xl font-semibold shadow-sm transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-emerald-500 ${
-                    heroBannerUrl
-                      ? "bg-white/10 hover:bg-white/20 text-white border-white/30 backdrop-blur-md"
-                      : "dark:bg-slate-800 dark:text-white dark:border-slate-700"
-                  }`}
+                  className={`h-12 px-8 text-lg rounded-xl font-semibold shadow-sm transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-blue-500 ${heroBannerUrl
+                    ? "bg-white/10 hover:bg-white/20 text-white border-white/30 backdrop-blur-md"
+                    : "dark:bg-slate-800 dark:text-white dark:border-slate-700"
+                    }`}
                 >
                   Become a Tutor
                 </Button>
@@ -189,7 +188,7 @@ export default async function HomePage() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             {stats.map((stat, index) => (
               <div key={index} className="text-center">
-                <div className="text-4xl font-bold text-brand-green mb-2">
+                <div className="text-4xl font-bold text-blue-600 mb-2">
                   {stat.number}
                 </div>
                 <div className="text-gray-600 dark:text-gray-300 font-medium">{stat.label}</div>
@@ -247,7 +246,7 @@ export default async function HomePage() {
             <Link href="/tutors">
               <Button
                 size="large"
-                className="bg-brand-green hover:bg-brand-green-hover text-white font-semibold h-12 px-8 rounded-xl border-0 shadow-md hover:shadow-lg transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-emerald-500"
+                className="bg-blue-600 hover:bg-blue-700 text-white font-semibold h-12 px-8 rounded-xl border-0 shadow-md hover:shadow-lg transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-blue-500"
               >
                 Browse All Tutors
               </Button>
@@ -256,19 +255,19 @@ export default async function HomePage() {
         </div>
       </section>
 
-      
-      <section className="py-20 md:py-28 bg-brand-green dark:bg-brand-green-hover transition-colors duration-200">
+
+      <section className="py-20 md:py-28 bg-blue-900 dark:bg-blue-900 transition-colors duration-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-4xl font-bold text-white mb-6">
             Ready to Start Learning?
           </h2>
-          <p className="text-xl text-emerald-100 mb-8 max-w-2xl mx-auto">
+          <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
             Join thousands of students already learning with SkillBridge
           </p>
           <Link href="/register">
             <Button
               size="large"
-              className="bg-white text-brand-green hover:bg-gray-50 h-12 px-8 text-lg font-bold border-0 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-emerald-500"
+              className="bg-white text-blue-600 hover:bg-gray-50 h-12 px-8 text-lg font-bold border-0 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-blue-500"
             >
               Get Started Today
             </Button>

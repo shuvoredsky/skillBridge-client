@@ -14,13 +14,13 @@ export default function RegisterPage() {
   const [loading, setLoading] = useState(false);
   const { register } = useAuth();
   const [form] = Form.useForm();
-  
+
 
   const onFinish = async (values: {
     name: string;
     email: string;
     password: string;
-    role: "STUDENT" | "TUTOR" ;
+    role: "STUDENT" | "TUTOR";
   }) => {
     setLoading(true);
     try {
@@ -29,8 +29,8 @@ export default function RegisterPage() {
         "Registration successful! Please check your email to verify."
       );
       setTimeout(() => {
-      router.push("/login");
-    }, 2000);
+        router.push("/login");
+      }, 2000);
     } catch (error: any) {
       message.error(error.message || "Registration failed");
     } finally {
@@ -40,20 +40,15 @@ export default function RegisterPage() {
 
   return (
     <div className="min-h-screen flex flex-col lg:flex-row bg-slate-50 dark:bg-slate-950 transition-colors duration-200">
-      
-      <div className="hidden lg:flex lg:w-1/2 bg-brand-green relative p-12 flex-col justify-between text-white overflow-hidden">
+
+      <div className="hidden lg:flex lg:w-1/2 bg-blue-900 relative p-12 flex-col justify-between text-white overflow-hidden">
         <div className="z-10">
-          <div className="flex items-center gap-3 mb-10">
-            <div className="bg-white p-2 rounded-xl shadow-sm">
-              <BookOutlined className="text-brand-green text-2xl" />
-            </div>
-            <span className="text-2xl font-bold tracking-tight">SkillBridge</span>
-          </div>
-          
+
+
           <h1 className="text-5xl font-extrabold mb-6 leading-tight">
             Start Your <br /> Learning Journey
           </h1>
-          <p className="text-lg text-emerald-50 opacity-90 max-w-sm leading-relaxed">
+          <p className="text-lg text-blue-50 opacity-90 max-w-sm leading-relaxed">
             Create an account to connect with expert tutors and master new skills at your own pace.
           </p>
         </div>
@@ -61,28 +56,28 @@ export default function RegisterPage() {
         <div className="z-10">
           <div className="flex -space-x-3 mb-4">
             {[1, 2, 3, 4].map((i) => (
-              <div key={i} className="w-10 h-10 rounded-full border-2 border-brand-green bg-emerald-100 overflow-hidden">
+              <div key={i} className="w-10 h-10 rounded-full border-2 border-blue-600 bg-blue-100 overflow-hidden">
                 <img src={`https://i.pravatar.cc/150?u=${i}`} alt="user" className="w-full h-full object-cover" />
               </div>
             ))}
-            <div className="w-10 h-10 rounded-full border-2 border-brand-green bg-emerald-400 flex items-center justify-center text-xs font-bold text-white">
+            <div className="w-10 h-10 rounded-full border-2 border-blue-600 bg-blue-400 flex items-center justify-center text-xs font-bold text-white">
               +2k
             </div>
           </div>
-          <p className="text-sm font-medium text-emerald-100 opacity-90 italic">Join over 2,000+ active learners today!</p>
+          <p className="text-sm font-medium text-blue-100 opacity-90 italic">Join over 2,000+ active learners today!</p>
         </div>
 
-        <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-emerald-400/10 rounded-full blur-3xl"></div>
-        <div className="absolute -top-24 -right-24 w-96 h-96 bg-emerald-300/10 rounded-full blur-3xl"></div>
+        <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-blue-400/10 rounded-full blur-3xl"></div>
+        <div className="absolute -top-24 -right-24 w-96 h-96 bg-blue-300/10 rounded-full blur-3xl"></div>
       </div>
 
-      
+
       <div className="flex-1 flex items-center justify-center p-6 sm:p-12 lg:p-24 bg-white dark:bg-slate-900 transition-colors duration-200">
         <div className="w-full max-w-[440px]">
-          
+
           <div className="lg:hidden flex justify-center mb-8">
             <div className="flex items-center gap-2">
-              <div className="bg-brand-green p-2 rounded-lg">
+              <div className="bg-blue-900 p-2 rounded-lg">
                 <BookOutlined className="text-white text-xl" />
               </div>
               <span className="text-xl font-bold text-gray-900 dark:text-white">SkillBridge</span>
@@ -115,7 +110,7 @@ export default function RegisterPage() {
               <Input
                 prefix={<UserOutlined className="text-gray-400 mr-2" />}
                 placeholder="John Doe"
-                className="rounded-xl h-12 border-gray-200 hover:border-brand-green focus:border-brand-green dark:bg-slate-800 dark:border-slate-700 dark:text-white"
+                className="rounded-xl h-12 border-gray-200 hover:border-blue-600 focus:border-blue-600 dark:bg-slate-800 dark:border-slate-700 dark:text-white"
               />
             </Form.Item>
 
@@ -157,7 +152,7 @@ export default function RegisterPage() {
               <Input
                 prefix={<MailOutlined className="text-gray-400 mr-2" />}
                 placeholder="example@mail.com"
-                className="rounded-xl h-12 border-gray-200 hover:border-brand-green focus:border-brand-green dark:bg-slate-800 dark:border-slate-700 dark:text-white"
+                className="rounded-xl h-12 border-gray-200 hover:border-blue-600 focus:border-blue-600 dark:bg-slate-800 dark:border-slate-700 dark:text-white"
               />
             </Form.Item>
 
@@ -174,7 +169,7 @@ export default function RegisterPage() {
                 <Input.Password
                   prefix={<LockOutlined className="text-gray-400 mr-2" />}
                   placeholder="Password"
-                  className="rounded-xl h-12 border-gray-200 hover:border-brand-green focus:border-brand-green dark:bg-slate-800 dark:border-slate-700 dark:text-white"
+                  className="rounded-xl h-12 border-gray-200 hover:border-blue-600 focus:border-blue-600 dark:bg-slate-800 dark:border-slate-700 dark:text-white"
                 />
               </Form.Item>
 
@@ -198,7 +193,7 @@ export default function RegisterPage() {
                 <Input.Password
                   prefix={<LockOutlined className="text-gray-400 mr-2" />}
                   placeholder="Confirm"
-                  className="rounded-xl h-12 border-gray-200 hover:border-brand-green focus:border-brand-green dark:bg-slate-800 dark:border-slate-700 dark:text-white"
+                  className="rounded-xl h-12 border-gray-200 hover:border-blue-600 focus:border-blue-600 dark:bg-slate-800 dark:border-slate-700 dark:text-white"
                 />
               </Form.Item>
             </div>
@@ -207,7 +202,7 @@ export default function RegisterPage() {
               <Button
                 type="primary"
                 htmlType="submit"
-                className="w-full h-13 text-base font-semibold rounded-xl bg-brand-green hover:bg-brand-green-hover border-0 shadow-md transition-all duration-200 text-white"
+                className="w-full h-13 text-base font-semibold rounded-xl bg-blue-900 hover:bg-blue-700 border-0 shadow-md transition-all duration-200 text-white"
                 loading={loading}
               >
                 Create Account →
@@ -218,7 +213,7 @@ export default function RegisterPage() {
           <div className="text-center mt-6">
             <Text className="text-gray-500 dark:text-gray-400 text-[15px]">
               Already have an account?{" "}
-              <Link href="/login" className="text-brand-green font-bold hover:text-brand-green-hover ml-1">
+              <Link href="/login" className="text-blue-600 font-bold hover:text-blue-700 ml-1">
                 Sign in
               </Link>
             </Text>

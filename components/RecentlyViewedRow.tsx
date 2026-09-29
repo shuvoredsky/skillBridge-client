@@ -109,7 +109,7 @@ export default function RecentlyViewedRow() {
             <button
               onClick={() => scroll("left")}
               aria-label="Scroll left"
-              className="absolute left-1 top-1/2 -translate-y-1/2 -mt-2 z-20 w-9 h-9 rounded-full bg-white dark:bg-slate-800 shadow-md border border-gray-200 dark:border-slate-700 flex items-center justify-center text-gray-700 dark:text-gray-200 hover:text-brand-green hover:border-brand-green dark:hover:text-brand-green hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer"
+              className="absolute left-1 top-1/2 -translate-y-1/2 -mt-2 z-20 w-9 h-9 rounded-full bg-white dark:bg-slate-800 shadow-md border border-gray-200 dark:border-slate-700 flex items-center justify-center text-gray-700 dark:text-gray-200 hover:text-blue-600 hover:border-blue-600 dark:hover:text-blue-400 dark:hover:border-blue-400 hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer"
             >
               <ChevronLeft size={18} />
             </button>
@@ -120,7 +120,7 @@ export default function RecentlyViewedRow() {
             <button
               onClick={() => scroll("right")}
               aria-label="Scroll right"
-              className="absolute right-1 top-1/2 -translate-y-1/2 -mt-2 z-20 w-9 h-9 rounded-full bg-white dark:bg-slate-800 shadow-md border border-gray-200 dark:border-slate-700 flex items-center justify-center text-gray-700 dark:text-gray-200 hover:text-brand-green hover:border-brand-green dark:hover:text-brand-green hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer"
+              className="absolute right-1 top-1/2 -translate-y-1/2 -mt-2 z-20 w-9 h-9 rounded-full bg-white dark:bg-slate-800 shadow-md border border-gray-200 dark:border-slate-700 flex items-center justify-center text-gray-700 dark:text-gray-200 hover:text-blue-600 hover:border-blue-600 dark:hover:text-blue-400 dark:hover:border-blue-400 hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer"
             >
               <ChevronRight size={18} />
             </button>
@@ -147,7 +147,7 @@ export default function RecentlyViewedRow() {
                       size={48}
                       src={getImageUrl(tutor.profilePhoto || tutor.user.image)}
                       icon={<UserOutlined />}
-                      className="bg-brand-green flex-shrink-0"
+                      className="bg-blue-600 flex-shrink-0"
                     />
                     <div className="min-w-0">
                       <h3 className="font-bold text-gray-900 dark:text-white truncate text-sm mb-0.5">
@@ -165,7 +165,7 @@ export default function RecentlyViewedRow() {
                   <div className="flex items-center justify-between mt-2">
                     <div className="flex flex-wrap gap-1 max-w-[140px]">
                       {tutor.subjects?.slice(0, 1).map((sub) => (
-                        <Tag key={sub} color="success" className="text-[10px] px-2 py-0.5 rounded-full border-0 font-medium">
+                        <Tag key={sub} color="blue" className="text-[10px] px-2 py-0.5 rounded-full border-0 font-medium">
                           {sub}
                         </Tag>
                       ))}
@@ -176,7 +176,7 @@ export default function RecentlyViewedRow() {
                       )}
                     </div>
                     <div className="text-right">
-                      <span className="text-brand-green dark:text-emerald-400 font-bold text-sm">
+                      <span className="text-blue-600 dark:text-blue-400 font-bold text-sm">
                         ${tutor.hourlyRate}
                       </span>
                       <span className="text-[10px] text-gray-400 dark:text-gray-500 block">

@@ -155,7 +155,7 @@ export default function AdminTutorsPage() {
               <button
                 type="button"
                 onClick={() => openDocumentPreview(degree, "Degree Certificate", record.user.name)}
-                className="text-brand-green hover:text-brand-green-hover hover:underline font-semibold text-xs flex items-center gap-1 cursor-pointer bg-transparent border-0 p-0"
+                className="text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 hover:underline font-semibold text-xs flex items-center gap-1 cursor-pointer bg-transparent border-0 p-0"
               >
                 <EyeOutlined /> Degree
               </button>
@@ -166,7 +166,7 @@ export default function AdminTutorsPage() {
               <button
                 type="button"
                 onClick={() => openDocumentPreview(nid, "National ID (NID)", record.user.name)}
-                className="text-brand-green hover:text-brand-green-hover hover:underline font-semibold text-xs flex items-center gap-1 cursor-pointer bg-transparent border-0 p-0"
+                className="text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 hover:underline font-semibold text-xs flex items-center gap-1 cursor-pointer bg-transparent border-0 p-0"
               >
                 <EyeOutlined /> NID
               </button>
@@ -177,7 +177,7 @@ export default function AdminTutorsPage() {
               <button
                 type="button"
                 onClick={() => openDocumentPreview(certificate, "Teaching Certificate", record.user.name)}
-                className="text-brand-green hover:text-brand-green-hover hover:underline font-semibold text-xs flex items-center gap-1 cursor-pointer bg-transparent border-0 p-0"
+                className="text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 hover:underline font-semibold text-xs flex items-center gap-1 cursor-pointer bg-transparent border-0 p-0"
               >
                 <EyeOutlined /> Certificate
               </button>
@@ -201,7 +201,7 @@ export default function AdminTutorsPage() {
               setSelectedTutor(record);
               setApproveModalVisible(true);
             }}
-            className="bg-brand-green hover:bg-brand-green-hover border-0 text-white font-medium rounded-lg active:scale-[0.96] transition-all"
+            className="bg-blue-600 hover:bg-blue-700 border-0 text-white font-medium rounded-lg active:scale-[0.96] transition-all"
           >
             Approve
           </Button>
@@ -261,7 +261,7 @@ export default function AdminTutorsPage() {
       <Modal
         title={
           <div className="flex items-center gap-2 text-gray-900 dark:text-white">
-            <FileTextOutlined className="text-brand-green" />
+            <FileTextOutlined className="text-blue-600 dark:text-blue-400" />
             <span>{previewDoc?.title || "Verification Document Preview"}</span>
           </div>
         }
@@ -327,7 +327,7 @@ export default function AdminTutorsPage() {
           setSelectedTutor(null);
         }}
         okText="Approve"
-        okButtonProps={{ className: "bg-brand-green hover:bg-brand-green-hover border-0 text-white font-medium rounded-lg" }}
+        okButtonProps={{ className: "bg-blue-600 hover:bg-blue-700 border-0 text-white font-medium rounded-lg" }}
       >
         <p className="text-gray-600 dark:text-gray-300">
           Are you sure you want to approve the teaching profile for <strong>{selectedTutor?.user.name}</strong>? 

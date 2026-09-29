@@ -69,7 +69,7 @@ export default function HelpPage() {
         {/* For Students Accordion */}
         <section>
           <div className="flex items-center gap-3 mb-6">
-            <div className="w-10 h-10 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 flex items-center justify-center text-brand-green">
+            <div className="w-10 h-10 rounded-xl bg-blue-50 dark:bg-blue-950/40 flex items-center justify-center text-blue-600 dark:text-blue-400">
               <BookOutlined className="text-xl" />
             </div>
             <div>
@@ -89,7 +89,7 @@ export default function HelpPage() {
         {/* For Tutors Accordion */}
         <section>
           <div className="flex items-center gap-3 mb-6">
-            <div className="w-10 h-10 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 flex items-center justify-center text-brand-green">
+            <div className="w-10 h-10 rounded-xl bg-blue-50 dark:bg-blue-950/40 flex items-center justify-center text-blue-600 dark:text-blue-400">
               <UserOutlined className="text-xl" />
             </div>
             <div>
@@ -107,19 +107,19 @@ export default function HelpPage() {
         </section>
 
         {/* Still Need Help? Callout */}
-        <Card className="rounded-3xl border-none shadow-xl bg-gradient-to-r from-emerald-600 to-teal-700 dark:from-emerald-700 dark:to-teal-900 text-center p-8 sm:p-10 text-white transition-colors duration-200">
+        <Card className="rounded-3xl border-none shadow-xl bg-gradient-to-r from-blue-600 to-indigo-700 dark:from-blue-700 dark:to-indigo-900 text-center p-8 sm:p-10 text-white transition-colors duration-200">
           <div className="w-16 h-16 rounded-2xl bg-white/10 backdrop-blur-md flex items-center justify-center mx-auto mb-5 text-white">
             <HelpCircle size={32} />
           </div>
           <h3 className="text-2xl sm:text-3xl font-bold mb-3 text-white">Still Need Help?</h3>
-          <p className="text-emerald-100 max-w-xl mx-auto mb-8 text-sm sm:text-base leading-relaxed">
+          <p className="text-blue-100 max-w-xl mx-auto mb-8 text-sm sm:text-base leading-relaxed">
             Can&apos;t find the answer you are looking for? Our friendly support team is here to assist you with any questions or issues.
           </p>
           <div className="flex justify-center">
             <Link href="/contact">
               <Button
                 size="large"
-                className="bg-white hover:bg-gray-50 text-emerald-700 font-bold border-none rounded-xl h-12 px-8 shadow-md hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 inline-flex items-center gap-2"
+                className="bg-white hover:bg-gray-50 text-blue-700 font-bold border-none rounded-xl h-12 px-8 shadow-md hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 inline-flex items-center gap-2"
               >
                 <span>Contact Support</span>
                 <ArrowRight size={16} />

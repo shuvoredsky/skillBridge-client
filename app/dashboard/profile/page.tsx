@@ -96,7 +96,7 @@ export default function StudentProfilePage() {
               loading={loading}
               block
               size="large"
-              className="bg-brand-green hover:bg-brand-green-hover border-0 h-12 mt-4 text-white font-semibold rounded-xl hover:scale-[1.01] active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-emerald-500 transition-all shadow-sm"
+              className="bg-blue-600 hover:bg-blue-700 border-0 h-12 mt-4 text-white font-semibold rounded-xl hover:scale-[1.01] active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-blue-500 transition-all shadow-sm"
             >
               Save Changes
             </Button>

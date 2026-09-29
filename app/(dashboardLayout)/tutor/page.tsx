@@ -40,14 +40,14 @@ function DocumentUploadCard({
         
         {uploadedDoc ? (
           <div className="flex flex-col items-center gap-1">
-            <span className="text-xs text-brand-green font-semibold flex items-center gap-1">
+            <span className="text-xs text-blue-600 dark:text-blue-400 font-semibold flex items-center gap-1">
               <CheckCircleOutlined /> Uploaded
             </span>
             <a 
               href={uploadedDoc.url} 
               target="_blank" 
               rel="noreferrer" 
-              className="text-xs text-brand-green hover:text-brand-green-hover hover:underline font-semibold"
+              className="text-xs text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 hover:underline font-semibold"
             >
               View Document
             </a>
@@ -83,7 +83,7 @@ function DocumentUploadCard({
           icon={<UploadOutlined />}
           loading={loading}
           onClick={() => fileInputRef.current?.click()}
-          className="mt-2 text-xs font-semibold h-8 bg-white dark:bg-slate-800 text-gray-700 dark:text-gray-200 border border-gray-200 dark:border-slate-700 hover:border-brand-green hover:text-brand-green dark:hover:text-brand-green rounded-lg"
+          className="mt-2 text-xs font-semibold h-8 bg-white dark:bg-slate-800 text-gray-700 dark:text-gray-200 border border-gray-200 dark:border-slate-700 hover:border-blue-600 hover:text-blue-600 dark:hover:text-blue-400 rounded-lg"
         >
           {uploadedDoc ? "Replace" : "Upload"}
         </Button>
@@ -176,7 +176,7 @@ export default function TutorDashboard() {
         >
           <button
             onClick={() => router.push("/tutor/profile")}
-            className="bg-brand-green hover:bg-brand-green-hover text-white font-medium px-6 py-2.5 rounded-lg border-0 transition-all cursor-pointer text-base"
+            className="bg-blue-600 hover:bg-blue-700 text-white font-medium px-6 py-2.5 rounded-lg border-0 transition-all cursor-pointer text-base"
           >
             Create Profile Now
           </button>
@@ -334,7 +334,7 @@ export default function TutorDashboard() {
             title="Total Sessions"
             value={sessions.length}
             icon={<CalendarOutlined />}
-            color="emerald"
+            color="blue"
             description="All scheduled sessions"
           />
         </Col>
@@ -354,7 +354,7 @@ export default function TutorDashboard() {
             title="Completed"
             value={completedSessions.length}
             icon={<CheckCircleOutlined />}
-            color="emerald"
+            color="blue"
             description="Successfully finished"
           />
         </Col>
@@ -374,7 +374,7 @@ export default function TutorDashboard() {
       <Row gutter={[16, 16]}>
         <Col xs={24} lg={16}>
           <Card title={<span className="dark:text-white">Profile Summary</span>} extra={
-            <a onClick={() => router.push("/tutor/profile")} className="text-brand-green hover:text-brand-green-hover font-semibold cursor-pointer">
+            <a onClick={() => router.push("/tutor/profile")} className="text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 font-semibold cursor-pointer">
               Edit
             </a>
           } className="dark:bg-slate-900 dark:border-slate-800 shadow-sm">
@@ -385,7 +385,7 @@ export default function TutorDashboard() {
                   {profile.subjects.map((subject) => (
                     <span
                       key={subject}
-                      className="px-3 py-1 bg-emerald-50 dark:bg-emerald-950/40 text-brand-green dark:text-brand-green font-medium rounded-md text-sm"
+                      className="px-3 py-1 bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 font-medium rounded-md text-sm"
                     >
                       {subject}
                     </span>
@@ -395,7 +395,7 @@ export default function TutorDashboard() {
 
               <div>
                 <div className="font-semibold text-gray-900 dark:text-white mb-1">Hourly Rate</div>
-                <div className="text-lg font-bold text-brand-green">
+                <div className="text-lg font-bold text-blue-600 dark:text-blue-400">
                   ${profile.hourlyRate}/hour
                 </div>
               </div>
@@ -415,7 +415,7 @@ export default function TutorDashboard() {
             <div className="flex flex-col gap-3">
               <button
                 onClick={() => router.push("/tutor/availability")}
-                className="w-full flex items-center gap-2 px-4 py-3 bg-white dark:bg-slate-800 text-gray-700 dark:text-gray-200 border border-gray-200 dark:border-slate-700 rounded-lg hover:border-brand-green hover:text-brand-green dark:hover:text-brand-green transition-colors cursor-pointer text-sm font-medium"
+                className="w-full flex items-center gap-2 px-4 py-3 bg-white dark:bg-slate-800 text-gray-700 dark:text-gray-200 border border-gray-200 dark:border-slate-700 rounded-lg hover:border-blue-600 hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-pointer text-sm font-medium"
               >
                 <ClockCircleOutlined />
                 <span>Manage Availability</span>
@@ -423,7 +423,7 @@ export default function TutorDashboard() {
 
               <button
                 onClick={() => router.push("/tutor/sessions")}
-                className="w-full flex items-center gap-2 px-4 py-3 bg-white dark:bg-slate-800 text-gray-700 dark:text-gray-200 border border-gray-200 dark:border-slate-700 rounded-lg hover:border-brand-green hover:text-brand-green dark:hover:text-brand-green transition-colors cursor-pointer text-sm font-medium"
+                className="w-full flex items-center gap-2 px-4 py-3 bg-white dark:bg-slate-800 text-gray-700 dark:text-gray-200 border border-gray-200 dark:border-slate-700 rounded-lg hover:border-blue-600 hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-pointer text-sm font-medium"
               >
                 <CalendarOutlined />
                 <span>View All Sessions</span>

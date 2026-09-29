@@ -149,7 +149,7 @@ export default function AdminUsersPage() {
       key: "name",
       render: (name) => (
         <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-full bg-emerald-50 dark:bg-emerald-950/40 flex items-center justify-center text-brand-green">
+          <div className="w-8 h-8 rounded-full bg-blue-50 dark:bg-blue-950/40 flex items-center justify-center text-blue-600 dark:text-blue-400">
             <UserOutlined />
           </div>
           <span className="font-semibold text-gray-900 dark:text-white">{name}</span>
@@ -227,7 +227,7 @@ export default function AdminUsersPage() {
                   size="small"
                   icon={<CheckCircleOutlined />}
                   onClick={() => openActionModal(record, "unban")}
-                  className="bg-brand-green hover:bg-brand-green-hover border-0 text-white rounded-lg font-medium active:scale-[0.96] transition-all"
+                  className="bg-blue-600 hover:bg-blue-700 border-0 text-white rounded-lg font-medium active:scale-[0.96] transition-all"
                 >
                   Unban
                 </Button>
@@ -297,7 +297,7 @@ export default function AdminUsersPage() {
               setPage(1);
               fetchUsers(1, { search: "", role: undefined, status: undefined });
             }}
-            className="rounded-xl font-medium hover:border-brand-green hover:text-brand-green active:scale-[0.98] transition-all duration-200"
+            className="rounded-xl font-medium hover:border-blue-600 hover:text-blue-600 dark:hover:text-blue-400 active:scale-[0.98] transition-all duration-200"
           >
             Reset Filters
           </Button>
@@ -358,7 +358,7 @@ export default function AdminUsersPage() {
           loading,
           className: actionType === "ban" 
             ? "bg-red-500 hover:bg-red-600 text-white rounded-xl font-medium" 
-            : "bg-brand-green hover:bg-brand-green-hover border-0 text-white rounded-xl font-medium",
+            : "bg-blue-600 hover:bg-blue-700 border-0 text-white rounded-xl font-medium",
         }}
         cancelButtonProps={{
           className: "rounded-xl font-medium",

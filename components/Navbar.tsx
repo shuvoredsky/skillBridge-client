@@ -35,7 +35,7 @@ export default function Navbar() {
       cancelText: "Cancel",
       okButtonProps: {
         className:
-          "bg-brand-green hover:bg-brand-green-hover border-0 text-white font-medium rounded-xl transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]",
+          "bg-blue-600 hover:bg-blue-700 border-0 text-white font-medium rounded-xl transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]",
       },
       onOk: async () => {
         await logout();
@@ -85,7 +85,7 @@ export default function Navbar() {
         <div className="flex justify-between items-center h-16">
           <Link
             href="/"
-            className="flex items-center space-x-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-green rounded-xl px-1 py-0.5"
+            className="flex items-center space-x-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 rounded-xl px-1 py-0.5"
           >
             {resolvedLogo ? (
               <div className="relative h-10 w-auto flex items-center justify-center">
@@ -96,13 +96,11 @@ export default function Navbar() {
                 />
               </div>
             ) : (
-              <div className="w-10 h-10 bg-brand-green rounded-lg flex items-center justify-center shadow-sm">
+              <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center shadow-sm">
                 <BookOpen className="text-white" size={20} />
               </div>
             )}
-            <span className="text-2xl font-bold text-gray-900 dark:text-white tracking-tight">
-              {siteName || "SkillBridge"}
-            </span>
+
           </Link>
 
           <div className="hidden md:flex items-center space-x-8">
@@ -110,7 +108,7 @@ export default function Navbar() {
               <Link
                 key={link.name}
                 href={link.href}
-                className="text-gray-600 dark:text-gray-300 hover:text-brand-green dark:hover:text-brand-green font-medium transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-green rounded-lg px-2 py-1"
+                className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 rounded-lg px-2 py-1"
               >
                 {link.name}
               </Link>
@@ -125,18 +123,18 @@ export default function Navbar() {
                   <Button
                     onClick={handleBecomeTutor}
                     type="link"
-                    className="text-brand-green dark:text-brand-green font-semibold hover:text-brand-green-hover transition-all duration-200 active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-brand-green rounded-lg"
+                    className="text-blue-600 dark:text-blue-400 font-semibold hover:text-blue-700 transition-all duration-200 active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-blue-600 rounded-lg"
                   >
                     Become a Tutor
                   </Button>
                 )}
 
                 <Dropdown menu={{ items: studentItems }} placement="bottomRight" arrow>
-                  <div className="flex items-center cursor-pointer space-x-2 bg-gray-50 dark:bg-slate-800 p-1 pr-3 rounded-full hover:bg-gray-100 dark:hover:bg-slate-700 transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-brand-green">
+                  <div className="flex items-center cursor-pointer space-x-2 bg-gray-50 dark:bg-slate-800 p-1 pr-3 rounded-full hover:bg-gray-100 dark:hover:bg-slate-700 transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-blue-600">
                     <Avatar
                       icon={<User size={18} />}
                       src={user.image}
-                      className="bg-brand-green flex items-center justify-center"
+                      className="bg-blue-600 flex items-center justify-center"
                     />
                     <span className="font-medium text-gray-700 dark:text-gray-200 text-sm">
                       {user.name}
@@ -149,7 +147,7 @@ export default function Navbar() {
                 <Link href="/login">
                   <Button
                     type="text"
-                    className="text-gray-600 dark:text-gray-300 font-medium hover:text-brand-green transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-brand-green rounded-xl"
+                    className="text-gray-600 dark:text-gray-300 font-medium hover:text-blue-600 transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-blue-600 rounded-xl"
                   >
                     Login
                   </Button>
@@ -157,7 +155,7 @@ export default function Navbar() {
                 <Link href="/register">
                   <Button
                     type="primary"
-                    className="bg-brand-green hover:bg-brand-green-hover dark:bg-brand-green dark:hover:bg-brand-green-hover rounded-xl h-10 px-6 border-0 text-white font-semibold shadow-sm hover:shadow-md transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-brand-green"
+                    className="bg-blue-600 hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-700 rounded-xl h-10 px-6 border-0 text-white font-semibold shadow-sm hover:shadow-md transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-blue-600"
                   >
                     Sign Up
                   </Button>
@@ -168,7 +166,7 @@ export default function Navbar() {
 
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="md:hidden text-gray-700 dark:text-gray-200 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-800 transition-all duration-200 hover:scale-105 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-green"
+            className="md:hidden text-gray-700 dark:text-gray-200 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-800 transition-all duration-200 hover:scale-105 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600"
             aria-label="Toggle navigation menu"
             aria-expanded={isOpen}
           >
@@ -183,7 +181,7 @@ export default function Navbar() {
                 <Link
                   key={link.name}
                   href={link.href}
-                  className="text-gray-700 dark:text-gray-200 hover:text-brand-green dark:hover:text-brand-green font-medium px-4 py-2 block transition-colors duration-200 focus-visible:ring-2 focus-visible:ring-brand-green rounded-lg"
+                  className="text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 font-medium px-4 py-2 block transition-colors duration-200 focus-visible:ring-2 focus-visible:ring-blue-600 rounded-lg"
                   onClick={() => setIsOpen(false)}
                 >
                   {link.name}
@@ -206,14 +204,14 @@ export default function Navbar() {
                           handleBecomeTutor();
                         }}
                         type="link"
-                        className="p-0 text-brand-green dark:text-brand-green font-semibold block text-left"
+                        className="p-0 text-blue-600 dark:text-blue-400 font-semibold block text-left"
                       >
                         Become a Tutor
                       </Button>
                     )}
                     <Link
                       href="/dashboard"
-                      className="block py-2 text-brand-green dark:text-brand-green font-medium"
+                      className="block py-2 text-blue-600 dark:text-blue-400 font-medium"
                       onClick={() => setIsOpen(false)}
                     >
                       My Dashboard
@@ -236,7 +234,7 @@ export default function Navbar() {
                     <Link href="/register" onClick={() => setIsOpen(false)}>
                       <Button
                         type="primary"
-                        className="w-full bg-brand-green hover:bg-brand-green-hover dark:bg-brand-green border-0 rounded-xl active:scale-[0.98] transition-all text-white font-semibold"
+                        className="w-full bg-blue-600 hover:bg-blue-700 dark:bg-blue-600 border-0 rounded-xl active:scale-[0.98] transition-all text-white font-semibold"
                       >
                         Sign Up
                       </Button>

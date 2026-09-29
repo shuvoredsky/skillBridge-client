@@ -249,7 +249,7 @@ export default function TutorProfilePage() {
               size="large"
               loading={saving}
               icon={<SaveOutlined />}
-              className="bg-brand-green hover:bg-brand-green-hover border-0 text-white h-12 rounded-xl font-semibold shadow-sm hover:scale-[1.01] active:scale-[0.98] transition-all duration-200"
+              className="bg-blue-600 hover:bg-blue-700 border-0 text-white h-12 rounded-xl font-semibold shadow-sm hover:scale-[1.01] active:scale-[0.98] transition-all duration-200"
               block
             >
               {profile ? "Update Profile" : "Create Profile"}

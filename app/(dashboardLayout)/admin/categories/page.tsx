@@ -144,7 +144,7 @@ export default function AdminCategoriesPage() {
       key: "name",
       render: (name) => (
         <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 flex items-center justify-center text-brand-green">
+          <div className="w-8 h-8 rounded-lg bg-blue-50 dark:bg-blue-950/40 flex items-center justify-center text-blue-600 dark:text-blue-400">
             <TagsOutlined />
           </div>
           <span className="font-semibold text-gray-900 dark:text-gray-100">{name}</span>
@@ -182,7 +182,7 @@ export default function AdminCategoriesPage() {
             size="small"
             icon={<EditOutlined />}
             onClick={() => openEditModal(record)}
-            className="rounded-lg text-xs font-medium hover:border-brand-green hover:text-brand-green active:scale-[0.96] transition-all duration-150"
+            className="rounded-lg text-xs font-medium hover:border-blue-600 hover:text-blue-600 dark:hover:text-blue-400 active:scale-[0.96] transition-all duration-150"
           >
             Edit
           </Button>
@@ -214,7 +214,7 @@ export default function AdminCategoriesPage() {
           size="large"
           icon={<PlusOutlined />}
           onClick={openCreateModal}
-          className="bg-brand-green hover:bg-brand-green-hover border-0 text-white font-semibold rounded-xl shadow-sm hover:scale-[1.02] active:scale-[0.98] transition-all duration-200"
+          className="bg-blue-600 hover:bg-blue-700 border-0 text-white font-semibold rounded-xl shadow-sm hover:scale-[1.02] active:scale-[0.98] transition-all duration-200"
         >
           Add Category
         </Button>
@@ -226,7 +226,7 @@ export default function AdminCategoriesPage() {
           title="Total Categories"
           value={categories.length}
           icon={<AppstoreOutlined />}
-          color="emerald"
+          color="blue"
           description="Active tutoring disciplines"
         />
       </div>
@@ -320,7 +320,7 @@ export default function AdminCategoriesPage() {
                 htmlType="submit"
                 loading={loading}
                 size="large"
-                className="bg-brand-green hover:bg-brand-green-hover border-0 text-white font-semibold rounded-xl active:scale-[0.98] transition-all duration-200"
+                className="bg-blue-600 hover:bg-blue-700 border-0 text-white font-semibold rounded-xl active:scale-[0.98] transition-all duration-200"
               >
                 {editingCategory ? "Update Category" : "Create Category"}
               </Button>

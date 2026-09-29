@@ -120,7 +120,7 @@ export default function AdminBookingsPage() {
       key: "student",
       render: (student) => (
         <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-full bg-emerald-50 dark:bg-emerald-950/40 flex items-center justify-center text-brand-green">
+          <div className="w-8 h-8 rounded-full bg-blue-50 dark:bg-blue-950/40 flex items-center justify-center text-blue-600 dark:text-blue-400">
             <UserOutlined />
           </div>
           <div>
@@ -156,7 +156,7 @@ export default function AdminBookingsPage() {
       key: "subject",
       render: (subject) => (
         <div className="flex items-center gap-1.5">
-          <BookOutlined className="text-brand-green" />
+          <BookOutlined className="text-blue-600 dark:text-blue-400" />
           <span className="font-medium text-gray-800 dark:text-gray-200">{subject}</span>
         </div>
       ),
@@ -226,7 +226,7 @@ export default function AdminBookingsPage() {
             title="Total Bookings"
             value={stats?.bookings.total ?? totalBookings}
             icon={<BookOutlined />}
-            color="emerald"
+            color="blue"
             description="All recorded sessions"
           />
         </Col>
@@ -235,7 +235,7 @@ export default function AdminBookingsPage() {
             title="Confirmed"
             value={stats?.bookings.confirmed ?? 0}
             icon={<CheckCircleOutlined />}
-            color="emerald"
+            color="blue"
             description="Upcoming scheduled"
           />
         </Col>
@@ -263,7 +263,7 @@ export default function AdminBookingsPage() {
       <Card className="dark:bg-slate-900 dark:border-slate-800 shadow-sm rounded-2xl">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div className="flex items-center gap-3">
-            <FilterOutlined className="text-brand-green text-base" />
+            <FilterOutlined className="text-blue-600 dark:text-blue-400 text-base" />
             <span className="text-sm font-semibold text-gray-700 dark:text-gray-300">Filter Bookings:</span>
             <Select
               placeholder="Filter by Status"
@@ -288,7 +288,7 @@ export default function AdminBookingsPage() {
               setPage(1);
               fetchBookings(1, { status: undefined });
             }}
-            className="rounded-xl font-medium hover:border-brand-green hover:text-brand-green transition-all duration-200 active:scale-[0.98]"
+            className="rounded-xl font-medium hover:border-blue-600 hover:text-blue-600 dark:hover:text-blue-400 transition-all duration-200 active:scale-[0.98]"
           >
             Reset Filters
           </Button>

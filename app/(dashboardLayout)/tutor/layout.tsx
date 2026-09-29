@@ -86,7 +86,7 @@ export default function TutorLayout({
             backgroundColor: isDark ? "#0f172a" : "#ffffff",
           }}
         >
-          <div className="text-brand-green dark:text-brand-green font-bold text-xl">
+          <div className="text-blue-600 dark:text-blue-400 font-bold text-xl">
             SkillBridge Tutor
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
@@ -98,7 +98,7 @@ export default function TutorLayout({
               }}
             >
               <div className="text-gray-700 dark:text-gray-200 flex items-center gap-2 cursor-pointer">
-                <Avatar icon={<UserOutlined />} className="bg-brand-green" src={user?.image} />
+                <Avatar icon={<UserOutlined />} className="bg-blue-600" src={user?.image} />
                 <span className="hidden md:inline font-medium">
                   {user?.name}
                 </span>

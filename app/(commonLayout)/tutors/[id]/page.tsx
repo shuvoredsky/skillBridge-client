@@ -248,7 +248,7 @@ export default function TutorDetailsPage() {
         <Link href="/tutors" className="inline-block mb-6">
           <Button
             icon={<ArrowLeftOutlined />}
-            className="dark:bg-slate-800 dark:text-white dark:border-slate-700 hover:border-brand-green"
+            className="dark:bg-slate-800 dark:text-white dark:border-slate-700 hover:border-blue-600"
           >
             Back to Tutors
           </Button>
@@ -262,7 +262,7 @@ export default function TutorDetailsPage() {
                   size={120}
                   src={getImageUrl(tutor.profilePhoto || tutor.user.image)}
                   icon={<UserOutlined />}
-                  className="bg-gradient-to-br from-brand-green to-emerald-600 mb-4"
+                  className="bg-gradient-to-br from-blue-600 to-indigo-600 mb-4"
                 />
                 <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
                   {tutor.user.name}
@@ -288,24 +288,24 @@ export default function TutorDetailsPage() {
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <span className="text-gray-600 dark:text-gray-400 flex items-center gap-2 font-medium">
-                    <DollarOutlined className="text-brand-green text-lg" />
+                    <DollarOutlined className="text-blue-600 dark:text-blue-400 text-lg" />
                     Hourly Rate
                   </span>
-                  <span className="text-2xl font-extrabold text-brand-green">
+                  <span className="text-2xl font-extrabold text-blue-600 dark:text-blue-400">
                     ${tutor.hourlyRate}
                   </span>
                 </div>
 
                 {tutor.experience && (
                   <div className="flex items-center gap-2 text-gray-600 dark:text-gray-300">
-                    <ClockCircleOutlined className="text-brand-green" />
+                    <ClockCircleOutlined className="text-blue-600 dark:text-blue-400" />
                     <span className="font-medium">{tutor.experience} Experience</span>
                   </div>
                 )}
 
                 {tutor.education && (
                   <div className="flex items-center gap-2 text-gray-600 dark:text-gray-300">
-                    <BookOutlined className="text-brand-green" />
+                    <BookOutlined className="text-blue-600 dark:text-blue-400" />
                     <span className="font-medium">{tutor.education}</span>
                   </div>
                 )}
@@ -319,7 +319,7 @@ export default function TutorDetailsPage() {
                   {tutor.subjects.map((subject: any) => (
                     <Tag
                       key={subject}
-                      color="success"
+                      color="blue"
                       className="text-sm font-medium px-2.5 py-0.5 rounded-full"
                     >
                       {subject}
@@ -332,7 +332,7 @@ export default function TutorDetailsPage() {
                 <Button
                   type="primary"
                   size="large"
-                  className="flex-1 bg-brand-green hover:bg-brand-green-hover border-0 text-white h-12 rounded-xl font-semibold shadow-sm"
+                  className="flex-1 bg-blue-600 hover:bg-blue-700 border-0 text-white h-12 rounded-xl font-semibold shadow-sm"
                   icon={<CalendarOutlined />}
                   onClick={handleBookSession}
                 >
@@ -418,7 +418,7 @@ export default function TutorDetailsPage() {
                           </span>
                           <div className="flex-1 bg-gray-200 dark:bg-slate-700 h-2.5 rounded-full overflow-hidden">
                             <div
-                              className="bg-brand-green h-full rounded-full transition-all duration-500"
+                              className="bg-blue-600 h-full rounded-full transition-all duration-500"
                               style={{ width: `${item.percentage}%` }}
                             />
                           </div>
@@ -442,7 +442,7 @@ export default function TutorDetailsPage() {
                           src={review.student.image}
                           icon={<UserOutlined />}
                           size={46}
-                          className="bg-brand-green shrink-0 shadow-sm"
+                          className="bg-blue-600 shrink-0 shadow-sm"
                         />
                         <div className="flex-1 min-w-0">
                           <div className="flex flex-wrap items-center justify-between gap-2 mb-1">
@@ -481,7 +481,7 @@ export default function TutorDetailsPage() {
       <Modal
         title={
           <div className="flex items-center gap-2 text-lg font-bold text-gray-900 dark:text-white">
-            <CalendarOutlined className="text-brand-green" />
+            <CalendarOutlined className="text-blue-600 dark:text-blue-400" />
             <span>Book a Session with {tutor.user.name}</span>
           </div>
         }
@@ -537,11 +537,11 @@ export default function TutorDetailsPage() {
             <div className="bg-slate-50 dark:bg-slate-800/60 p-4 rounded-xl border border-slate-200/70 dark:border-slate-700/60">
               <div className="flex items-center justify-between mb-2">
                 <span className="text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider flex items-center gap-1.5">
-                  <ClockCircleOutlined className="text-brand-green" />
+                  <ClockCircleOutlined className="text-blue-600 dark:text-blue-400" />
                   Available Slots for {watchDate.format("dddd")}
                 </span>
                 {dayMatchingSlots.length > 0 && (
-                  <span className="text-xs font-semibold text-emerald-600 dark:text-emerald-400">
+                  <span className="text-xs font-semibold text-blue-600 dark:text-blue-400">
                     {dayMatchingSlots.length} slot{dayMatchingSlots.length > 1 ? "s" : ""} found
                   </span>
                 )}
@@ -561,8 +561,8 @@ export default function TutorDetailsPage() {
                         onClick={() => handleSelectSlot(slot)}
                         className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all duration-200 flex items-center gap-1.5 border ${
                           isSelected
-                            ? "bg-brand-green text-white border-brand-green shadow-sm ring-2 ring-emerald-300 dark:ring-emerald-800"
-                            : "bg-white dark:bg-slate-900 text-gray-700 dark:text-gray-200 border-gray-200 dark:border-slate-700 hover:border-brand-green hover:text-brand-green"
+                            ? "bg-blue-600 text-white border-blue-600 shadow-sm ring-2 ring-blue-300 dark:ring-blue-800"
+                            : "bg-white dark:bg-slate-900 text-gray-700 dark:text-gray-200 border-gray-200 dark:border-slate-700 hover:border-blue-600 hover:text-blue-600 dark:hover:text-blue-400"
                         }`}
                       >
                         {isSelected && <CheckCircleFilled />}
@@ -632,7 +632,7 @@ export default function TutorDetailsPage() {
           )}
 
           {/* Live Price Calculator Breakdown */}
-          <div className="bg-gradient-to-br from-slate-50 to-emerald-50/40 dark:from-slate-800 dark:to-emerald-950/20 p-4 rounded-xl border border-emerald-100 dark:border-emerald-900/40 space-y-2">
+          <div className="bg-gradient-to-br from-slate-50 to-blue-50/40 dark:from-slate-800 dark:to-blue-950/20 p-4 rounded-xl border border-blue-100 dark:border-blue-900/40 space-y-2">
             <div className="flex items-center justify-between text-xs text-gray-600 dark:text-gray-400 font-medium">
               <span>Hourly Rate:</span>
               <span className="font-semibold text-gray-900 dark:text-white">
@@ -652,12 +652,12 @@ export default function TutorDetailsPage() {
                   <span>Calculation:</span>
                   <span className="font-mono text-xs">{calculationFormula}</span>
                 </div>
-                <div className="h-px bg-emerald-200/60 dark:bg-emerald-800/40 my-1" />
+                <div className="h-px bg-blue-200/60 dark:bg-blue-800/40 my-1" />
                 <div className="flex items-center justify-between pt-1">
                   <span className="font-bold text-gray-800 dark:text-gray-200 text-sm">
                     Total Session Fee:
                   </span>
-                  <span className="text-2xl font-extrabold text-brand-green">
+                  <span className="text-2xl font-extrabold text-blue-600 dark:text-blue-400">
                     ${totalCostFormatted}
                   </span>
                 </div>
@@ -703,7 +703,7 @@ export default function TutorDetailsPage() {
                 loading={submitting}
                 disabled={!isFormBookingReady}
                 size="large"
-                className="bg-brand-green hover:bg-brand-green-hover border-0 text-white rounded-xl font-semibold shadow-md disabled:opacity-50"
+                className="bg-blue-600 hover:bg-blue-700 border-0 text-white rounded-xl font-semibold shadow-md disabled:opacity-50"
               >
                 Confirm Booking
               </Button>

@@ -91,7 +91,7 @@ export default function StudentDashboardPage() {
             title="Upcoming"
             value={upcomingBookings.length}
             icon={<CalendarOutlined />}
-            color="emerald"
+            color="blue"
             description="Confirmed upcoming sessions"
           />
         </Col>
@@ -100,7 +100,7 @@ export default function StudentDashboardPage() {
             title="Completed"
             value={completedBookings.length}
             icon={<CheckCircleOutlined />}
-            color="emerald"
+            color="blue"
             description="Successfully completed"
           />
         </Col>
@@ -137,7 +137,7 @@ export default function StudentDashboardPage() {
           >
             <Button
               type="primary"
-              className="bg-brand-green hover:bg-brand-green-hover border-0 rounded-xl"
+              className="bg-blue-600 hover:bg-blue-700 border-0 rounded-xl"
               onClick={() => router.push("/tutors")}
             >
               Find a Tutor
@@ -152,8 +152,8 @@ export default function StudentDashboardPage() {
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-start gap-4 flex-1">
-                    <div className="w-12 h-12 bg-emerald-50 dark:bg-emerald-950/40 rounded-lg flex items-center justify-center">
-                      <BookOutlined className="text-brand-green text-xl" />
+                    <div className="w-12 h-12 bg-blue-50 dark:bg-blue-950/40 rounded-lg flex items-center justify-center">
+                      <BookOutlined className="text-blue-600 dark:text-blue-400 text-xl" />
                     </div>
                     <div className="flex-1">
                       <h3 className="font-semibold text-gray-900 dark:text-gray-100 mb-1">
@@ -189,7 +189,7 @@ export default function StudentDashboardPage() {
               type="primary"
               size="large"
               block
-              className="bg-brand-green hover:bg-brand-green-hover border-0 h-auto py-4 text-white rounded-xl"
+              className="bg-blue-600 hover:bg-blue-700 border-0 h-auto py-4 text-white rounded-xl"
               onClick={() => router.push("/tutors")}
             >
               <div className="flex flex-col items-center gap-2">
@@ -202,7 +202,7 @@ export default function StudentDashboardPage() {
             <Button
               size="large"
               block
-              className="h-auto py-4 dark:bg-slate-800 dark:text-white dark:border-slate-700 hover:border-brand-green rounded-xl"
+              className="h-auto py-4 dark:bg-slate-800 dark:text-white dark:border-slate-700 hover:border-blue-600 rounded-xl"
               onClick={() => router.push("/dashboard/bookings")}
             >
               <div className="flex flex-col items-center gap-2">
@@ -215,7 +215,7 @@ export default function StudentDashboardPage() {
             <Button
               size="large"
               block
-              className="h-auto py-4 dark:bg-slate-800 dark:text-white dark:border-slate-700 hover:border-brand-green rounded-xl"
+              className="h-auto py-4 dark:bg-slate-800 dark:text-white dark:border-slate-700 hover:border-blue-600 rounded-xl"
               onClick={() => router.push("/dashboard/profile")}
             >
               <div className="flex flex-col items-center gap-2">

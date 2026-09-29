@@ -122,7 +122,7 @@ export default function AdminDashboardPage() {
             title="Total Users"
             value={stats?.users.total || 0}
             icon={<UserOutlined />}
-            color="emerald"
+            color="blue"
             footer={
               <div className="flex flex-wrap gap-2">
                 <span className="px-2 py-0.5 bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 text-xs rounded-md font-medium">
@@ -169,7 +169,7 @@ export default function AdminDashboardPage() {
 
       <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-slate-800 transition-colors">
         <h2 className="text-lg font-bold text-gray-800 dark:text-white mb-6 flex items-center gap-2">
-          <div className="w-1 h-6 bg-brand-green rounded-full"></div>
+          <div className="w-1 h-6 bg-blue-600 rounded-full"></div>
           Booking Status
         </h2>
         <Row gutter={[16, 16]}>
@@ -189,7 +189,7 @@ export default function AdminDashboardPage() {
               <Statistic
                 title={<span className="dark:text-gray-300">Completed</span>}
                 value={stats?.bookings.completed || 0}
-                prefix={<CheckCircleOutlined className="text-brand-green" />}
+                prefix={<CheckCircleOutlined className="text-emerald-500" />}
                 styles={{ content: { color: isDark ? "#34d399" : "#166534", fontWeight: "700" } }}
               />
             </div>

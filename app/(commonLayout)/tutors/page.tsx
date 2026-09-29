@@ -145,7 +145,7 @@ export default function BrowseTutorsPage() {
     <div className="space-y-6">
       <div>
         <label htmlFor="tutors-search-input" className="font-semibold text-gray-900 dark:text-white mb-2.5 flex items-center gap-2 text-sm cursor-pointer">
-          <SearchOutlined className="text-brand-green" />
+          <SearchOutlined className="text-blue-600 dark:text-blue-400" />
           Search Tutors
         </label>
         <Input
@@ -162,7 +162,7 @@ export default function BrowseTutorsPage() {
 
       <div>
         <label htmlFor="tutors-subject-select" className="font-semibold text-gray-900 dark:text-white mb-2.5 flex items-center gap-2 text-sm cursor-pointer">
-          <BookOutlined className="text-brand-green" />
+          <BookOutlined className="text-blue-600 dark:text-blue-400" />
           Subject / Category
         </label>
         <Select
@@ -185,7 +185,7 @@ export default function BrowseTutorsPage() {
 
       <div>
         <h3 className="font-semibold text-gray-900 dark:text-white mb-2.5 flex items-center gap-2 text-sm">
-          <DollarOutlined className="text-brand-green" />
+          <DollarOutlined className="text-blue-600 dark:text-blue-400" />
           Hourly Rate Range
         </h3>
         <Slider
@@ -207,7 +207,7 @@ export default function BrowseTutorsPage() {
 
       <div>
         <label htmlFor="tutors-rating-select" className="font-semibold text-gray-900 dark:text-white mb-2.5 flex items-center gap-2 text-sm cursor-pointer">
-          <StarOutlined className="text-brand-green" />
+          <StarOutlined className="text-blue-600 dark:text-blue-400" />
           Minimum Rating
         </label>
         <Select
@@ -234,7 +234,7 @@ export default function BrowseTutorsPage() {
             block
             size="large"
             onClick={() => setDrawerOpen(false)}
-            className="bg-brand-green hover:bg-brand-green-hover border-0 text-white rounded-xl font-semibold"
+            className="bg-blue-600 hover:bg-blue-700 border-0 text-white rounded-xl font-semibold"
           >
             Apply Filters
           </Button>
@@ -274,7 +274,7 @@ export default function BrowseTutorsPage() {
                 {totalTutors} Tutors
               </span>
               {activeFiltersCount > 0 && (
-                <Tag color="success" className="m-0 rounded-full font-bold text-xs bg-emerald-50 text-brand-green dark:bg-emerald-950/40 border-0">
+                <Tag color="success" className="m-0 rounded-full font-bold text-xs bg-blue-50 text-blue-600 dark:bg-blue-950/40 dark:text-blue-400 border-0">
                   {activeFiltersCount} active
                 </Tag>
               )}
@@ -294,7 +294,7 @@ export default function BrowseTutorsPage() {
                 type="primary"
                 icon={<FilterOutlined />}
                 onClick={() => setDrawerOpen(true)}
-                className="bg-brand-green hover:bg-brand-green-hover border-0 text-white font-medium rounded-xl h-9 flex items-center gap-1.5"
+                className="bg-blue-600 hover:bg-blue-700 border-0 text-white font-medium rounded-xl h-9 flex items-center gap-1.5"
               >
                 Filters {activeFiltersCount > 0 && `(${activeFiltersCount})`}
               </Button>
@@ -306,10 +306,10 @@ export default function BrowseTutorsPage() {
             title={
               <div className="flex items-center justify-between pr-4">
                 <span className="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2">
-                  <FilterOutlined className="text-brand-green" /> Filter Tutors
+                  <FilterOutlined className="text-blue-600 dark:text-blue-400" /> Filter Tutors
                 </span>
                 {activeFiltersCount > 0 && (
-                  <span className="text-xs text-brand-green font-semibold">
+                  <span className="text-xs text-blue-600 dark:text-blue-400 font-semibold">
                     {activeFiltersCount} active
                   </span>
                 )}
@@ -364,7 +364,7 @@ export default function BrowseTutorsPage() {
                     <Button
                       type="primary"
                       onClick={clearAllFilters}
-                      className="bg-brand-green hover:bg-brand-green-hover border-0 text-white rounded-xl font-medium mt-2"
+                      className="bg-blue-600 hover:bg-blue-700 border-0 text-white rounded-xl font-medium mt-2"
                     >
                       Clear All Filters
                     </Button>

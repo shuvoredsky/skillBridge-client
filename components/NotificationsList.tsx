@@ -41,7 +41,7 @@ export default function NotificationsList() {
             type="primary"
             icon={<CheckOutlined />}
             onClick={markAllAsRead}
-            className="bg-brand-green hover:bg-brand-green-hover border-0 text-white"
+            className="bg-blue-600 hover:bg-blue-700 border-0 text-white"
           >
             Mark All Read
           </Button>
@@ -50,7 +50,7 @@ export default function NotificationsList() {
 
       {notifications.length === 0 ? (
         <EmptyState
-          icon={<BellOutlined className="text-2xl text-brand-green" />}
+          icon={<BellOutlined className="text-2xl text-blue-600" />}
           title="No Notifications"
           description="You're all caught up! New updates regarding your sessions and bookings will appear here."
         />
@@ -62,14 +62,14 @@ export default function NotificationsList() {
                 key={item.id}
                 className={`px-6 py-5 transition-colors duration-200 flex items-start gap-4 ${
                   !item.isRead
-                    ? "bg-emerald-50/40 dark:bg-emerald-950/10"
+                    ? "bg-blue-50/40 dark:bg-blue-950/10"
                     : "bg-transparent"
                 }`}
               >
                 <div className="mt-1">
-                  <Badge dot={!item.isRead} color="#10b981">
+                  <Badge dot={!item.isRead} color="#2563EB">
                     <div className="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center">
-                      <BellOutlined className="text-brand-green text-lg" />
+                      <BellOutlined className="text-blue-600 text-lg" />
                     </div>
                   </Badge>
                 </div>

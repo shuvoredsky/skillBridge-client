@@ -15,14 +15,14 @@ export default function PageHeader({ title, description, breadcrumbs }: PageHead
         {/* Breadcrumbs */}
         {breadcrumbs && breadcrumbs.length > 0 && (
           <nav className="flex items-center space-x-2 text-xs sm:text-sm text-gray-500 dark:text-gray-400 mb-3">
-            <Link href="/" className="hover:text-brand-green dark:hover:text-brand-green transition-colors">
+            <Link href="/" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
               Home
             </Link>
             {breadcrumbs.map((crumb, idx) => (
               <span key={idx} className="flex items-center space-x-2">
                 <span className="text-gray-400">/</span>
                 {crumb.href ? (
-                  <Link href={crumb.href} className="hover:text-brand-green dark:hover:text-brand-green transition-colors">
+                  <Link href={crumb.href} className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
                     {crumb.label}
                   </Link>
                 ) : (

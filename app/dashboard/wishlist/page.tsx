@@ -47,7 +47,7 @@ export default function WishlistPage() {
             type="primary"
             icon={<SearchOutlined />}
             onClick={() => router.push("/tutors")}
-            className="bg-brand-green hover:bg-brand-green-hover border-0 text-white font-medium rounded-xl h-10 px-5 shadow-sm transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
+            className="bg-blue-600 hover:bg-blue-700 border-0 text-white font-medium rounded-xl h-10 px-5 shadow-sm transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
           >
             Find More Tutors
           </Button>

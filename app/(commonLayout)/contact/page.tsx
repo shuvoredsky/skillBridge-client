@@ -28,8 +28,8 @@ export default function ContactPage() {
             <div className="space-y-6">
               <Card className="rounded-2xl border-none shadow-sm dark:bg-slate-900 transition-colors duration-200">
                 <div className="flex items-start gap-4">
-                  <div className="bg-emerald-100 dark:bg-emerald-950/40 p-3 rounded-xl">
-                    <MailOutlined className="text-xl text-brand-green" />
+                  <div className="bg-blue-100 dark:bg-blue-950/40 p-3 rounded-xl">
+                    <MailOutlined className="text-xl text-blue-600 dark:text-blue-400" />
                   </div>
                   <div>
                     <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-1">Email Us</h3>
@@ -40,8 +40,8 @@ export default function ContactPage() {
 
               <Card className="rounded-2xl border-none shadow-sm dark:bg-slate-900 transition-colors duration-200">
                 <div className="flex items-start gap-4">
-                  <div className="bg-emerald-100 dark:bg-emerald-900/30 p-3 rounded-xl">
-                    <PhoneOutlined className="text-xl text-emerald-600 dark:text-emerald-400" />
+                  <div className="bg-blue-100 dark:bg-blue-900/30 p-3 rounded-xl">
+                    <PhoneOutlined className="text-xl text-blue-600 dark:text-blue-400" />
                   </div>
                   <div>
                     <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-1">Call Us</h3>
@@ -118,7 +118,7 @@ export default function ContactPage() {
                   type="primary" 
                   htmlType="submit" 
                   icon={<SendOutlined />}
-                  className="bg-brand-green hover:bg-brand-green-hover h-12 px-8 font-bold rounded-lg w-full md:w-auto border-0 text-white"
+                  className="bg-blue-600 hover:bg-blue-700 h-12 px-8 font-bold rounded-lg w-full md:w-auto border-0 text-white"
                 >
                   Send Message
                 </Button>

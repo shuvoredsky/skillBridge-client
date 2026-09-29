@@ -53,7 +53,7 @@ export default async function BlogPostDetailPage({ params }: PageProps) {
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 mt-10">
         <Link
           href="/blog"
-          className="group inline-flex items-center gap-2 text-brand-green hover:text-brand-green-hover font-semibold text-sm mb-8 transition-colors"
+          className="group inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 font-semibold text-sm mb-8 transition-colors"
         >
           <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
           <span>Back to all articles</span>
@@ -67,7 +67,7 @@ export default async function BlogPostDetailPage({ params }: PageProps) {
               alt={post.title}
               className="w-full h-full object-cover opacity-95 dark:opacity-85"
             />
-            <div className="absolute top-4 left-4 bg-brand-green/90 backdrop-blur-md text-white text-xs font-bold px-3 py-1 rounded-full shadow-sm">
+            <div className="absolute top-4 left-4 bg-blue-600/90 backdrop-blur-md text-white text-xs font-bold px-3 py-1 rounded-full shadow-sm">
               {post.tag}
             </div>
           </div>
@@ -75,17 +75,17 @@ export default async function BlogPostDetailPage({ params }: PageProps) {
           <div className="p-6 sm:p-8 border-b border-gray-100 dark:border-slate-800">
             <div className="flex flex-wrap items-center gap-4 text-xs text-gray-500 dark:text-gray-400">
               <span className="flex items-center gap-1.5 font-medium text-gray-700 dark:text-gray-300">
-                <User size={14} className="text-brand-green" />
+                <User size={14} className="text-blue-600 dark:text-blue-400" />
                 {post.author}
               </span>
               <span>•</span>
               <span className="flex items-center gap-1.5">
-                <Calendar size={14} className="text-brand-green" />
+                <Calendar size={14} className="text-blue-600 dark:text-blue-400" />
                 {post.date}
               </span>
               <span>•</span>
               <span className="flex items-center gap-1.5">
-                <Clock size={14} className="text-brand-green" />
+                <Clock size={14} className="text-blue-600 dark:text-blue-400" />
                 {post.readTime}
               </span>
             </div>
@@ -95,7 +95,7 @@ export default async function BlogPostDetailPage({ params }: PageProps) {
         {/* Blog Post Content with comfortable reading line-height & spacing */}
         <article className="bg-white dark:bg-slate-900 border border-gray-100 dark:border-slate-800 rounded-3xl p-6 sm:p-10 shadow-sm transition-colors duration-200">
           <div 
-            className="prose prose-slate dark:prose-invert prose-emerald max-w-none text-base sm:text-lg leading-relaxed text-gray-700 dark:text-gray-300 prose-headings:font-bold prose-headings:text-gray-900 dark:prose-headings:text-white prose-a:text-brand-green hover:prose-a:underline prose-img:rounded-2xl"
+            className="prose prose-slate dark:prose-invert prose-blue max-w-none text-base sm:text-lg leading-relaxed text-gray-700 dark:text-gray-300 prose-headings:font-bold prose-headings:text-gray-900 dark:prose-headings:text-white prose-a:text-blue-600 dark:prose-a:text-blue-400 hover:prose-a:underline prose-img:rounded-2xl"
             dangerouslySetInnerHTML={{ __html: post.content }}
           />
         </article>

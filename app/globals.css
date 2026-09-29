@@ -1,8 +1,12 @@
 @import "tailwindcss";
 
 @theme {
-  --color-brand-green: #10b981;
-  --color-brand-green-hover: #059669;
+  --color-brand-blue: #2563EB;
+  --color-brand-blue-hover: #1D4ED8;
+  --color-brand-blue-active: #1E40AF;
+  --color-brand-blue-light: #60A5FA;
+  --color-brand-green: #2563EB;
+  --color-brand-green-hover: #1D4ED8;
   --color-brand-red: #ef4444;
   --color-brand-red-hover: #dc2626;
 }

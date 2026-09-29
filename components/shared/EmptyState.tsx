@@ -27,7 +27,7 @@ export default function EmptyState({
     <div
       className={`flex flex-col items-center justify-center text-center p-8 sm:p-12 rounded-2xl bg-white dark:bg-slate-900 border border-gray-100 dark:border-slate-800 transition-colors duration-200 ${className}`}
     >
-      <div className="w-16 h-16 rounded-full bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-100 dark:border-emerald-900/40 flex items-center justify-center text-brand-green dark:text-emerald-400 mb-4 shadow-sm">
+      <div className="w-16 h-16 rounded-full bg-blue-50 dark:bg-blue-950/40 border border-blue-100 dark:border-blue-900/40 flex items-center justify-center text-blue-600 dark:text-blue-400 mb-4 shadow-sm">
         {icon || <Inbox size={28} />}
       </div>
 
@@ -48,7 +48,7 @@ export default function EmptyState({
           type="primary"
           size="large"
           onClick={onAction}
-          className="bg-brand-green hover:bg-brand-green-hover border-0 text-white font-semibold rounded-xl h-11 px-6 shadow-sm transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-emerald-500"
+          className="bg-blue-600 hover:bg-blue-700 border-0 text-white font-semibold rounded-xl h-11 px-6 shadow-sm transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-blue-500"
         >
           {actionLabel}
         </Button>

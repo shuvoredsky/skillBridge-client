@@ -28,7 +28,7 @@ export default function LogoSpinner({
     <div className="flex flex-col items-center justify-center gap-4">
       <div className="relative flex items-center justify-center">
         {/* Subtle animated dashed accent ring */}
-        <div className="absolute -inset-3 rounded-2xl border-2 border-dashed border-brand-green/40 dark:border-brand-green/60 animate-spin [animation-duration:8s]" />
+        <div className="absolute -inset-3 rounded-2xl border-2 border-dashed border-blue-600/40 dark:border-blue-500/60 animate-spin [animation-duration:8s]" />
         
         {/* Dynamic logo or fallback icon container */}
         <div className={`relative ${sizeClasses} flex items-center justify-center transition-all duration-300 animate-pulse`}>
@@ -39,7 +39,7 @@ export default function LogoSpinner({
               className="w-full h-full object-contain rounded-xl shadow-sm"
             />
           ) : (
-            <div className="w-full h-full bg-brand-green rounded-xl flex items-center justify-center shadow-md">
+            <div className="w-full h-full bg-blue-600 rounded-xl flex items-center justify-center shadow-md">
               <BookOutlined className="text-white text-2xl" />
             </div>
           )}

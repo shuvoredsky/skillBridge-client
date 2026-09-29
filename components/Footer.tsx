@@ -13,7 +13,7 @@ export default function Footer() {
           {/* Brand */}
           <div className="md:col-span-1">
             <div className="flex items-center gap-2 mb-3">
-              <div className="w-8 h-8 bg-brand-green rounded-lg flex items-center justify-center">
+              <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
                 <BookOpen className="text-white" size={18} />
               </div>
               <span className="text-xl font-bold text-gray-900 dark:text-white">SkillBridge</span>
@@ -28,22 +28,22 @@ export default function Footer() {
             <h3 className="text-gray-900 dark:text-white font-semibold text-sm mb-3">Company</h3>
             <ul className="space-y-2">
               <li>
-                <Link href="/tutors" className="text-gray-500 dark:text-gray-400 hover:text-brand-green transition-colors text-sm">
+                <Link href="/tutors" className="text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors text-sm">
                   Find Tutors
                 </Link>
               </li>
               <li>
-                <Link href="/about" className="text-gray-500 dark:text-gray-400 hover:text-brand-green transition-colors text-sm">
+                <Link href="/about" className="text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors text-sm">
                   About Us
                 </Link>
               </li>
               <li>
-                <Link href="/contact" className="text-gray-500 dark:text-gray-400 hover:text-brand-green transition-colors text-sm">
+                <Link href="/contact" className="text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors text-sm">
                   Contact Us
                 </Link>
               </li>
               <li>
-                <Link href="/blog" className="text-gray-500 dark:text-gray-400 hover:text-brand-green transition-colors text-sm">
+                <Link href="/blog" className="text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors text-sm">
                   Blog
                 </Link>
               </li>
@@ -55,22 +55,22 @@ export default function Footer() {
             <h3 className="text-gray-900 dark:text-white font-semibold text-sm mb-3">Support & Legal</h3>
             <ul className="space-y-2">
               <li>
-                <Link href="/help" className="text-gray-500 dark:text-gray-400 hover:text-brand-green transition-colors text-sm">
+                <Link href="/help" className="text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors text-sm">
                   Help & Support
                 </Link>
               </li>
               <li>
-                <Link href="/privacy-policy" className="text-gray-500 dark:text-gray-400 hover:text-brand-green transition-colors text-sm">
+                <Link href="/privacy-policy" className="text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors text-sm">
                   Privacy Policy
                 </Link>
               </li>
               <li>
-                <Link href="/register" className="text-gray-500 dark:text-gray-400 hover:text-brand-green transition-colors text-sm">
+                <Link href="/register" className="text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors text-sm">
                   Sign Up
                 </Link>
               </li>
               <li>
-                <Link href="/login" className="text-gray-500 dark:text-gray-400 hover:text-brand-green transition-colors text-sm">
+                <Link href="/login" className="text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors text-sm">
                   Login
                 </Link>
               </li>
@@ -84,28 +84,28 @@ export default function Footer() {
               <a
                 href="#"
                 aria-label="Visit our Facebook page"
-                className="w-8 h-8 rounded-lg bg-slate-200 dark:bg-slate-800 hover:bg-brand-green flex items-center justify-center text-gray-600 dark:text-gray-300 hover:text-white transition-all"
+                className="w-8 h-8 rounded-lg bg-slate-200 dark:bg-slate-800 hover:bg-blue-600 flex items-center justify-center text-gray-600 dark:text-gray-300 hover:text-white transition-all"
               >
                 <Facebook size={16} />
               </a>
               <a
                 href="#"
                 aria-label="Follow us on Twitter"
-                className="w-8 h-8 rounded-lg bg-slate-200 dark:bg-slate-800 hover:bg-brand-green flex items-center justify-center text-gray-600 dark:text-gray-300 hover:text-white transition-all"
+                className="w-8 h-8 rounded-lg bg-slate-200 dark:bg-slate-800 hover:bg-blue-600 flex items-center justify-center text-gray-600 dark:text-gray-300 hover:text-white transition-all"
               >
                 <Twitter size={16} />
               </a>
               <a
                 href="#"
                 aria-label="Follow us on Instagram"
-                className="w-8 h-8 rounded-lg bg-slate-200 dark:bg-slate-800 hover:bg-brand-green flex items-center justify-center text-gray-600 dark:text-gray-300 hover:text-white transition-all"
+                className="w-8 h-8 rounded-lg bg-slate-200 dark:bg-slate-800 hover:bg-blue-600 flex items-center justify-center text-gray-600 dark:text-gray-300 hover:text-white transition-all"
               >
                 <Instagram size={16} />
               </a>
               <a
                 href="#"
                 aria-label="Connect with us on LinkedIn"
-                className="w-8 h-8 rounded-lg bg-slate-200 dark:bg-slate-800 hover:bg-brand-green flex items-center justify-center text-gray-600 dark:text-gray-300 hover:text-white transition-all"
+                className="w-8 h-8 rounded-lg bg-slate-200 dark:bg-slate-800 hover:bg-blue-600 flex items-center justify-center text-gray-600 dark:text-gray-300 hover:text-white transition-all"
               >
                 <Linkedin size={16} />
               </a>

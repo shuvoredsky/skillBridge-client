@@ -215,7 +215,7 @@ export default function AdminSettingsPage() {
           <Card
             title={
               <div className="flex items-center gap-2">
-                <PictureOutlined className="text-brand-green" />
+                <PictureOutlined className="text-blue-600 dark:text-blue-400" />
                 <span className="font-semibold text-gray-900 dark:text-white">Site Logo & Branding</span>
               </div>
             }
@@ -241,7 +241,7 @@ export default function AdminSettingsPage() {
                       />
                     ) : (
                       <div className="flex items-center gap-2 text-gray-400 text-xs">
-                        <BookOutlined className="text-brand-green text-lg" />
+                        <BookOutlined className="text-blue-600 dark:text-blue-400 text-lg" />
                         <span>Default Icon</span>
                       </div>
                     )}
@@ -274,7 +274,7 @@ export default function AdminSettingsPage() {
 
                 <div
                   onClick={() => fileInputRef.current?.click()}
-                  className="border-2 border-dashed border-gray-200 dark:border-slate-700 hover:border-brand-green dark:hover:border-brand-green rounded-2xl p-6 text-center cursor-pointer transition-colors bg-white dark:bg-slate-900"
+                  className="border-2 border-dashed border-gray-200 dark:border-slate-700 hover:border-blue-600 dark:hover:border-blue-600 rounded-2xl p-6 text-center cursor-pointer transition-colors bg-white dark:bg-slate-900"
                 >
                   {previewUrl ? (
                     <div className="space-y-3">
@@ -285,7 +285,7 @@ export default function AdminSettingsPage() {
                           className="max-h-full max-w-full object-contain"
                         />
                       </div>
-                      <div className="text-xs text-brand-green font-medium">
+                      <div className="text-xs text-blue-600 dark:text-blue-400 font-medium">
                         ✓ {selectedFile?.name} ({((selectedFile?.size || 0) / 1024).toFixed(1)} KB)
                       </div>
                       <Text className="text-xs text-gray-400 block">
@@ -294,7 +294,7 @@ export default function AdminSettingsPage() {
                     </div>
                   ) : (
                     <div className="space-y-2">
-                      <UploadOutlined className="text-3xl text-brand-green" />
+                      <UploadOutlined className="text-3xl text-blue-600 dark:text-blue-400" />
                       <div className="text-sm font-medium text-gray-700 dark:text-gray-200">
                         Click to browse or drag & drop your logo image
                       </div>
@@ -314,7 +314,7 @@ export default function AdminSettingsPage() {
                   loading={uploading}
                   disabled={!selectedFile}
                   onClick={handleSaveLogo}
-                  className="bg-brand-green hover:bg-brand-green-hover text-white font-semibold border-0 h-11 px-6 rounded-xl hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 shadow-sm disabled:opacity-50 disabled:pointer-events-none"
+                  className="bg-blue-600 hover:bg-blue-700 text-white font-semibold border-0 h-11 px-6 rounded-xl hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 shadow-sm disabled:opacity-50 disabled:pointer-events-none"
                 >
                   Save & Apply Logo
                 </Button>
@@ -336,7 +336,7 @@ export default function AdminSettingsPage() {
           <Card
             title={
               <div className="flex items-center gap-2">
-                <FileImageOutlined className="text-brand-green" />
+                <FileImageOutlined className="text-blue-600 dark:text-blue-400" />
                 <span className="font-semibold text-gray-900 dark:text-white">Home Page Hero Banner & Text</span>
               </div>
             }
@@ -350,7 +350,7 @@ export default function AdminSettingsPage() {
               {/* Text Settings Form */}
               <div className="space-y-4 p-5 bg-slate-50 dark:bg-slate-800/60 rounded-xl border border-gray-100 dark:border-slate-700/60">
                 <div className="flex items-center gap-2 mb-1">
-                  <EditOutlined className="text-brand-green text-sm" />
+                  <EditOutlined className="text-blue-600 dark:text-blue-400 text-sm" />
                   <Text strong className="text-gray-800 dark:text-gray-200 text-sm">
                     Hero Section Headlines
                   </Text>
@@ -396,7 +396,7 @@ export default function AdminSettingsPage() {
                     icon={<CheckCircleOutlined />}
                     loading={savingText}
                     onClick={handleSaveTextSettings}
-                    className="bg-brand-green hover:bg-brand-green-hover text-white font-semibold border-0 h-10 px-5 rounded-xl text-xs hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 shadow-sm"
+                    className="bg-blue-600 hover:bg-blue-700 text-white font-semibold border-0 h-10 px-5 rounded-xl text-xs hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 shadow-sm"
                   >
                     Save Text Settings
                   </Button>
@@ -418,7 +418,7 @@ export default function AdminSettingsPage() {
                       />
                     ) : (
                       <div className="flex flex-col items-center gap-1 text-gray-400 text-xs">
-                        <FileImageOutlined className="text-brand-green text-2xl" />
+                        <FileImageOutlined className="text-blue-600 dark:text-blue-400 text-2xl" />
                         <span>Default Gradient Hero Active (No Image Uploaded)</span>
                       </div>
                     )}
@@ -451,7 +451,7 @@ export default function AdminSettingsPage() {
 
                 <div
                   onClick={() => bannerFileInputRef.current?.click()}
-                  className="border-2 border-dashed border-gray-200 dark:border-slate-700 hover:border-brand-green dark:hover:border-brand-green rounded-2xl p-6 text-center cursor-pointer transition-colors bg-white dark:bg-slate-900"
+                  className="border-2 border-dashed border-gray-200 dark:border-slate-700 hover:border-blue-600 dark:hover:border-blue-600 rounded-2xl p-6 text-center cursor-pointer transition-colors bg-white dark:bg-slate-900"
                 >
                   {bannerPreviewUrl ? (
                     <div className="space-y-3">
@@ -462,7 +462,7 @@ export default function AdminSettingsPage() {
                           className="max-h-full max-w-full object-cover rounded-lg"
                         />
                       </div>
-                      <div className="text-xs text-brand-green font-medium">
+                      <div className="text-xs text-blue-600 dark:text-blue-400 font-medium">
                         ✓ {selectedBannerFile?.name} ({((selectedBannerFile?.size || 0) / 1024).toFixed(1)} KB)
                       </div>
                       <Text className="text-xs text-gray-400 block">
@@ -471,7 +471,7 @@ export default function AdminSettingsPage() {
                     </div>
                   ) : (
                     <div className="space-y-2">
-                      <UploadOutlined className="text-3xl text-brand-green" />
+                      <UploadOutlined className="text-3xl text-blue-600 dark:text-blue-400" />
                       <div className="text-sm font-medium text-gray-700 dark:text-gray-200">
                         Click to browse or drag & drop your hero banner image
                       </div>
@@ -491,7 +491,7 @@ export default function AdminSettingsPage() {
                   loading={uploadingBanner}
                   disabled={!selectedBannerFile}
                   onClick={handleSaveBanner}
-                  className="bg-brand-green hover:bg-brand-green-hover text-white font-semibold border-0 h-11 px-6 rounded-xl hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 shadow-sm disabled:opacity-50 disabled:pointer-events-none"
+                  className="bg-blue-600 hover:bg-blue-700 text-white font-semibold border-0 h-11 px-6 rounded-xl hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 shadow-sm disabled:opacity-50 disabled:pointer-events-none"
                 >
                   Save & Apply Hero Banner
                 </Button>
@@ -515,7 +515,7 @@ export default function AdminSettingsPage() {
           <Card
             title={
               <div className="flex items-center gap-2">
-                <InfoCircleOutlined className="text-emerald-500" />
+                <InfoCircleOutlined className="text-blue-600 dark:text-blue-400" />
                 <span className="font-semibold text-gray-900 dark:text-white">Branding Overview</span>
               </div>
             }
@@ -545,7 +545,7 @@ export default function AdminSettingsPage() {
                       className="h-8 w-auto max-w-[100px] object-contain rounded"
                     />
                   ) : (
-                    <div className="w-8 h-8 bg-brand-green rounded-lg flex items-center justify-center">
+                    <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
                       <BookOutlined className="text-white text-sm" />
                     </div>
                   )}
@@ -570,7 +570,7 @@ export default function AdminSettingsPage() {
                     />
                   )}
                   <div className="relative z-10 text-center px-2">
-                    <div className="text-xs font-bold text-emerald-400 line-clamp-1">
+                    <div className="text-xs font-bold text-blue-400 line-clamp-1">
                       {heroTitle || "Learn From The Best Tutors Worldwide"}
                     </div>
                     <div className="text-[10px] text-gray-300 line-clamp-1 mt-0.5">

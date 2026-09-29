@@ -97,7 +97,7 @@ export default function StudentDashboardLayout({
           style={{ backgroundColor: isDark ? "#0f172a" : "#ffffff", color: isDark ? "#ffffff" : "#000000" }}
         >
           <Link href="/" className="flex items-center gap-2">
-            <div className="w-10 h-10 bg-brand-green rounded-lg flex items-center justify-center">
+            <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
               <BookOutlined className="text-white text-xl" />
             </div>
             <span className="text-xl font-bold text-gray-900 dark:text-white hidden md:inline">
@@ -118,7 +118,7 @@ export default function StudentDashboardLayout({
                 <Avatar
                   size={40}
                   icon={<UserOutlined />}
-                  className="bg-brand-green"
+                  className="bg-blue-600"
                   src={user?.image}
                 />
               </div>
@@ -139,7 +139,7 @@ export default function StudentDashboardLayout({
                 <Avatar
                   size={48}
                   icon={<UserOutlined />}
-                  className="bg-gradient-to-br from-brand-green to-emerald-600"
+                  className="bg-gradient-to-br from-blue-600 to-indigo-600"
                   src={user?.image}
                 />
                 <div className="flex-1 min-w-0">
